@@ -8,6 +8,7 @@ import { useFrameworkDetail } from "./framework-detail"
 import { Reveal, SectionLabel, Stagger, StaggerItem } from "./reveal"
 
 const LANGS = ["All", "Python", "TypeScript", "JVM", ".NET / multi"] as const
+const maxAffix = Math.max(...siteFrameworks.map((f) => f.scores.AFFIX))
 
 function langBucket(lang: string): (typeof LANGS)[number] {
   const l = lang.toLowerCase()
@@ -58,12 +59,12 @@ export function Frameworks() {
       <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Frameworks</SectionLabel>
-          <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            Open a dossier
+          <h2 className="mt-3 max-w-[18ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            Sixteen dossiers from the matrix
           </h2>
           <p className="mt-4 max-w-[44ch] text-sm text-muted-foreground md:text-base">
-            Filter by language niche, then open a framework for primitives,
-            version pins, scores, and primary citations.
+            Filter by language estate. Each card opens primitives, version pins,
+            dimension scores, and primary citations.
           </p>
         </Reveal>
 
@@ -128,7 +129,15 @@ export function Frameworks() {
                   <p className="mt-2 line-clamp-3 flex-1 text-[13px] leading-relaxed text-muted-foreground">
                     {f.oneLiner}
                   </p>
-                  <p className="mt-4 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                  <div className="mt-4 h-1 w-full overflow-hidden rounded-[1px] bg-white/10">
+                    <div
+                      className="h-full bg-accent/85 transition group-hover:bg-accent"
+                      style={{
+                        width: `${(f.scores.AFFIX / maxAffix) * 100}%`,
+                      }}
+                    />
+                  </div>
+                  <p className="mt-3 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                     RHS {f.scores.RHS.toFixed(1)}
                     {m ? ` · ${m.primary_lang}` : ""}
                   </p>

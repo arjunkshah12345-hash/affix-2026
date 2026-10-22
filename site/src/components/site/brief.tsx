@@ -62,6 +62,10 @@ export function Brief() {
           <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
             Five claims that survive the matrix
           </h2>
+          <p className="mt-4 max-w-[46ch] text-sm text-muted-foreground md:text-base">
+            Constructs tested against the published score sheet. Sparklines
+            encode the supporting terms, not a separate model.
+          </p>
         </Reveal>
 
         <Stagger className="mt-12">

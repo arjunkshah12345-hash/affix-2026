@@ -11,7 +11,7 @@ const links = [
   { href: "#rankings", id: "rankings", label: "Rankings" },
   { href: "#method", id: "method", label: "Method" },
   { href: "#failures", id: "failures", label: "Failures" },
-  { href: "#findings", id: "findings", label: "Findings" },
+  { href: "#map", id: "map", label: "Map" },
   { href: "#film", id: "film", label: "Film" },
 ]
 

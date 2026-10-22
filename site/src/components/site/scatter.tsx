@@ -56,12 +56,12 @@ export function Scatter() {
       <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Map</SectionLabel>
-          <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            High fitness, low rewrite
+          <h2 className="mt-3 max-w-[20ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            AFFIX × RHS across the sample
           </h2>
           <p className="mt-4 max-w-[48ch] text-sm text-muted-foreground md:text-base">
-            AFFIX against RHS. Preferred region: high fitness, low hazard. Axes
-            scale within the study sample.
+            Preferred quadrant is high fitness and low rewrite hazard. Axes
+            scale to the sixteen-framework sample, not a fixed absolute scale.
           </p>
         </Reveal>
 
@@ -104,8 +104,20 @@ export function Scatter() {
                 height={
                   scale((ymin + ymax) / 2, ymin, ymax, H - PAD.b, PAD.t) - PAD.t
                 }
-                fill="rgba(255,150,50,0.08)"
+                fill="rgba(255,150,50,0.1)"
               />
+              <text
+                x={
+                  scale((xmin + xmax) / 2, xmin, xmax, PAD.l, W - PAD.r) + 10
+                }
+                y={PAD.t + 16}
+                fill="rgba(255,150,50,0.75)"
+                fontFamily="var(--font-data), monospace"
+                fontSize="9"
+                letterSpacing="0.14em"
+              >
+                PREFERRED
+              </text>
 
               {xTicks.map((t) => {
                 const x = scale(t, xmin, xmax, PAD.l, W - PAD.r)

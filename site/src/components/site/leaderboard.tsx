@@ -28,13 +28,24 @@ export function Leaderboard() {
             Meter length is AFFIX relative to the leader. RHS ↓ is succession
             risk. Open any row for the dossier.
           </p>
+          <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            <span>
+              RHS · <span className="text-emerald-400">≤22</span> safe
+            </span>
+            <span>
+              <span className="text-amber-300">≤30</span> watch
+            </span>
+            <span>
+              <span className="text-rose-400">&gt;30</span> elevated
+            </span>
+          </div>
         </Reveal>
 
         <div className="mt-10 hidden grid-cols-[2.5rem_1fr_5.5rem_4rem_3.5rem] gap-4 border-b border-white/10 pb-3 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground md:grid">
           <span>#</span>
           <span>Framework</span>
           <span className="text-right">AFFIX</span>
-          <span className="text-right">RHS</span>
+          <span className="text-right">RHS ↓</span>
           <span className="text-right">LIE</span>
         </div>
 
