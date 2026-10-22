@@ -1,6 +1,7 @@
 import { Brief } from "@/components/site/brief"
 import { Charts } from "@/components/site/charts"
 import { Compare } from "@/components/site/compare"
+import { Contrast } from "@/components/site/contrast"
 import { Failures } from "@/components/site/failures"
 import { Findings } from "@/components/site/findings"
 import { Footer } from "@/components/site/footer"
@@ -23,6 +24,7 @@ export default function Home() {
         <main>
           <Hero />
           <Roster />
+          <Contrast />
           <Brief />
           <Leaderboard />
           <Methodology />

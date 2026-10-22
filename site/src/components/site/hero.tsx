@@ -27,7 +27,7 @@ export function Hero() {
 
           <div>
             <motion.p
-              className="font-display text-5xl font-semibold tracking-tight text-foreground md:text-6xl"
+              className="font-display text-[clamp(2.75rem,6vw,4.25rem)] font-semibold leading-[0.95] tracking-[-0.04em] text-foreground lg:hidden"
               initial={reduce ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -35,7 +35,7 @@ export function Hero() {
               AFFIX
             </motion.p>
             <motion.h1
-              className="mt-5 max-w-[18ch] font-display text-[clamp(1.75rem,3.4vw,2.35rem)] font-semibold leading-[1.15] tracking-[-0.02em] text-foreground"
+              className="mt-5 max-w-[16ch] font-display text-[clamp(1.85rem,3.6vw,2.5rem)] font-semibold leading-[1.12] tracking-[-0.025em] text-foreground lg:mt-0"
               initial={reduce ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.75, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
@@ -129,7 +129,10 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="font-data text-[10px] uppercase tracking-[0.22em] text-white/75">
+            <p className="font-display text-2xl font-semibold tracking-tight text-white md:text-3xl">
+              AFFIX
+            </p>
+            <p className="mt-3 font-data text-[10px] uppercase tracking-[0.22em] text-white/75">
               Specimen · 01
             </p>
             <p className="mt-2 font-display text-[clamp(4.5rem,12vw,7.5rem)] font-semibold leading-none tracking-[-0.05em] text-white">

@@ -58,8 +58,8 @@ export function Charts() {
       <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Signals</SectionLabel>
-          <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            Orange bars, grey hazard
+          <h2 className="mt-3 max-w-[18ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            Leaders on AFFIX and RHS
           </h2>
           <p className="mt-4 max-w-[48ch] text-sm text-muted-foreground md:text-base">
             AFFIX and RHS for the leading eight, plus index profiles for the top

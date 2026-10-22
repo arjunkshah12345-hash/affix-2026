@@ -1,25 +1,47 @@
 "use client"
 
-import { useState, type ReactNode } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import { DitherButton, DitherGradient } from "@/components/dither-kit"
 import { cn } from "@/lib/utils"
 
 const links = [
-  { href: "#top", label: "Index" },
-  { href: "#results", label: "Results" },
-  { href: "#rankings", label: "Rankings" },
-  { href: "#method", label: "Method" },
-  { href: "#failures", label: "Failures" },
-  { href: "#findings", label: "Findings" },
-  { href: "#film", label: "Film" },
+  { href: "#top", id: "top", label: "Index" },
+  { href: "#results", id: "results", label: "Results" },
+  { href: "#rankings", id: "rankings", label: "Rankings" },
+  { href: "#method", id: "method", label: "Method" },
+  { href: "#failures", id: "failures", label: "Failures" },
+  { href: "#findings", id: "findings", label: "Findings" },
+  { href: "#film", id: "film", label: "Film" },
 ]
 
 export function Shell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
+  const [active, setActive] = useState("top")
+
+  useEffect(() => {
+    const ids = links.map((l) => l.id)
+    const els = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => Boolean(el))
+
+    if (!els.length) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+        if (visible[0]?.target.id) setActive(visible[0].target.id)
+      },
+      { rootMargin: "-20% 0px -55% 0px", threshold: [0.1, 0.25, 0.5] }
+    )
+
+    els.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <div className="min-h-dvh bg-[#050505]">
-      {/* Mobile top bar */}
       <div className="fixed inset-x-0 top-0 z-50 flex h-14 items-center justify-between border-b border-white/8 bg-[#050505]/90 px-4 backdrop-blur-md lg:hidden">
         <a href="#top" className="font-display text-base font-semibold tracking-tight">
           AFFIX
@@ -42,7 +64,10 @@ export function Shell({ children }: { children: ReactNode }) {
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="border-b border-white/8 py-4 font-data text-[12px] uppercase tracking-[0.18em] text-foreground"
+                className={cn(
+                  "border-b border-white/8 py-4 font-data text-[12px] uppercase tracking-[0.18em]",
+                  active === l.id ? "text-accent" : "text-foreground"
+                )}
               >
                 {l.label}
               </a>
@@ -51,7 +76,6 @@ export function Shell({ children }: { children: ReactNode }) {
         </div>
       ) : null}
 
-      {/* Desktop rail */}
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-[13.5rem] flex-col border-r border-white/8 bg-[#050505] lg:flex">
         <div className="relative flex flex-1 flex-col px-5 pb-6 pt-8">
           <DitherGradient
@@ -72,14 +96,16 @@ export function Shell({ children }: { children: ReactNode }) {
             </span>
           </a>
 
-          <nav className="relative mt-12 flex flex-1 flex-col gap-1">
+          <nav className="relative mt-12 flex flex-1 flex-col gap-0.5">
             {links.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
                 className={cn(
-                  "rounded-sm px-2 py-2 font-data text-[11px] uppercase tracking-[0.16em]",
-                  "text-muted-foreground transition hover:bg-white/[0.04] hover:text-foreground"
+                  "rounded-sm px-2 py-2 font-data text-[11px] uppercase tracking-[0.16em] transition",
+                  active === l.id
+                    ? "bg-white/[0.06] text-accent"
+                    : "text-muted-foreground hover:bg-white/[0.04] hover:text-foreground"
                 )}
               >
                 {l.label}
