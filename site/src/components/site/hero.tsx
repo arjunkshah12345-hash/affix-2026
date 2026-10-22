@@ -5,49 +5,56 @@ import { asOf, leader, safest } from "@/data/content"
 import { motion, useReducedMotion } from "motion/react"
 
 /**
- * Specimen stage — the leading AFFIX score sits on a full-height dither field.
- * Intentionally not the prior “bottom glow + Rank frameworks by what lasts” hero.
+ * Specimen stage — leading score on a full-height dither field.
+ * Not the prior bottom-glow / “by what lasts” composition.
  */
 export function Hero() {
   const reduce = useReducedMotion()
 
   return (
     <section id="top" className="relative min-h-[100svh] lg:min-h-dvh">
-      <div className="grid min-h-[100svh] lg:min-h-dvh lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-        {/* Copy column */}
-        <div className="relative z-10 flex flex-col justify-between px-5 py-10 md:px-10 md:py-14 lg:py-16">
+      <div className="grid min-h-[100svh] lg:min-h-dvh lg:grid-cols-[1fr_1.15fr]">
+        {/* Copy */}
+        <div className="relative z-10 flex flex-col justify-between gap-10 px-5 py-8 md:px-8 md:py-12 lg:py-14">
           <motion.p
             className="font-data text-[11px] uppercase tracking-[0.2em] text-muted-foreground"
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.55 }}
           >
-            Agent Framework Fitness Index · {asOf}
+            Fitness index · {asOf}
           </motion.p>
 
-          <div className="my-16 max-w-[22ch] lg:my-0">
-            <motion.h1
-              className="font-display text-[clamp(3rem,6vw,4.5rem)] font-semibold leading-[0.98] tracking-[-0.035em]"
-              initial={reduce ? false : { opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-            >
-              The index for stacks you can still own in twelve months.
-            </motion.h1>
+          <div>
             <motion.p
-              className="mt-6 text-base leading-relaxed text-muted-foreground md:text-lg"
+              className="font-display text-5xl font-semibold tracking-tight text-foreground md:text-6xl"
               initial={reduce ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              Sixteen production frameworks. Ten dimensions. Rewrite hazard
-              scored beside fitness—not after the fact.
+              AFFIX
+            </motion.p>
+            <motion.h1
+              className="mt-5 max-w-[18ch] font-display text-[clamp(1.75rem,3.4vw,2.35rem)] font-semibold leading-[1.15] tracking-[-0.02em] text-foreground"
+              initial={reduce ? false : { opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Stacks you can still own in twelve months.
+            </motion.h1>
+            <motion.p
+              className="mt-5 max-w-[34ch] text-[15px] leading-relaxed text-muted-foreground"
+              initial={reduce ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.14 }}
+            >
+              Sixteen frameworks. Fitness and rewrite hazard in one index.
             </motion.p>
             <motion.div
-              className="mt-9 flex flex-wrap gap-3"
+              className="mt-8 flex flex-wrap items-center gap-3"
               initial={reduce ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.25, duration: 0.6 }}
+              transition={{ delay: 0.22, duration: 0.55 }}
             >
               <DitherButton
                 type="button"
@@ -65,37 +72,37 @@ export function Hero() {
               </DitherButton>
               <a
                 href="#results"
-                className="inline-flex h-11 items-center px-2 font-data text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition hover:text-accent"
+                className="font-data text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition hover:text-accent"
               >
-                Read results
+                Results
               </a>
             </motion.div>
           </div>
 
-          <dl className="grid grid-cols-3 gap-4 border-t border-white/10 pt-6 font-data text-[11px]">
+          <dl className="grid grid-cols-3 gap-3 border-t border-white/10 pt-5 font-data text-[10px]">
             <div>
               <dt className="uppercase tracking-[0.14em] text-muted-foreground">
                 Leader
               </dt>
-              <dd className="mt-1 text-foreground">{leader.framework}</dd>
+              <dd className="mt-1 text-[12px] text-foreground">{leader.framework}</dd>
             </div>
             <div>
               <dt className="uppercase tracking-[0.14em] text-muted-foreground">
                 AFFIX
               </dt>
-              <dd className="mt-1 text-accent">{leader.AFFIX.toFixed(1)}</dd>
+              <dd className="mt-1 text-[12px] text-accent">{leader.AFFIX.toFixed(1)}</dd>
             </div>
             <div>
               <dt className="uppercase tracking-[0.14em] text-muted-foreground">
                 Best RHS
               </dt>
-              <dd className="mt-1 text-foreground">{safest.RHS.toFixed(1)}</dd>
+              <dd className="mt-1 text-[12px] text-foreground">{safest.RHS.toFixed(1)}</dd>
             </div>
           </dl>
         </div>
 
-        {/* Dither specimen panel — the visual product */}
-        <div className="relative min-h-[52vh] overflow-hidden border-t border-white/8 lg:min-h-0 lg:border-l lg:border-t-0">
+        {/* Dither specimen — score locked in first viewport */}
+        <div className="relative min-h-[42vh] overflow-hidden border-t border-white/8 lg:min-h-0 lg:border-l lg:border-t-0">
           <DitherGradient
             from="orange"
             to="transparent"
@@ -106,32 +113,32 @@ export function Hero() {
             className="absolute inset-0"
           />
           <DitherGradient
-            from={18}
+            from={22}
             to="transparent"
             direction="left"
             cell={3}
-            opacity={0.45}
+            opacity={0.4}
             bloom="low"
             className="absolute inset-0"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-[#050505]/35" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/50 via-transparent to-[#050505]/55" />
 
           <motion.div
-            className="relative flex h-full min-h-[52vh] flex-col items-start justify-end p-6 md:p-10 lg:min-h-full lg:p-12"
-            initial={reduce ? false : { opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="relative flex h-full min-h-[42vh] flex-col justify-end p-6 md:p-8 lg:absolute lg:inset-0 lg:min-h-0 lg:justify-center lg:p-10"
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="font-data text-[11px] uppercase tracking-[0.22em] text-white/70">
-              Specimen · rank 01
+            <p className="font-data text-[10px] uppercase tracking-[0.22em] text-white/75">
+              Specimen · 01
             </p>
-            <p className="mt-3 font-display text-[clamp(5rem,14vw,9rem)] font-semibold leading-none tracking-[-0.05em] text-white">
+            <p className="mt-2 font-display text-[clamp(4.5rem,12vw,7.5rem)] font-semibold leading-none tracking-[-0.05em] text-white">
               {leader.AFFIX.toFixed(1)}
             </p>
-            <p className="mt-4 font-display text-2xl font-semibold tracking-tight text-white md:text-3xl">
+            <p className="mt-3 font-display text-xl font-semibold text-white md:text-2xl">
               {leader.framework}
             </p>
-            <p className="mt-2 font-data text-[12px] uppercase tracking-[0.16em] text-white/65">
+            <p className="mt-1.5 font-data text-[11px] uppercase tracking-[0.14em] text-white/70">
               RHS {leader.RHS.toFixed(1)} · LIE {leader.LIE} · PR {leader.PR}
             </p>
           </motion.div>
