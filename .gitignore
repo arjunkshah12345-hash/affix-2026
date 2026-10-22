@@ -58,3 +58,6 @@ video/dist/
 
 # Local shot dumps outside public
 site/shots/
+video/.render-tmp/
+video/.tmp/
+**/puppeteer_dev_chrome_profile*/
