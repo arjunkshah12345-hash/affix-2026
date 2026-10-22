@@ -31,28 +31,28 @@ export function Methodology() {
     : null
 
   return (
-    <section id="method" className="relative overflow-hidden py-28 md:py-36">
+    <section id="method" className="relative overflow-hidden py-24 md:py-32">
       <DitherGradient
         from="orange"
         to="transparent"
         direction="right"
         cell={3}
-        opacity={0.1}
+        opacity={0.08}
         bloom="low"
-        className="pointer-events-none absolute inset-y-0 left-0 w-1/2"
+        className="pointer-events-none absolute inset-y-0 left-0 w-1/3"
       />
-      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
+      <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Methodology</SectionLabel>
-          <h2 className="mt-4 max-w-[18ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            How we score stacks
+          <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            Weights, rubrics, worked math
           </h2>
-          <p className="mt-5 max-w-[52ch] text-muted-foreground">
+          <p className="mt-4 max-w-[48ch] text-sm text-muted-foreground md:text-base">
             {methodology.overview}
           </p>
         </Reveal>
 
-        <Reveal delay={0.06} className="mt-16">
+        <Reveal delay={0.06} className="mt-14">
           <p className="mb-4 font-data text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
             Dimension weights · expand for 90 vs 60 rubrics
           </p>
@@ -97,7 +97,7 @@ export function Methodology() {
               >
                 <DitherAvatar
                   name={d.code}
-                  hue={28}
+                  hue={24}
                   bloom="low"
                   className="size-4 shrink-0 rounded-[2px]"
                 />

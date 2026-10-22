@@ -36,23 +36,23 @@ export function Failures() {
   } | null>(null)
 
   return (
-    <section id="failures" className="relative overflow-hidden py-28 md:py-36">
+    <section id="failures" className="relative overflow-hidden py-24 md:py-32">
       <DitherGradient
         from="orange"
         to="transparent"
         direction="up"
         cell={3}
-        opacity={0.1}
+        opacity={0.08}
         bloom="low"
-        className="pointer-events-none absolute inset-x-0 top-0 h-48"
+        className="pointer-events-none absolute inset-x-0 top-0 h-40"
       />
-      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
+      <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Failure modes</SectionLabel>
-          <h2 className="mt-4 max-w-[18ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Where stacks break
+          <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            Coverage at the fault line
           </h2>
-          <p className="mt-5 max-w-[48ch] text-muted-foreground">
+          <p className="mt-4 max-w-[44ch] text-sm text-muted-foreground md:text-base">
             First-class API, documented pattern, or absent. Hover a cell for the
             named surface and evidence. FMC ranks rows.
           </p>

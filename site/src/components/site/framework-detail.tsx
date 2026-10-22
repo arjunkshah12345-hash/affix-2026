@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react"
 import { AnimatePresence, motion } from "motion/react"
-import { DitherAvatar, DitherButton } from "@/components/dither-kit"
+import { DitherAvatar, DitherButton, DitherGradient } from "@/components/dither-kit"
 import {
   getSiteFramework,
   matrixFrameworkById,
@@ -72,6 +72,7 @@ const SCORE_KEYS = [
   "PR",
 ] as const
 
+/** Full-viewport dossier — covers the rail stage so it never sits under the left ink. */
 function FrameworkDetailDrawer() {
   const { openId, close } = useFrameworkDetail()
   const fw = openId ? getSiteFramework(openId) : undefined
@@ -94,66 +95,66 @@ function FrameworkDetailDrawer() {
   return (
     <AnimatePresence>
       {openId && fw && (
-        <>
-          <motion.button
-            type="button"
-            aria-label="Close framework detail"
-            className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-[2px]"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            onClick={close}
+        <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="fw-detail-title"
+          className="fixed inset-0 z-[80] flex flex-col bg-[#050505]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.28 }}
+        >
+          <DitherGradient
+            from="orange"
+            to="transparent"
+            direction="down"
+            cell={2}
+            opacity={0.18}
+            bloom="low"
+            className="pointer-events-none absolute inset-x-0 top-0 h-48"
           />
-          <motion.aside
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="fw-detail-title"
-            className="fixed inset-y-0 right-0 z-[70] flex w-full max-w-[480px] flex-col border-l border-white/8 bg-[#0a0a0a] shadow-2xl shadow-black/50"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="flex items-start justify-between gap-4 border-b border-white/8 px-6 py-5">
-              <div className="flex items-start gap-3">
-                <DitherAvatar
-                  name={fw.id}
-                  hue={28}
-                  bloom="low"
-                  className="mt-0.5 size-10 shrink-0 rounded-sm"
-                />
-                <div>
-                  <p className="font-data text-[10px] uppercase tracking-[0.14em] text-accent">
-                    {fw.id}
-                    {matrix ? ` · ${matrix.primary_lang}` : ""}
-                  </p>
-                  <h2
-                    id="fw-detail-title"
-                    className="mt-1 font-display text-2xl font-semibold tracking-tight"
-                  >
-                    {fw.name}
-                  </h2>
-                </div>
-              </div>
-              <DitherButton
-                type="button"
-                color="orange"
-                variant="hatched"
-                bloom="low"
-                onClick={close}
-                className="h-9 shrink-0 rounded-md px-3 font-data text-[11px] uppercase tracking-[0.14em] text-white"
-              >
-                Close
-              </DitherButton>
-            </div>
 
-            <div className="flex-1 overflow-y-auto px-6 py-6">
-              <p className="text-[15px] leading-relaxed text-foreground">
+          <div className="relative flex items-start justify-between gap-4 border-b border-white/8 px-5 py-5 md:px-10">
+            <div className="flex items-start gap-3">
+              <DitherAvatar
+                name={fw.id}
+                hue={24}
+                bloom="low"
+                className="mt-0.5 size-10 shrink-0 rounded-sm"
+              />
+              <div>
+                <p className="font-data text-[10px] uppercase tracking-[0.14em] text-accent">
+                  Dossier · {fw.id}
+                  {matrix ? ` · ${matrix.primary_lang}` : ""}
+                </p>
+                <h2
+                  id="fw-detail-title"
+                  className="mt-1 font-display text-2xl font-semibold tracking-tight md:text-3xl"
+                >
+                  {fw.name}
+                </h2>
+              </div>
+            </div>
+            <DitherButton
+              type="button"
+              color="orange"
+              variant="hatched"
+              bloom="low"
+              onClick={close}
+              className="h-9 shrink-0 rounded-md px-3 font-data text-[11px] uppercase tracking-[0.14em] text-white"
+            >
+              Close
+            </DitherButton>
+          </div>
+
+          <div className="relative flex-1 overflow-y-auto">
+            <div className="mx-auto max-w-[960px] px-5 py-8 md:px-10 md:py-10">
+              <p className="max-w-[52ch] text-[15px] leading-relaxed text-foreground md:text-base">
                 {fw.oneLiner}
               </p>
 
-              <dl className="mt-8 space-y-5">
+              <dl className="mt-10 grid gap-8 sm:grid-cols-2">
                 <div>
                   <dt className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                     Best for
@@ -172,7 +173,7 @@ function FrameworkDetailDrawer() {
                 </div>
               </dl>
 
-              <div className="mt-8">
+              <div className="mt-10">
                 <p className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                   Version pins
                 </p>
@@ -185,11 +186,11 @@ function FrameworkDetailDrawer() {
                 </ul>
               </div>
 
-              <div className="mt-8">
+              <div className="mt-10">
                 <p className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                   Key scores
                 </p>
-                <div className="mt-3 grid grid-cols-4 gap-2">
+                <div className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-8">
                   {SCORE_KEYS.map((key) => (
                     <div
                       key={key}
@@ -217,13 +218,16 @@ function FrameworkDetailDrawer() {
                 </div>
               </div>
 
-              <div className="mt-8">
+              <div className="mt-10">
                 <p className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                   Primitives
                 </p>
                 <div className="mt-3 divide-y divide-white/8 border-y border-white/8">
                   {PRIMITIVE_LABELS.map(({ key, label }) => (
-                    <div key={key} className="grid grid-cols-[7rem_1fr] gap-3 py-3">
+                    <div
+                      key={key}
+                      className="grid grid-cols-[7rem_1fr] gap-3 py-3 md:grid-cols-[8rem_1fr]"
+                    >
                       <span className="font-data text-[10px] uppercase tracking-[0.14em] text-accent">
                         {label}
                       </span>
@@ -235,7 +239,7 @@ function FrameworkDetailDrawer() {
                 </div>
               </div>
 
-              <div className="mt-8 pb-8">
+              <div className="mt-10 pb-12">
                 <p className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                   Citations
                 </p>
@@ -255,8 +259,8 @@ function FrameworkDetailDrawer() {
                 </ul>
               </div>
             </div>
-          </motion.aside>
-        </>
+          </div>
+        </motion.div>
       )}
     </AnimatePresence>
   )

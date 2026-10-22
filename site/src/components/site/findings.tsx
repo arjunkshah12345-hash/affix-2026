@@ -11,30 +11,29 @@ export function Findings() {
   const [open, setOpen] = useState<number | null>(null)
 
   return (
-    <section id="findings" className="relative overflow-hidden py-28 md:py-36">
+    <section id="findings" className="relative overflow-hidden py-24 md:py-32">
       <DitherGradient
         from="orange"
         to="transparent"
         direction="left"
         cell={3}
-        opacity={0.1}
+        opacity={0.08}
         bloom="low"
         className="pointer-events-none absolute inset-y-0 right-0 w-2/5"
       />
-      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
+      <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Findings</SectionLabel>
-          <h2 className="mt-4 max-w-[18ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Claims that can die
+          <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            Killable claims only
           </h2>
-          <p className="mt-5 max-w-[52ch] text-muted-foreground">
+          <p className="mt-4 max-w-[48ch] text-sm text-muted-foreground md:text-base">
             {findings.length} claims from the AFFIX-2026 synthesis. Expand each
-            for supporting evidence and the condition under which the claim is
-            withdrawn.
+            for evidence and the condition under which the claim is withdrawn.
           </p>
         </Reveal>
 
-        <Stagger className="mt-16 grid gap-x-12 gap-y-0 md:grid-cols-2">
+        <Stagger className="mt-14 grid gap-x-10 gap-y-0 md:grid-cols-2">
           {findings.map((f) => {
             const n = `R${f.n}`
             const isOpen = open === f.n
@@ -56,7 +55,7 @@ export function Findings() {
                       <div className="flex items-center gap-2.5">
                         <DitherAvatar
                           name={n}
-                          hue={28}
+                          hue={24}
                           bloom="low"
                           className="size-8 shrink-0 rounded-sm"
                         />

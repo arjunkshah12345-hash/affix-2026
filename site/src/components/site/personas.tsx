@@ -30,30 +30,30 @@ export function Personas() {
   const current = personas.find((p) => p.id === active)!
 
   return (
-    <section id="playbooks" className="relative overflow-hidden py-28 md:py-36">
+    <section id="playbooks" className="relative overflow-hidden py-24 md:py-32">
       <DitherGradient
         from="orange"
         to="transparent"
         direction="up"
         cell={3}
-        opacity={0.14}
+        opacity={0.12}
         bloom="low"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-72"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-56"
       />
-      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
+      <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Playbooks</SectionLabel>
-          <h2 className="mt-4 max-w-[18ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Defaults by persona
+          <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            Start here by seat
           </h2>
-          <p className="mt-5 max-w-[52ch] text-muted-foreground">
+          <p className="mt-4 max-w-[48ch] text-sm text-muted-foreground md:text-base">
             Suggested primary stacks conditioned on language estate, compliance
-            constraints, and distance from conversational UI to durable agents.
-            Defaults, not prescriptions.
+            constraints, and distance from chat UI to durable agents. Defaults,
+            not prescriptions.
           </p>
         </Reveal>
 
-        <Reveal delay={0.08} className="mt-14">
+        <Reveal delay={0.08} className="mt-12">
           <div className="flex flex-wrap gap-2">
             {personas.map((p) => (
               <button
@@ -69,7 +69,7 @@ export function Personas() {
               >
                 <DitherAvatar
                   name={p.id}
-                  hue={28}
+                  hue={24}
                   bloom="low"
                   className="size-5 shrink-0 rounded-sm"
                 />

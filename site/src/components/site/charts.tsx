@@ -45,30 +45,29 @@ const radarConfig = {
 
 export function Charts() {
   return (
-    <section id="signals" className="relative overflow-hidden py-28 md:py-36">
+    <section id="signals" className="relative overflow-hidden py-24 md:py-32">
       <DitherGradient
         from="orange"
         to="transparent"
         direction="left"
         cell={3}
-        opacity={0.12}
+        opacity={0.1}
         bloom="low"
         className="pointer-events-none absolute inset-y-0 right-0 w-2/5"
       />
-      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
+      <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Signals</SectionLabel>
-          <h2 className="mt-4 max-w-[18ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Leaders, visualized
+          <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            Orange bars, grey hazard
           </h2>
-          <p className="mt-5 max-w-[52ch] text-muted-foreground">
-            AFFIX and RHS for the leading eight frameworks, and proprietary
-            index profiles for the top pair. Values are EST from the published
-            matrix.
+          <p className="mt-4 max-w-[48ch] text-sm text-muted-foreground md:text-base">
+            AFFIX and RHS for the leading eight, plus index profiles for the top
+            pair. Values are EST from the published matrix.
           </p>
         </Reveal>
 
-        <div className="mt-16 grid gap-14 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-14 grid gap-14 lg:grid-cols-2 lg:gap-12">
           <Reveal delay={0.05} className="min-w-0">
             <p className="mb-4 font-data text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
               AFFIX and rewrite hazard · top eight
@@ -77,7 +76,7 @@ export function Charts() {
               <BarChart
                 data={barData}
                 config={barConfig}
-                className="h-[320px] w-full"
+                className="h-[300px] w-full"
                 animate
                 animationDuration={1200}
                 bloom="low"
@@ -93,8 +92,8 @@ export function Charts() {
               </BarChart>
             </div>
             <p className="mt-4 max-w-[42ch] font-data text-[11px] leading-relaxed text-muted-foreground">
-              Orange is AFFIX. Grey hatch is rewrite hazard. High scores on both
-              mean strong capability with a fragile long-term fit.
+              Orange is AFFIX. Grey hatch is rewrite hazard. High on both means
+              strong capability with a fragile long-term fit.
             </p>
           </Reveal>
 
@@ -107,7 +106,7 @@ export function Charts() {
                 data={radarData}
                 config={radarConfig}
                 nameKey="axis"
-                className="h-[320px] w-full"
+                className="h-[300px] w-full"
                 animate
                 animationDuration={1400}
                 bloom="low"
@@ -119,8 +118,8 @@ export function Charts() {
               </RadarChart>
             </div>
             <p className="mt-4 max-w-[42ch] font-data text-[11px] leading-relaxed text-muted-foreground">
-              Similar overall fitness, different shapes. Developer experience
-              wins the prototype; contracts and hardening win production.
+              Similar overall fitness, different shapes. DX wins the prototype;
+              contracts and hardening win production.
             </p>
           </Reveal>
         </div>

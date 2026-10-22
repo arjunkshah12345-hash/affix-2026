@@ -20,14 +20,14 @@ const points = [
 
 export function Limitations() {
   return (
-    <section id="limitations" className="border-t border-white/8 py-20 md:py-24">
-      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
+    <section id="limitations" className="border-t border-white/8 py-24 md:py-32">
+      <div className="mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Scope</SectionLabel>
-          <h2 className="mt-4 max-w-[20ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            Scope and limits
+          <h2 className="mt-3 max-w-[18ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            What this index is not
           </h2>
-          <p className="mt-4 max-w-[46ch] text-muted-foreground">
+          <p className="mt-4 max-w-[44ch] text-sm text-muted-foreground md:text-base">
             {study} is a comparative fitness index—not a model bake-off.
           </p>
         </Reveal>

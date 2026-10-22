@@ -43,30 +43,29 @@ export function Scatter() {
   const yTicks = [ymin, Math.round((ymin + ymax) / 2), ymax]
 
   return (
-    <section id="map" className="relative overflow-hidden py-28 md:py-36">
+    <section id="map" className="relative overflow-hidden py-24 md:py-32">
       <DitherGradient
         from="orange"
         to="transparent"
         direction="up"
         cell={3}
-        opacity={0.12}
+        opacity={0.1}
         bloom="low"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-56"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-48"
       />
-      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
+      <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Map</SectionLabel>
-          <h2 className="mt-4 max-w-[18ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Fitness vs rewrite risk
+          <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            High fitness, low rewrite
           </h2>
-          <p className="mt-5 max-w-[52ch] text-muted-foreground">
-            Scatter of composite fitness (AFFIX) against rewrite hazard (RHS).
-            Preferred region: high AFFIX, low RHS. Axes are scaled within the
-            study sample, not to absolute capability.
+          <p className="mt-4 max-w-[48ch] text-sm text-muted-foreground md:text-base">
+            AFFIX against RHS. Preferred region: high fitness, low hazard. Axes
+            scale within the study sample.
           </p>
         </Reveal>
 
-        <Reveal delay={0.08} className="mt-14">
+        <Reveal delay={0.08} className="mt-12">
           <div className="relative overflow-hidden border border-white/8 bg-[#080808]">
             <svg
               viewBox={`0 0 ${W} ${H}`}
@@ -94,7 +93,6 @@ export function Scatter() {
               </defs>
               <rect width={W} height={H} fill="url(#scatter-dark)" />
 
-              {/* quadrant hint: high AFFIX / low RHS */}
               <rect
                 x={scale((xmin + xmax) / 2, xmin, xmax, PAD.l, W - PAD.r)}
                 y={PAD.t}

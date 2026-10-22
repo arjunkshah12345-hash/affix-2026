@@ -58,23 +58,23 @@ export function Compare() {
   const presets = comparisons.slice(0, 6)
 
   return (
-    <section id="compare" className="relative overflow-hidden py-28 md:py-36">
+    <section id="compare" className="relative overflow-hidden py-24 md:py-32">
       <DitherGradient
         from="orange"
         to="transparent"
         direction="right"
         cell={3}
-        opacity={0.12}
+        opacity={0.1}
         bloom="low"
         className="pointer-events-none absolute inset-y-0 left-0 w-1/3"
       />
-      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
+      <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Head-to-head</SectionLabel>
-          <h2 className="mt-4 max-w-[16ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Pick two. Decide.
+          <h2 className="mt-3 max-w-[14ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            Two stacks. One call.
           </h2>
-          <p className="mt-5 max-w-[46ch] text-muted-foreground">
+          <p className="mt-4 max-w-[44ch] text-sm text-muted-foreground md:text-base">
             Dimension radar from the score matrix. Verdicts use curated
             comparisons when available; otherwise they are derived from scores.
           </p>
@@ -99,7 +99,7 @@ export function Compare() {
               >
                 <DitherAvatar
                   name={`${c.leftId}${c.rightId}`}
-                  hue={28}
+                  hue={24}
                   bloom="low"
                   className="size-4 shrink-0 rounded-[2px]"
                 />
@@ -124,7 +124,7 @@ export function Compare() {
           </div>
         </Reveal>
 
-        <div className="mt-14 grid gap-14 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-14 grid gap-12 lg:grid-cols-2 lg:gap-12">
           <Reveal delay={0.08} className="min-w-0">
             <p className="mb-4 font-data text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
               Profile · {left.id} vs {right.id}
@@ -134,7 +134,7 @@ export function Compare() {
                 data={radarData}
                 config={radarConfig}
                 nameKey="axis"
-                className="h-[340px] w-full"
+                className="h-[320px] w-full"
                 animate
                 animationDuration={1200}
                 bloom="low"

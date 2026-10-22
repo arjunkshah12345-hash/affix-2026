@@ -45,23 +45,23 @@ export function Frameworks() {
   }, [q, lang])
 
   return (
-    <section id="frameworks" className="relative overflow-hidden py-28 md:py-36">
+    <section id="frameworks" className="relative overflow-hidden py-24 md:py-32">
       <DitherGradient
         from="orange"
         to="transparent"
         direction="up"
         cell={3}
-        opacity={0.12}
+        opacity={0.1}
         bloom="low"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-64"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-56"
       />
-      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
+      <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Frameworks</SectionLabel>
-          <h2 className="mt-4 max-w-[16ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Sixteen dossiers
+          <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            Open a dossier
           </h2>
-          <p className="mt-5 max-w-[48ch] text-muted-foreground">
+          <p className="mt-4 max-w-[44ch] text-sm text-muted-foreground md:text-base">
             Filter by language niche, then open a framework for primitives,
             version pins, scores, and primary citations.
           </p>
@@ -96,7 +96,7 @@ export function Frameworks() {
           </div>
         </Reveal>
 
-        <Stagger className="mt-14 grid gap-px bg-white/8 sm:grid-cols-2 lg:grid-cols-4">
+        <Stagger className="mt-12 grid gap-px bg-white/8 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((f) => {
             const m = matrixFrameworkById[f.id]
             return (
@@ -110,7 +110,7 @@ export function Frameworks() {
                     <div className="flex items-center gap-2">
                       <DitherAvatar
                         name={f.id}
-                        hue={28}
+                        hue={24}
                         bloom="low"
                         className="size-7 shrink-0 rounded-sm"
                       />
