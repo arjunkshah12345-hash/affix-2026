@@ -93,31 +93,40 @@ export function Scatter() {
               </defs>
               <rect width={W} height={H} fill="url(#scatter-dark)" />
 
-              <rect
-                x={scale((xmin + xmax) / 2, xmin, xmax, PAD.l, W - PAD.r)}
-                y={PAD.t}
-                width={
-                  W -
-                  PAD.r -
-                  scale((xmin + xmax) / 2, xmin, xmax, PAD.l, W - PAD.r)
-                }
-                height={
-                  scale((ymin + ymax) / 2, ymin, ymax, H - PAD.b, PAD.t) - PAD.t
-                }
-                fill="rgba(255,150,50,0.1)"
-              />
-              <text
-                x={
-                  scale((xmin + xmax) / 2, xmin, xmax, PAD.l, W - PAD.r) + 10
-                }
-                y={PAD.t + 16}
-                fill="rgba(255,150,50,0.75)"
-                fontFamily="var(--font-data), monospace"
-                fontSize="9"
-                letterSpacing="0.14em"
-              >
-                PREFERRED
-              </text>
+              {(() => {
+                const x0 = scale((xmin + xmax) / 2, xmin, xmax, PAD.l, W - PAD.r)
+                const yMid = scale(
+                  (ymin + ymax) / 2,
+                  ymin,
+                  ymax,
+                  H - PAD.b,
+                  PAD.t
+                )
+                // Low RHS is toward the bottom (y increases as RHS falls).
+                const y0 = yMid
+                const y1 = H - PAD.b
+                return (
+                  <>
+                    <rect
+                      x={x0}
+                      y={y0}
+                      width={W - PAD.r - x0}
+                      height={y1 - y0}
+                      fill="rgba(255,150,50,0.1)"
+                    />
+                    <text
+                      x={x0 + 10}
+                      y={y0 + 16}
+                      fill="rgba(255,150,50,0.75)"
+                      fontFamily="var(--font-data), monospace"
+                      fontSize="9"
+                      letterSpacing="0.14em"
+                    >
+                      PREFERRED
+                    </text>
+                  </>
+                )
+              })()}
 
               {xTicks.map((t) => {
                 const x = scale(t, xmin, xmax, PAD.l, W - PAD.r)
