@@ -2,8 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { frameworks } from "@/data/content"
-import { cn } from "@/lib/utils"
-import { Reveal } from "./reveal"
+import { Reveal, SectionLabel } from "./reveal"
 
 const W = 640
 const H = 420
@@ -43,16 +42,14 @@ export function Scatter() {
   const yTicks = [ymin, Math.round((ymin + ymax) / 2), ymax]
 
   return (
-    <section id="map" className="relative py-32 md:py-40">
-      <div className="mx-auto max-w-[1120px] px-6 md:px-8">
+    <section id="map" className="relative py-24 md:py-32">
+      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
-            07 — Map
-          </p>
-          <h2 className="mt-4 max-w-[24ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
+          <SectionLabel>Map</SectionLabel>
+          <h2 className="mt-3 max-w-[24ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
             AFFIX versus rewrite hazard
           </h2>
-          <p className="mt-5 max-w-[52ch] text-muted-foreground">
+          <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted-foreground md:text-base">
             Scatter of composite fitness (AFFIX) against rewrite hazard (RHS).
             Preferred region: high AFFIX, low RHS. Axes are scaled within the
             study sample, not to absolute capability.
@@ -60,7 +57,7 @@ export function Scatter() {
         </Reveal>
 
         <Reveal delay={0.08} className="mt-14">
-          <div className="relative overflow-hidden border border-white/8 bg-[#080808]">
+          <div className="relative overflow-hidden border border-foreground/12 bg-background">
             <svg
               viewBox={`0 0 ${W} ${H}`}
               className="h-auto w-full"
@@ -69,23 +66,27 @@ export function Scatter() {
             >
               <defs>
                 <pattern
-                  id="scatter-dither"
-                  width="4"
-                  height="4"
+                  id="scatter-paper"
+                  width="6"
+                  height="6"
                   patternUnits="userSpaceOnUse"
                 >
-                  <rect width="4" height="4" fill="#0a0a0a" />
-                  <rect width="1" height="1" fill="oklch(0.72 0.19 45 / 0.12)" />
+                  <rect width="6" height="6" fill="oklch(0.968 0.006 250)" />
                   <rect
-                    x="2"
-                    y="2"
                     width="1"
                     height="1"
-                    fill="oklch(0.72 0.19 45 / 0.08)"
+                    fill="oklch(0.22 0.03 265 / 0.06)"
+                  />
+                  <rect
+                    x="3"
+                    y="3"
+                    width="1"
+                    height="1"
+                    fill="oklch(0.5 0.17 25 / 0.05)"
                   />
                 </pattern>
               </defs>
-              <rect width={W} height={H} fill="url(#scatter-dither)" />
+              <rect width={W} height={H} fill="url(#scatter-paper)" />
 
               {/* quadrant hint: high AFFIX / low RHS */}
               <rect
@@ -99,7 +100,7 @@ export function Scatter() {
                 height={
                   scale((ymin + ymax) / 2, ymin, ymax, H - PAD.b, PAD.t) - PAD.t
                 }
-                fill="oklch(0.72 0.19 45 / 0.04)"
+                fill="oklch(0.5 0.17 25 / 0.06)"
               />
 
               {xTicks.map((t) => {
@@ -111,13 +112,13 @@ export function Scatter() {
                       y1={PAD.t}
                       x2={x}
                       y2={H - PAD.b}
-                      stroke="rgba(255,255,255,0.06)"
+                      stroke="oklch(0.22 0.03 265 / 0.1)"
                     />
                     <text
                       x={x}
                       y={H - 18}
                       textAnchor="middle"
-                      fill="oklch(0.55 0.02 75)"
+                      fill="oklch(0.48 0.02 265)"
                       fontFamily="var(--font-mono), monospace"
                       fontSize="10"
                     >
@@ -135,13 +136,13 @@ export function Scatter() {
                       y1={y}
                       x2={W - PAD.r}
                       y2={y}
-                      stroke="rgba(255,255,255,0.06)"
+                      stroke="oklch(0.22 0.03 265 / 0.1)"
                     />
                     <text
                       x={PAD.l - 10}
                       y={y + 3}
                       textAnchor="end"
-                      fill="oklch(0.55 0.02 75)"
+                      fill="oklch(0.48 0.02 265)"
                       fontFamily="var(--font-mono), monospace"
                       fontSize="10"
                     >
@@ -155,7 +156,7 @@ export function Scatter() {
                 x={W / 2}
                 y={H - 6}
                 textAnchor="middle"
-                fill="oklch(0.68 0.02 75)"
+                fill="oklch(0.35 0.03 265)"
                 fontFamily="var(--font-mono), monospace"
                 fontSize="10"
                 letterSpacing="0.12em"
@@ -166,7 +167,7 @@ export function Scatter() {
                 x={14}
                 y={H / 2}
                 textAnchor="middle"
-                fill="oklch(0.68 0.02 75)"
+                fill="oklch(0.35 0.03 265)"
                 fontFamily="var(--font-mono), monospace"
                 fontSize="10"
                 letterSpacing="0.12em"
@@ -190,19 +191,19 @@ export function Scatter() {
                       r={on ? 7 : 5}
                       fill={
                         on
-                          ? "oklch(0.72 0.19 45)"
-                          : "oklch(0.72 0.19 45 / 0.75)"
+                          ? "oklch(0.5 0.17 25)"
+                          : "oklch(0.5 0.17 25 / 0.85)"
                       }
-                      stroke={on ? "white" : "transparent"}
-                      strokeWidth={1}
+                      stroke={on ? "oklch(0.22 0.03 265)" : "transparent"}
+                      strokeWidth={1.25}
                     />
                     <text
                       x={p.x + 9}
                       y={p.y + 3}
                       fill={
                         on
-                          ? "oklch(0.96 0.01 85)"
-                          : "oklch(0.68 0.02 75)"
+                          ? "oklch(0.22 0.03 265)"
+                          : "oklch(0.4 0.025 265)"
                       }
                       fontFamily="var(--font-mono), monospace"
                       fontSize="10"
@@ -215,16 +216,16 @@ export function Scatter() {
               })}
             </svg>
 
-            <div className="border-t border-white/8 px-5 py-4">
+            <div className="border-t border-foreground/10 px-5 py-4">
               {active ? (
-                <p className="font-mono text-[12px] text-muted-foreground">
+                <p className="font-data text-[12px] text-muted-foreground">
                   <span className="text-accent">{active.framework}</span>
                   {" · "}
                   AFFIX {active.AFFIX.toFixed(1)} · RHS {active.RHS.toFixed(1)} ·
                   LIE {active.LIE} · FMC {active.FMC} · RACS {active.RACS}
                 </p>
               ) : (
-                <p className="font-mono text-[11px] text-muted-foreground/60">
+                <p className="font-data text-[11px] text-muted-foreground/70">
                   Hover a point — preferred region is high AFFIX, low RHS
                   (shaded).
                 </p>
@@ -232,11 +233,7 @@ export function Scatter() {
             </div>
           </div>
 
-          <p
-            className={cn(
-              "mt-4 font-mono text-[11px] leading-relaxed text-muted-foreground"
-            )}
-          >
+          <p className="mt-4 font-data text-[11px] leading-relaxed text-muted-foreground">
             PydanticAI sits near the preferred corner. DSPy and smolagents sit
             high on rewrite hazard; LangGraph trades control for cognitive tax.
           </p>

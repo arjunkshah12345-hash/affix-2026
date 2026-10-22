@@ -1,25 +1,22 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { DitherButton } from "@/components/dither-kit"
 import { cn } from "@/lib/utils"
 
 const links = [
-  { href: "#brief", label: "Brief" },
-  { href: "#method", label: "Method" },
+  { href: "#results", label: "Results" },
   { href: "#rankings", label: "Rankings" },
-  { href: "#frameworks", label: "Explore" },
+  { href: "#method", label: "Method" },
   { href: "#failures", label: "Failures" },
-  { href: "#compare", label: "Compare" },
   { href: "#findings", label: "Findings" },
-  { href: "#playbooks", label: "Playbooks" },
+  { href: "#film", label: "Film" },
 ]
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    const onScroll = () => setScrolled(window.scrollY > 12)
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
@@ -28,46 +25,40 @@ export function Nav() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-[background,border-color,backdrop-filter] duration-500",
+        "fixed inset-x-0 top-0 z-50 transition-[background,box-shadow,border-color] duration-500",
         scrolled
-          ? "border-b border-white/6 bg-[#050505]/70 backdrop-blur-xl"
+          ? "border-b border-foreground/10 bg-background/85 backdrop-blur-md"
           : "border-b border-transparent bg-transparent"
       )}
     >
-      <div className="mx-auto flex h-16 max-w-[1120px] items-center justify-between px-6 md:px-8">
+      <div className="mx-auto flex h-14 max-w-[1120px] items-center justify-between px-5 md:h-16 md:px-8">
         <a href="#top" className="group flex items-baseline gap-2">
           <span className="font-display text-lg font-semibold tracking-tight text-foreground">
             AFFIX
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground transition group-hover:text-accent">
+          <span className="font-data text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
             2026
           </span>
         </a>
 
-        <nav className="hidden items-center gap-5 lg:flex xl:gap-7">
+        <nav className="hidden items-center gap-6 md:flex lg:gap-7">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground transition hover:text-foreground xl:text-[11px] xl:tracking-[0.16em]"
+              className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
             >
               {l.label}
             </a>
           ))}
         </nav>
 
-        <DitherButton
-          type="button"
-          color="orange"
-          variant="gradient"
-          bloom="low"
-          className="h-9 rounded-md px-4 font-mono text-[11px] uppercase tracking-[0.14em] text-white"
-          onClick={() => {
-            document.querySelector("#rankings")?.scrollIntoView({ behavior: "smooth" })
-          }}
+        <a
+          href="#rankings"
+          className="inline-flex h-9 items-center rounded-sm bg-foreground px-3.5 font-data text-[10px] uppercase tracking-[0.14em] text-background transition hover:bg-accent"
         >
-          View rankings
-        </DitherButton>
+          Rankings
+        </a>
       </div>
     </header>
   )

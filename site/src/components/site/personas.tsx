@@ -1,11 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { DitherButton } from "@/components/dither-kit"
 import { personas, siteFrameworkById } from "@/data/content"
 import { cn } from "@/lib/utils"
 import { AnimatePresence, motion } from "motion/react"
-import { Reveal } from "./reveal"
+import { Reveal, SectionLabel } from "./reveal"
 
 function resolvePickLabel(pick: string) {
   const ids = pick.split(/[+/,]/).map((s) => s.trim())
@@ -26,16 +25,14 @@ export function Personas() {
   const current = personas.find((p) => p.id === active)!
 
   return (
-    <section id="playbooks" className="relative py-32 md:py-40">
-      <div className="mx-auto max-w-[1120px] px-6 md:px-8">
+    <section id="playbooks" className="relative py-24 md:py-32">
+      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
-            09 — Playbooks
-          </p>
-          <h2 className="mt-4 max-w-[22ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
+          <SectionLabel>Playbooks</SectionLabel>
+          <h2 className="mt-3 max-w-[22ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
             Persona-conditioned defaults
           </h2>
-          <p className="mt-5 max-w-[52ch] text-muted-foreground">
+          <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted-foreground md:text-base">
             Suggested primary stacks conditioned on language estate, compliance
             constraints, and distance from conversational UI to durable agents.
             Defaults, not prescriptions.
@@ -50,10 +47,10 @@ export function Personas() {
                 type="button"
                 onClick={() => setActive(p.id)}
                 className={cn(
-                  "rounded-md border px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] transition",
+                  "border px-3 py-2 font-data text-[11px] uppercase tracking-[0.14em] transition",
                   active === p.id
                     ? "border-accent/50 bg-accent/10 text-accent"
-                    : "border-white/10 text-muted-foreground hover:border-white/20 hover:text-foreground"
+                    : "border-foreground/12 text-muted-foreground hover:border-foreground/25 hover:text-foreground"
                 )}
               >
                 {p.name}
@@ -61,7 +58,7 @@ export function Personas() {
             ))}
           </div>
 
-          <div className="relative mt-12 min-h-[220px] overflow-hidden border-t border-white/8 pt-10">
+          <div className="relative mt-12 min-h-[220px] overflow-hidden border-t border-foreground/12 pt-10">
             <AnimatePresence mode="wait">
               <motion.div
                 key={current.id}
@@ -70,18 +67,18 @@ export function Personas() {
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               >
-                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                <p className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                   Recommended primary
                 </p>
-                <p className="mt-3 font-display text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+                <p className="mt-3 font-display text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
                   {resolvePickLabel(current.pick)}
                 </p>
-                <p className="mt-4 max-w-[42ch] text-lg text-muted-foreground">
+                <p className="mt-4 max-w-[42ch] text-[15px] leading-relaxed text-muted-foreground md:text-lg">
                   {current.note}
                 </p>
                 <dl className="mt-8 grid gap-4 sm:grid-cols-2">
                   <div>
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                    <dt className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                       Alt
                     </dt>
                     <dd className="mt-1 text-sm text-foreground/80">
@@ -89,7 +86,7 @@ export function Personas() {
                     </dd>
                   </div>
                   <div>
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                    <dt className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                       Avoid
                     </dt>
                     <dd className="mt-1 text-sm text-foreground/80">
@@ -102,18 +99,17 @@ export function Personas() {
           </div>
 
           <div className="mt-10">
-            <DitherButton
+            <button
               type="button"
-              color="orange"
-              variant="hatched"
-              bloom="low"
-              className="h-11 rounded-md px-5 font-mono text-[11px] uppercase tracking-[0.16em] text-white"
+              className="border border-foreground/12 bg-foreground px-5 py-2.5 font-data text-[11px] uppercase tracking-[0.14em] text-background transition hover:bg-accent hover:border-accent"
               onClick={() =>
-                document.querySelector("#rankings")?.scrollIntoView({ behavior: "smooth" })
+                document
+                  .querySelector("#rankings")
+                  ?.scrollIntoView({ behavior: "smooth" })
               }
             >
               Return to rankings
-            </DitherButton>
+            </button>
           </div>
         </Reveal>
       </div>

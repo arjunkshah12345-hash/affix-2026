@@ -1,64 +1,61 @@
 "use client"
 
 import { asOf, frameworks, study } from "@/data/content"
-import { Reveal } from "./reveal"
+import { Reveal, SectionLabel } from "./reveal"
 
 const points = [
   {
     label: "Sample",
-    body: `${frameworks.length} Tier-A frameworks, deep-scored from primary docs and named APIs as of ${asOf}. Spot-checks (LiteLLM, Inngest, ElizaOS) are contextual only—not full AFFIX rows.`,
+    body: `${frameworks.length} Tier-A frameworks, scored from primary docs and named APIs as of ${asOf}. Spot-checks are contextual only—not full AFFIX rows.`,
   },
   {
     label: "EST scores",
-    body: "Every dimension and index is an estimate from public evidence. Marketing claims never override shipped APIs. No production telemetry or blind hiring surveys were collected.",
+    body: "Every dimension and index is an estimate from public evidence. Marketing claims never override shipped APIs. No production telemetry cohorts were collected.",
   },
   {
     label: "Falsifiers",
-    body: "Claims retire if twelve-month rewrite rates invert RHS order, if DX−PH loses significance against outcomes, or if protocol exports erase the MF gap. Each finding carries its own kill condition.",
+    body: "Claims retire if twelve-month rewrite rates invert RHS order, if DX−PH loses significance against outcomes, or if protocol exports erase the MF gap.",
   },
 ] as const
 
 export function Limitations() {
   return (
-    <section id="limitations" className="relative border-t border-white/8 py-24 md:py-28">
-      <div className="mx-auto max-w-[1120px] px-6 md:px-8">
+    <section id="limitations" className="border-t border-foreground/10 py-20 md:py-24">
+      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-            Limits
-          </p>
-          <h2 className="mt-4 max-w-[22ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+          <SectionLabel>Scope</SectionLabel>
+          <h2 className="mt-3 max-w-[22ch] font-display text-2xl font-semibold tracking-tight md:text-3xl">
             Scope and limitations
           </h2>
-          <p className="mt-4 max-w-[52ch] text-muted-foreground">
-            {study} is a comparative fitness index derived from public APIs and
-            documentation. It does not measure model quality, and it does not
-            predict outcomes for any single deployment.
+          <p className="mt-4 max-w-[48ch] text-muted-foreground">
+            {study} is a comparative fitness index from public APIs and
+            documentation. It does not measure model quality or predict any
+            single deployment.
           </p>
         </Reveal>
 
-        <Reveal delay={0.06} className="mt-14 space-y-8">
+        <Reveal delay={0.06} className="mt-12 space-y-0">
           {points.map((p) => (
             <div
               key={p.label}
-              className="grid gap-2 border-t border-white/8 pt-8 md:grid-cols-[9rem_1fr] md:gap-10"
+              className="grid gap-2 border-t border-foreground/10 py-7 md:grid-cols-[8rem_1fr] md:gap-10"
             >
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-accent">
+              <p className="font-data text-[10px] uppercase tracking-[0.14em] text-accent">
                 {p.label}
               </p>
-              <p className="max-w-[56ch] text-[15px] leading-relaxed text-muted-foreground">
+              <p className="max-w-[52ch] text-[15px] leading-relaxed text-muted-foreground">
                 {p.body}
               </p>
             </div>
           ))}
         </Reveal>
 
-        <Reveal delay={0.1} className="mt-12">
+        <Reveal delay={0.1} className="mt-8">
           <a
             href="/methodology.md"
-            download
-            className="font-mono text-[11px] uppercase tracking-[0.16em] text-foreground underline-offset-4 transition hover:text-accent hover:underline"
+            className="font-data text-[11px] uppercase tracking-[0.14em] text-foreground underline-offset-4 transition hover:text-accent hover:underline"
           >
-            Download full methodology →
+            Full methodology download
           </a>
         </Reveal>
       </div>

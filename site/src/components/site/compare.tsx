@@ -14,7 +14,7 @@ import {
   getComparison,
 } from "@/data/content"
 import { cn } from "@/lib/utils"
-import { Reveal } from "./reveal"
+import { Reveal, SectionLabel } from "./reveal"
 
 const RADAR_DIMS = [
   { key: "CS", axis: "Control" },
@@ -49,23 +49,21 @@ export function Compare() {
   }))
 
   const radarConfig = {
-    left: { label: left.framework, color: "orange" as const },
-    right: { label: right.framework, color: "grey" as const },
+    left: { label: left.framework, color: "red" as const },
+    right: { label: right.framework, color: "blue" as const },
   }
 
   const presets = comparisons.slice(0, 6)
 
   return (
-    <section id="compare" className="relative py-32 md:py-40">
-      <div className="mx-auto max-w-[1120px] px-6 md:px-8">
+    <section id="compare" className="relative py-24 md:py-32">
+      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
-            06 — Head-to-head
-          </p>
-          <h2 className="mt-4 max-w-[20ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
+          <SectionLabel>Head-to-head</SectionLabel>
+          <h2 className="mt-3 max-w-[20ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
             Paired dimensional comparison
           </h2>
-          <p className="mt-5 max-w-[46ch] text-muted-foreground">
+          <p className="mt-4 max-w-[46ch] text-[15px] leading-relaxed text-muted-foreground md:text-base">
             Dimension radar from the score matrix. Verdicts use curated
             comparisons when available; otherwise they are derived from scores.
           </p>
@@ -82,10 +80,10 @@ export function Compare() {
                   setRightId(c.rightId)
                 }}
                 className={cn(
-                  "rounded-md border px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] transition",
+                  "border px-2.5 py-1.5 font-data text-[10px] uppercase tracking-[0.12em] transition",
                   leftId === c.leftId && rightId === c.rightId
                     ? "border-accent/50 bg-accent/10 text-accent"
-                    : "border-white/10 text-muted-foreground hover:border-white/20 hover:text-foreground"
+                    : "border-foreground/12 text-muted-foreground hover:border-foreground/25 hover:text-foreground"
                 )}
               >
                 {c.leftId} · {c.rightId}
@@ -109,29 +107,31 @@ export function Compare() {
           </div>
         </Reveal>
 
-        <div className="mt-14 grid gap-16 lg:grid-cols-2 lg:gap-20">
+        <div className="mt-14 grid gap-14 lg:grid-cols-2 lg:gap-16">
           <Reveal delay={0.08} className="min-w-0">
-            <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="mb-4 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
               Profile · {left.id} vs {right.id}
             </p>
-            <RadarChart
-              data={radarData}
-              config={radarConfig}
-              nameKey="axis"
-              className="h-[340px] w-full"
-              animate
-              animationDuration={1200}
-              bloom="low"
-            >
-              <Radar dataKey="left" variant="gradient" />
-              <Radar dataKey="right" variant="dotted" />
-              <Legend />
-              <Tooltip />
-            </RadarChart>
+            <div className="border border-foreground/10 bg-foreground/[0.03] p-4 md:p-5">
+              <RadarChart
+                data={radarData}
+                config={radarConfig}
+                nameKey="axis"
+                className="h-[340px] w-full"
+                animate
+                animationDuration={1200}
+                bloom="low"
+              >
+                <Radar dataKey="left" variant="gradient" />
+                <Radar dataKey="right" variant="dotted" />
+                <Legend />
+                <Tooltip />
+              </RadarChart>
+            </div>
           </Reveal>
 
           <Reveal delay={0.12}>
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
               {curated ? "Curated verdict" : "Derived from scores"}
             </p>
             <p className="mt-4 font-display text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
@@ -147,7 +147,7 @@ export function Compare() {
                 </li>
               ))}
             </ul>
-            <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-white/8 pt-6">
+            <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-foreground/12 pt-6">
               <Stat label="AFFIX" a={left.AFFIX} b={right.AFFIX} higher />
               <Stat label="RHS ↓" a={left.RHS} b={right.RHS} />
               <Stat label="PR" a={left.PR} b={right.PR} higher />
@@ -172,13 +172,13 @@ function Select({
 }) {
   return (
     <label className="block">
-      <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+      <span className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
         {label}
       </span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-2 w-full appearance-none border border-white/10 bg-[#050505] px-3 py-2.5 font-mono text-[12px] text-foreground outline-none transition focus:border-accent/40"
+        className="mt-2 w-full appearance-none border border-foreground/12 bg-background px-3 py-2.5 font-data text-[12px] text-foreground outline-none transition focus:border-accent/40"
       >
         {frameworks
           .filter((f) => f.id !== exclude)
@@ -206,10 +206,10 @@ function Stat({
   const aWins = higher ? a >= b : a <= b
   return (
     <div>
-      <dt className="font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground">
+      <dt className="font-data text-[9px] uppercase tracking-[0.14em] text-muted-foreground">
         {label}
       </dt>
-      <dd className="mt-2 font-mono text-sm tabular-nums">
+      <dd className="mt-2 font-data text-sm tabular-nums">
         <span className={aWins ? "text-accent" : "text-foreground/70"}>
           {a.toFixed(1)}
         </span>

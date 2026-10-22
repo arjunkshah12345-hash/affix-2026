@@ -8,13 +8,13 @@ import {
   type FailureCoverage,
 } from "@/data/content"
 import { cn } from "@/lib/utils"
-import { Reveal } from "./reveal"
+import { Reveal, SectionLabel } from "./reveal"
 
 const CELL: Record<FailureCoverage, { bg: string; label: string }> = {
-  first_class: { bg: "bg-emerald-500/70", label: "F" },
-  pattern: { bg: "bg-amber-400/60", label: "P" },
-  absent: { bg: "bg-rose-500/50", label: "A" },
-  unknown: { bg: "bg-white/20", label: "?" },
+  first_class: { bg: "bg-emerald-600/85 text-white", label: "F" },
+  pattern: { bg: "bg-amber-500/80 text-foreground", label: "P" },
+  absent: { bg: "bg-rose-600/80 text-white", label: "A" },
+  unknown: { bg: "bg-foreground/15 text-foreground/70", label: "?" },
 }
 
 const LEGEND_ORDER: FailureCoverage[] = [
@@ -35,16 +35,14 @@ export function Failures() {
   } | null>(null)
 
   return (
-    <section id="failures" className="relative py-32 md:py-40">
-      <div className="mx-auto max-w-[1120px] px-6 md:px-8">
+    <section id="failures" className="relative py-24 md:py-32">
+      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
-            05 — Failure modes
-          </p>
-          <h2 className="mt-4 max-w-[24ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
+          <SectionLabel>Failure modes</SectionLabel>
+          <h2 className="mt-3 max-w-[24ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
             Failure-mode coverage matrix
           </h2>
-          <p className="mt-5 max-w-[48ch] text-muted-foreground">
+          <p className="mt-4 max-w-[48ch] text-[15px] leading-relaxed text-muted-foreground md:text-base">
             First-class API, documented pattern, or absent. Hover a cell for the
             named surface and evidence. FMC ranks rows.
           </p>
@@ -54,7 +52,7 @@ export function Failures() {
           {LEGEND_ORDER.map((k) => (
             <div key={k} className="flex items-center gap-2">
               <span className={cn("size-2.5 rounded-sm", CELL[k].bg)} />
-              <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              <span className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                 {k.replace("_", " ")} — {failureLegend[k]}
               </span>
             </div>
@@ -62,23 +60,23 @@ export function Failures() {
         </Reveal>
 
         <Reveal delay={0.1} className="mt-10">
-          <div className="overflow-x-auto border border-white/8">
+          <div className="overflow-x-auto border border-foreground/12">
             <table className="w-full min-w-[920px] border-collapse text-left">
               <thead>
-                <tr className="border-b border-white/8">
-                  <th className="sticky left-0 z-10 bg-[#050505] px-3 py-3 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                <tr className="border-b border-foreground/10">
+                  <th className="sticky left-0 z-10 bg-background px-3 py-3 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                     Framework
                   </th>
                   {failureModes.map((m) => (
                     <th
                       key={m.code}
                       title={m.name}
-                      className="px-1 py-3 text-center font-mono text-[9px] uppercase tracking-[0.1em] text-muted-foreground"
+                      className="px-1 py-3 text-center font-data text-[9px] uppercase tracking-[0.1em] text-muted-foreground"
                     >
                       {m.code}
                     </th>
                   ))}
-                  <th className="px-3 py-3 text-right font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                  <th className="px-3 py-3 text-right font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                     FMC
                   </th>
                 </tr>
@@ -89,13 +87,13 @@ export function Failures() {
                   .map((fw) => (
                     <tr
                       key={fw.id}
-                      className="border-b border-white/6 transition hover:bg-white/[0.02]"
+                      className="border-b border-foreground/8 transition hover:bg-foreground/[0.03]"
                     >
-                      <td className="sticky left-0 z-10 bg-[#050505] px-3 py-2.5">
-                        <span className="font-mono text-[11px] text-foreground">
+                      <td className="sticky left-0 z-10 bg-background px-3 py-2.5">
+                        <span className="font-data text-[11px] text-foreground">
                           {fw.id}
                         </span>
-                        <span className="ml-2 hidden font-mono text-[10px] text-muted-foreground sm:inline">
+                        <span className="ml-2 hidden font-data text-[10px] text-muted-foreground sm:inline">
                           {fw.name}
                         </span>
                       </td>
@@ -107,10 +105,10 @@ export function Failures() {
                             <button
                               type="button"
                               className={cn(
-                                "inline-flex size-6 items-center justify-center rounded-sm font-mono text-[9px] text-black/80 transition",
+                                "inline-flex size-6 items-center justify-center rounded-sm font-data text-[9px] transition",
                                 CELL[cell].bg,
                                 hover?.fw === fw.id && hover.mode === m.code
-                                  ? "ring-1 ring-accent"
+                                  ? "ring-1 ring-accent ring-offset-1 ring-offset-background"
                                   : ""
                               )}
                               onMouseEnter={() =>
@@ -142,7 +140,7 @@ export function Failures() {
                           </td>
                         )
                       })}
-                      <td className="px-3 py-2.5 text-right font-mono text-[12px] tabular-nums text-accent">
+                      <td className="px-3 py-2.5 text-right font-data text-[12px] tabular-nums text-accent">
                         {fw.FMC}
                       </td>
                     </tr>
@@ -153,7 +151,7 @@ export function Failures() {
 
           <div className="mt-4 min-h-[4.5rem]">
             {hover ? (
-              <p className="font-mono text-[12px] leading-relaxed text-muted-foreground">
+              <p className="font-data text-[12px] leading-relaxed text-muted-foreground">
                 <span className="text-accent">
                   {hover.fw} · {hover.mode} · {hover.cell.replace("_", " ")}
                 </span>
@@ -181,7 +179,7 @@ export function Failures() {
                 ) : null}
               </p>
             ) : (
-              <p className="font-mono text-[11px] text-muted-foreground/60">
+              <p className="font-data text-[11px] text-muted-foreground/70">
                 Hover a cell for API surface and primary-source evidence.
               </p>
             )}

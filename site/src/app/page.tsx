@@ -24,9 +24,8 @@ export default function Home() {
         <Hero />
         <Kpis />
         <Brief />
-        <LaunchVideo />
-        <Methodology />
         <Leaderboard />
+        <Methodology />
         <Frameworks />
         <Charts />
         <Failures />
@@ -34,6 +33,7 @@ export default function Home() {
         <Scatter />
         <Findings />
         <Personas />
+        <LaunchVideo />
         <Limitations />
       </main>
       <Footer />

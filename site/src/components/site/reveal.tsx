@@ -1,39 +1,30 @@
 "use client"
 
+import { motion, useReducedMotion, type HTMLMotionProps } from "motion/react"
 import type { ReactNode } from "react"
-import { motion, useReducedMotion } from "motion/react"
 import { cn } from "@/lib/utils"
 
-type RevealProps = {
-  children: ReactNode
-  className?: string
-  delay?: number
-  y?: number
-}
+const ease = [0.22, 1, 0.36, 1] as const
 
 export function Reveal({
   children,
   className,
   delay = 0,
-  y = 28,
-}: RevealProps) {
+  ...props
+}: {
+  children: ReactNode
+  className?: string
+  delay?: number
+} & HTMLMotionProps<"div">) {
   const reduce = useReducedMotion()
-
-  if (reduce) {
-    return <div className={className}>{children}</div>
-  }
-
   return (
     <motion.div
-      className={cn(className)}
-      initial={{ opacity: 0, y }}
+      className={className}
+      initial={reduce ? false : { opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-12% 0px" }}
-      transition={{
-        duration: 0.85,
-        delay,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+      viewport={{ once: true, margin: "-8% 0px" }}
+      transition={{ duration: 0.7, delay, ease }}
+      {...props}
     >
       {children}
     </motion.div>
@@ -44,20 +35,19 @@ export function Stagger({
   children,
   className,
 }: {
-  children: React.ReactNode
+  children: ReactNode
   className?: string
 }) {
   const reduce = useReducedMotion()
-
   return (
     <motion.div
       className={className}
       initial={reduce ? false : "hidden"}
-      whileInView={reduce ? undefined : "show"}
-      viewport={{ once: true, margin: "-10% 0px" }}
+      whileInView="show"
+      viewport={{ once: true, margin: "-6% 0px" }}
       variants={{
         hidden: {},
-        show: { transition: { staggerChildren: 0.08 } },
+        show: { transition: { staggerChildren: 0.06 } },
       }}
     >
       {children}
@@ -69,22 +59,31 @@ export function StaggerItem({
   children,
   className,
 }: {
-  children: React.ReactNode
+  children: ReactNode
   className?: string
 }) {
+  const reduce = useReducedMotion()
   return (
     <motion.div
-      className={className}
+      className={cn(className)}
       variants={{
-        hidden: { opacity: 0, y: 22 },
+        hidden: reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 },
         show: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+          transition: { duration: 0.55, ease },
         },
       }}
     >
       {children}
     </motion.div>
+  )
+}
+
+export function SectionLabel({ children }: { children: ReactNode }) {
+  return (
+    <p className="font-data text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+      {children}
+    </p>
   )
 }

@@ -1,14 +1,14 @@
 import type { Metadata } from "next"
-import { DM_Sans, IBM_Plex_Mono, Syne } from "next/font/google"
+import { Bricolage_Grotesque, IBM_Plex_Mono, Source_Sans_3 } from "next/font/google"
 import "./globals.css"
 
-const display = Syne({
+const display = Bricolage_Grotesque({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["500", "600", "700", "800"],
 })
 
-const sans = DM_Sans({
+const sans = Source_Sans_3({
   variable: "--font-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AFFIX-2026 — Agent Framework Fitness Index",
     description:
-      "PydanticAI #1 of 16 frameworks (AFFIX 87.6, RHS 17.3). Fitness today, rewrite risk within twelve months—methodology, failures, and head-to-heads included.",
+      "PydanticAI #1 of 16 frameworks (AFFIX 87.6, RHS 17.3). Comparative fitness and rewrite-hazard estimates from primary documentation.",
     type: "website",
     siteName: "AFFIX-2026",
     images: [
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "AFFIX-2026 — Agent Framework Fitness Index",
     description:
-      "16 frameworks. PydanticAI leads AFFIX. RHS scores who you outgrow in a year.",
+      "16 frameworks ranked on fitness today and rewrite risk within twelve months.",
     images: ["/og.png"],
   },
 }
@@ -60,9 +60,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`dark ${display.variable} ${sans.variable} ${mono.variable} h-full`}
+      className={`${display.variable} ${sans.variable} ${mono.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col bg-[#050505] text-foreground">
+      <body className="flex min-h-full flex-col bg-background text-foreground">
         {children}
       </body>
     </html>

@@ -12,7 +12,7 @@ import {
   rhsTerms,
 } from "@/data/content"
 import { cn } from "@/lib/utils"
-import { Reveal } from "./reveal"
+import { Reveal, SectionLabel } from "./reveal"
 
 export function Methodology() {
   const [openCode, setOpenCode] = useState<string | null>(null)
@@ -30,25 +30,23 @@ export function Methodology() {
     : null
 
   return (
-    <section id="method" className="relative py-32 md:py-40">
-      <div className="mx-auto max-w-[1120px] px-6 md:px-8">
+    <section id="method" className="relative py-24 md:py-32">
+      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
-            01 — Methodology
-          </p>
-          <h2 className="mt-4 max-w-[24ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
+          <SectionLabel>Methodology</SectionLabel>
+          <h2 className="mt-3 max-w-[24ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
             Scoring dimensions and proprietary indices
           </h2>
-          <p className="mt-5 max-w-[52ch] text-muted-foreground">
+          <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted-foreground md:text-base">
             {methodology.overview}
           </p>
         </Reveal>
 
-        <Reveal delay={0.06} className="mt-16">
-          <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+        <Reveal delay={0.06} className="mt-14">
+          <p className="mb-4 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
             Dimension weights · expand for 90 vs 60 rubrics
           </p>
-          <div className="flex h-3 w-full overflow-hidden rounded-sm">
+          <div className="flex h-2.5 w-full overflow-hidden rounded-sm border border-foreground/10">
             {dimensions.map((d) => (
               <button
                 key={d.code}
@@ -59,15 +57,15 @@ export function Methodology() {
                 }
                 className={cn(
                   "h-full transition-opacity hover:opacity-100",
-                  openCode === d.code ? "opacity-100" : "opacity-70",
-                  openCode && openCode !== d.code ? "opacity-40" : ""
+                  openCode === d.code ? "opacity-100" : "opacity-75",
+                  openCode && openCode !== d.code ? "opacity-35" : ""
                 )}
                 style={{
                   width: `${d.weight * 100}%`,
                   background:
                     openCode === d.code
-                      ? "oklch(0.72 0.19 45)"
-                      : `oklch(${0.35 + d.weight * 1.2} 0.08 45)`,
+                      ? "var(--accent)"
+                      : `color-mix(in oklch, var(--foreground) ${18 + d.weight * 55}%, transparent)`,
                 }}
               />
             ))}
@@ -81,10 +79,10 @@ export function Methodology() {
                   setOpenCode((c) => (c === d.code ? null : d.code))
                 }
                 className={cn(
-                  "rounded-md border px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] transition",
+                  "border px-2.5 py-1.5 font-data text-[10px] uppercase tracking-[0.14em] transition",
                   openCode === d.code
                     ? "border-accent/50 bg-accent/10 text-accent"
-                    : "border-white/10 text-muted-foreground hover:border-white/20 hover:text-foreground"
+                    : "border-foreground/12 text-muted-foreground hover:border-foreground/25 hover:text-foreground"
                 )}
               >
                 {d.code}{" "}
@@ -106,17 +104,17 @@ export function Methodology() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="mt-8 border-t border-white/8 pt-8"
+                    className="mt-8 border-t border-foreground/12 pt-8"
                   >
                     <h3 className="font-display text-2xl font-semibold tracking-tight">
                       {d.name}{" "}
-                      <span className="font-mono text-base text-accent">
+                      <span className="font-data text-base text-accent">
                         {d.code}
                       </span>
                     </h3>
                     <div className="mt-6 grid gap-8 md:grid-cols-2">
                       <div>
-                        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-accent">
+                        <p className="font-data text-[10px] uppercase tracking-[0.14em] text-accent">
                           Rubric · 90
                         </p>
                         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -124,7 +122,7 @@ export function Methodology() {
                         </p>
                       </div>
                       <div>
-                        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                        <p className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                           Rubric · 60
                         </p>
                         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -138,8 +136,8 @@ export function Methodology() {
           </AnimatePresence>
         </Reveal>
 
-        <Reveal delay={0.1} className="mt-24">
-          <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+        <Reveal delay={0.1} className="mt-20">
+          <p className="mb-3 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
             Worked example · PydanticAI vs Vercel AI SDK
           </p>
           <h3 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
@@ -245,16 +243,16 @@ function FormulaCard({
   right: Side
 }) {
   return (
-    <div className="border-t border-white/8 pt-8">
+    <div className="border-t border-foreground/12 pt-8">
       <div className="flex items-baseline justify-between gap-4">
         <h4 className="font-display text-xl font-semibold tracking-tight">
           {title}
         </h4>
-        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+        <span className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
           {subtitle}
         </span>
       </div>
-      <p className="mt-3 font-mono text-[10px] leading-relaxed text-muted-foreground/80">
+      <p className="mt-3 font-data text-[10px] leading-relaxed text-muted-foreground">
         {formula}
       </p>
       <div className="mt-6 grid gap-6 sm:grid-cols-2">
@@ -270,7 +268,7 @@ function SideBreakdown({ side, accent }: { side: Side; accent?: boolean }) {
     <div>
       <p
         className={cn(
-          "font-mono text-[10px] uppercase tracking-[0.16em]",
+          "font-data text-[10px] uppercase tracking-[0.14em]",
           accent ? "text-accent" : "text-muted-foreground"
         )}
       >
@@ -280,7 +278,7 @@ function SideBreakdown({ side, accent }: { side: Side; accent?: boolean }) {
         {side.rows.map((r) => (
           <li
             key={r.label}
-            className="flex justify-between gap-3 font-mono text-[11px] text-muted-foreground"
+            className="flex justify-between gap-3 font-data text-[11px] text-muted-foreground"
           >
             <span className="truncate">{r.label}</span>
             <span className="tabular-nums text-foreground/80">
@@ -289,7 +287,7 @@ function SideBreakdown({ side, accent }: { side: Side; accent?: boolean }) {
           </li>
         ))}
       </ul>
-      <p className="mt-4 flex justify-between border-t border-white/8 pt-3 font-mono text-sm">
+      <p className="mt-4 flex justify-between border-t border-foreground/10 pt-3 font-data text-sm">
         <span className="text-muted-foreground">Sum → published</span>
         <span className={accent ? "text-accent" : "text-foreground"}>
           {side.total.toFixed(1)} → {side.published}

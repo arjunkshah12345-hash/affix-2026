@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 /**
- * Generate publish-ready AFFIX-2026 visual assets:
+ * Generate publish-ready AFFIX-2026 visual assets (light institutional):
  *   public/og.png (1200×630)
  *   public/icon.png (512)
  *   public/apple-touch-icon.png (180)
  *   public/favicon.ico
+ *
+ * Palette: cool paper / deep ink / carmine
+ * Fonts: Syne + IBM Plex Mono (scripts/fonts) — stand-ins for Bricolage / Source Sans
  */
 import { createCanvas, GlobalFonts } from "@napi-rs/canvas"
 import fs from "node:fs"
@@ -15,15 +18,16 @@ import pngToIco from "png-to-ico"
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, "..")
 const publicDir = path.join(root, "public")
+const brandDir = path.resolve(root, "../assets/brand")
 const fontsDir = path.join(__dirname, "fonts")
 
-const BG = "#050505"
-const FG = "#f5f0e8"
-const MUTED = "#a89a86"
-const ACCENT = "#f59e0b"
-const ACCENT_HOT = "#ff6b1a"
-const LINE = "rgba(245,158,11,0.22)"
-const GRID = "rgba(255,255,255,0.035)"
+const BG = "#F4F5F7"
+const FG = "#1A1F2E"
+const MUTED = "#5C6478"
+const ACCENT = "#B33A2B"
+const ACCENT_HOT = "#9A2F22"
+const LINE = "rgba(179,58,43,0.28)"
+const GRID = "rgba(26,31,46,0.06)"
 
 GlobalFonts.registerFromPath(path.join(fontsDir, "Syne-Bold.ttf"), "Syne")
 GlobalFonts.registerFromPath(path.join(fontsDir, "Syne-SemiBold.ttf"), "Syne Semi")
@@ -50,7 +54,8 @@ function paintDitherWash(ctx, w, h, opts = {}) {
     color = ACCENT,
     fade = "radial",
   } = opts
-  const img = ctx.createImageData(w, h)
+  // Preserve existing paper pixels; only tint dither dots (putImageData alpha=0 would punch holes → black)
+  const img = ctx.getImageData(x0, y0, w, h)
   const data = img.data
   const cx = w * 0.72
   const cy = h * 0.78
@@ -73,15 +78,13 @@ function paintDitherWash(ctx, w, h, opts = {}) {
         density = strength * (y / h) ** 1.4
       }
       const on = density > t
+      if (!on) continue
       const i = (y * w + x) * 4
-      if (on) {
-        data[i] = r
-        data[i + 1] = g
-        data[i + 2] = b
-        data[i + 3] = Math.round(180 * Math.min(1, density / strength))
-      } else {
-        data[i + 3] = 0
-      }
+      const a = (120 * Math.min(1, density / strength)) / 255
+      data[i] = Math.round(data[i] * (1 - a) + r * a)
+      data[i + 1] = Math.round(data[i + 1] * (1 - a) + g * a)
+      data[i + 2] = Math.round(data[i + 2] * (1 - a) + b * a)
+      data[i + 3] = 255
     }
   }
   ctx.putImageData(img, x0, y0)
@@ -110,7 +113,7 @@ function drawAccentRule(ctx, x, y, w) {
   const grad = ctx.createLinearGradient(x, y, x + w, y)
   grad.addColorStop(0, ACCENT_HOT)
   grad.addColorStop(0.55, ACCENT)
-  grad.addColorStop(1, "rgba(245,158,11,0)")
+  grad.addColorStop(1, "rgba(179,58,43,0)")
   ctx.fillStyle = grad
   ctx.fillRect(x, y, w, 3)
 }
@@ -130,17 +133,17 @@ function generateOg() {
   ctx.fillStyle = BG
   ctx.fillRect(0, 0, W, H)
 
-  // subtle vignette
-  const vig = ctx.createRadialGradient(W * 0.45, H * 0.4, 40, W * 0.5, H * 0.55, W * 0.75)
-  vig.addColorStop(0, "rgba(20,14,8,0.35)")
-  vig.addColorStop(1, "rgba(0,0,0,0)")
+  // soft cool paper wash
+  const vig = ctx.createRadialGradient(W * 0.45, H * 0.35, 40, W * 0.5, H * 0.5, W * 0.75)
+  vig.addColorStop(0, "rgba(255,255,255,0.55)")
+  vig.addColorStop(1, "rgba(26,31,46,0.04)")
   ctx.fillStyle = vig
   ctx.fillRect(0, 0, W, H)
 
   drawGrid(ctx, W, H, 48)
-  paintDitherWash(ctx, W, H, { cell: 3, strength: 0.62, color: ACCENT_HOT, fade: "radial" })
+  paintDitherWash(ctx, W, H, { cell: 3, strength: 0.38, color: ACCENT, fade: "radial" })
 
-  // top hairline
+  // top / bottom hairlines
   ctx.fillStyle = LINE
   ctx.fillRect(0, 0, W, 1)
   ctx.fillRect(0, H - 1, W, 1)
@@ -166,7 +169,7 @@ function generateOg() {
   ctx.fillText("Agent Framework Fitness Index", padX, padY + 232)
 
   // meta line
-  ctx.fillStyle = "rgba(245,240,232,0.55)"
+  ctx.fillStyle = "rgba(26,31,46,0.45)"
   ctx.font = "500 20px IBM Plex Mono"
   ctx.fillText("16 frameworks  ·  2026", padX, padY + 278)
 
@@ -176,10 +179,10 @@ function generateOg() {
   const boxW = W - padX * 2
   const boxH = 72
 
-  ctx.fillStyle = "rgba(255,255,255,0.03)"
-  ctx.strokeStyle = "rgba(245,158,11,0.35)"
+  ctx.fillStyle = "rgba(255,255,255,0.72)"
+  ctx.strokeStyle = "rgba(179,58,43,0.35)"
   ctx.lineWidth = 1
-  roundRect(ctx, boxX, boxY, boxW, boxH, 6)
+  roundRect(ctx, boxX, boxY, boxW, boxH, 4)
   ctx.fill()
   ctx.stroke()
 
@@ -214,12 +217,12 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.moveTo(x + r, y)
   ctx.arcTo(x + w, y, x + w, y + h, r)
   ctx.arcTo(x + w, y + h, x, y + h, r)
-  ctx.arcTo(x, y + h, x + w, y + h, r)
+  ctx.arcTo(x, y + h, x, y, r)
   ctx.arcTo(x, y, x + w, y, r)
   ctx.closePath()
 }
 
-/** Minimal “A” monogram on dithered square */
+/** Minimal “A” monogram on light dithered square */
 function generateIcon(size) {
   const canvas = createCanvas(size, size)
   const ctx = canvas.getContext("2d")
@@ -227,24 +230,23 @@ function generateIcon(size) {
   ctx.fillStyle = BG
   ctx.fillRect(0, 0, size, size)
 
-  // inset panel
   const inset = Math.round(size * 0.08)
   paintDitherWash(ctx, size, size, {
     cell: Math.max(2, Math.round(size / 128)),
-    strength: 0.7,
-    color: ACCENT_HOT,
+    strength: 0.45,
+    color: ACCENT,
     fade: "bottom",
   })
 
-  // darken center for letter clarity
+  // lighten center for letter clarity
   const veil = ctx.createRadialGradient(size / 2, size / 2, size * 0.1, size / 2, size / 2, size * 0.55)
-  veil.addColorStop(0, "rgba(5,5,5,0.55)")
-  veil.addColorStop(1, "rgba(5,5,5,0.05)")
+  veil.addColorStop(0, "rgba(244,245,247,0.75)")
+  veil.addColorStop(1, "rgba(244,245,247,0.05)")
   ctx.fillStyle = veil
   ctx.fillRect(0, 0, size, size)
 
   // thin border
-  ctx.strokeStyle = "rgba(245,158,11,0.45)"
+  ctx.strokeStyle = "rgba(179,58,43,0.4)"
   ctx.lineWidth = Math.max(2, size / 128)
   ctx.strokeRect(inset + 0.5, inset + 0.5, size - inset * 2 - 1, size - inset * 2 - 1)
 
@@ -256,7 +258,7 @@ function generateIcon(size) {
   ctx.textBaseline = "middle"
   ctx.fillText("A", size / 2, size / 2 + size * 0.02)
 
-  // small gold tick under A
+  // carmine tick under A
   const tickW = size * 0.14
   const grad = ctx.createLinearGradient(size / 2 - tickW, 0, size / 2 + tickW, 0)
   grad.addColorStop(0, ACCENT_HOT)
@@ -269,6 +271,7 @@ function generateIcon(size) {
 
 async function main() {
   fs.mkdirSync(publicDir, { recursive: true })
+  fs.mkdirSync(brandDir, { recursive: true })
 
   const og = generateOg()
   await writePng(og, path.join(publicDir, "og.png"))
@@ -290,6 +293,20 @@ async function main() {
   const icoPath = path.join(publicDir, "favicon.ico")
   fs.writeFileSync(icoPath, ico)
   console.log("wrote", path.relative(root, icoPath), `(${ico.length} bytes)`)
+
+  // mirror into ../assets/brand/
+  const brandCopies = [
+    ["og.png", "og.png"],
+    ["icon.png", "icon-512.png"],
+    ["apple-touch-icon.png", "apple-touch-icon.png"],
+    ["favicon.ico", "favicon.ico"],
+  ]
+  for (const [src, dest] of brandCopies) {
+    const from = path.join(publicDir, src)
+    const to = path.join(brandDir, dest)
+    fs.copyFileSync(from, to)
+    console.log("copied", path.relative(root, to))
+  }
 
   // keep shots intact — report presence
   const shotsDir = path.join(publicDir, "shots")
