@@ -43,8 +43,8 @@ export function Personas() {
       <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Playbooks</SectionLabel>
-          <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            Start here by seat
+          <h2 className="mt-3 max-w-[18ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            Primary stack by operating seat
           </h2>
           <p className="mt-4 max-w-[48ch] text-sm text-muted-foreground md:text-base">
             Suggested primary stacks conditioned on language estate, compliance

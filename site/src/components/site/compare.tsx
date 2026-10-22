@@ -71,12 +71,12 @@ export function Compare() {
       <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
         <Reveal>
           <SectionLabel>Head-to-head</SectionLabel>
-          <h2 className="mt-3 max-w-[14ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            Two stacks. One call.
+          <h2 className="mt-3 max-w-[18ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            Dimension surfaces, side by side
           </h2>
           <p className="mt-4 max-w-[44ch] text-sm text-muted-foreground md:text-base">
-            Dimension radar from the score matrix. Verdicts use curated
-            comparisons when available; otherwise they are derived from scores.
+            Radar from the score matrix. Curated verdicts when present;
+            otherwise derived from the same weights as the index.
           </p>
         </Reveal>
 

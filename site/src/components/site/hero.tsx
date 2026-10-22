@@ -68,13 +68,13 @@ export function Hero() {
                   })
                 }
               >
-                Enter the matrix
+                Open rankings
               </DitherButton>
               <a
-                href="#results"
+                href="#contrast"
                 className="font-data text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition hover:text-accent"
               >
-                Results
+                Key split
               </a>
             </motion.div>
           </div>
