@@ -3,6 +3,7 @@
 import {
   Bar,
   BarChart,
+  DitherGradient,
   Grid,
   Legend,
   Radar,
@@ -21,7 +22,7 @@ const barData = frameworks.slice(0, 8).map((f) => ({
 }))
 
 const barConfig = {
-  affix: { label: "AFFIX", color: "red" as const },
+  affix: { label: "AFFIX", color: "orange" as const },
   rhs: { label: "Rewrite risk", color: "grey" as const },
 }
 
@@ -38,32 +39,41 @@ const radarData = [
 ]
 
 const radarConfig = {
-  pd: { label: "PydanticAI", color: "red" as const },
-  vs: { label: "Vercel AI SDK", color: "blue" as const },
+  pd: { label: "PydanticAI", color: "orange" as const },
+  vs: { label: "Vercel AI SDK", color: "grey" as const },
 }
 
 export function Charts() {
   return (
-    <section id="signals" className="relative py-24 md:py-32">
-      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
+    <section id="signals" className="relative overflow-hidden py-28 md:py-36">
+      <DitherGradient
+        from="orange"
+        to="transparent"
+        direction="left"
+        cell={3}
+        opacity={0.12}
+        bloom="low"
+        className="pointer-events-none absolute inset-y-0 right-0 w-2/5"
+      />
+      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
           <SectionLabel>Signals</SectionLabel>
-          <h2 className="mt-3 max-w-[22ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            Score distributions among leaders
+          <h2 className="mt-4 max-w-[18ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
+            Leaders, visualized
           </h2>
-          <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted-foreground md:text-base">
+          <p className="mt-5 max-w-[52ch] text-muted-foreground">
             AFFIX and RHS for the leading eight frameworks, and proprietary
-            index profiles for the top four. Values are EST from the published
+            index profiles for the top pair. Values are EST from the published
             matrix.
           </p>
         </Reveal>
 
         <div className="mt-16 grid gap-14 lg:grid-cols-2 lg:gap-16">
           <Reveal delay={0.05} className="min-w-0">
-            <p className="mb-4 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            <p className="mb-4 font-data text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
               AFFIX and rewrite hazard · top eight
             </p>
-            <div className="border border-foreground/10 bg-foreground/[0.03] p-4 md:p-5">
+            <div className="border border-white/8 bg-white/[0.02] p-4 md:p-5">
               <BarChart
                 data={barData}
                 config={barConfig}
@@ -83,16 +93,16 @@ export function Charts() {
               </BarChart>
             </div>
             <p className="mt-4 max-w-[42ch] font-data text-[11px] leading-relaxed text-muted-foreground">
-              Carmine is AFFIX. Grey hatch is rewrite hazard. High scores on both
+              Orange is AFFIX. Grey hatch is rewrite hazard. High scores on both
               mean strong capability with a fragile long-term fit.
             </p>
           </Reveal>
 
           <Reveal delay={0.12} className="min-w-0">
-            <p className="mb-4 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            <p className="mb-4 font-data text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
               Profile · PydanticAI vs Vercel AI SDK
             </p>
-            <div className="border border-foreground/10 bg-foreground/[0.03] p-4 md:p-5">
+            <div className="border border-white/8 bg-white/[0.02] p-4 md:p-5">
               <RadarChart
                 data={radarData}
                 config={radarConfig}

@@ -1,9 +1,14 @@
 "use client"
 
 import { useState } from "react"
+import { AnimatePresence, motion } from "motion/react"
+import {
+  DitherAvatar,
+  DitherButton,
+  DitherGradient,
+} from "@/components/dither-kit"
 import { personas, siteFrameworkById } from "@/data/content"
 import { cn } from "@/lib/utils"
-import { AnimatePresence, motion } from "motion/react"
 import { Reveal, SectionLabel } from "./reveal"
 
 function resolvePickLabel(pick: string) {
@@ -25,14 +30,23 @@ export function Personas() {
   const current = personas.find((p) => p.id === active)!
 
   return (
-    <section id="playbooks" className="relative py-24 md:py-32">
-      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
+    <section id="playbooks" className="relative overflow-hidden py-28 md:py-36">
+      <DitherGradient
+        from="orange"
+        to="transparent"
+        direction="up"
+        cell={3}
+        opacity={0.14}
+        bloom="low"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-72"
+      />
+      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
           <SectionLabel>Playbooks</SectionLabel>
-          <h2 className="mt-3 max-w-[22ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            Persona-conditioned defaults
+          <h2 className="mt-4 max-w-[18ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
+            Defaults by persona
           </h2>
-          <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted-foreground md:text-base">
+          <p className="mt-5 max-w-[52ch] text-muted-foreground">
             Suggested primary stacks conditioned on language estate, compliance
             constraints, and distance from conversational UI to durable agents.
             Defaults, not prescriptions.
@@ -47,18 +61,24 @@ export function Personas() {
                 type="button"
                 onClick={() => setActive(p.id)}
                 className={cn(
-                  "border px-3 py-2 font-data text-[11px] uppercase tracking-[0.14em] transition",
+                  "inline-flex items-center gap-2 border px-3 py-2 font-data text-[11px] uppercase tracking-[0.14em] transition",
                   active === p.id
                     ? "border-accent/50 bg-accent/10 text-accent"
-                    : "border-foreground/12 text-muted-foreground hover:border-foreground/25 hover:text-foreground"
+                    : "border-white/8 text-muted-foreground hover:border-white/20 hover:text-foreground"
                 )}
               >
+                <DitherAvatar
+                  name={p.id}
+                  hue={28}
+                  bloom="low"
+                  className="size-5 shrink-0 rounded-sm"
+                />
                 {p.name}
               </button>
             ))}
           </div>
 
-          <div className="relative mt-12 min-h-[220px] overflow-hidden border-t border-foreground/12 pt-10">
+          <div className="relative mt-12 min-h-[220px] overflow-hidden border-t border-white/8 pt-10">
             <AnimatePresence mode="wait">
               <motion.div
                 key={current.id}
@@ -98,10 +118,13 @@ export function Personas() {
             </AnimatePresence>
           </div>
 
-          <div className="mt-10">
-            <button
+          <div className="mt-10 flex flex-wrap gap-3">
+            <DitherButton
               type="button"
-              className="border border-foreground/12 bg-foreground px-5 py-2.5 font-data text-[11px] uppercase tracking-[0.14em] text-background transition hover:bg-accent hover:border-accent"
+              color="orange"
+              variant="gradient"
+              bloom="high"
+              className="h-11 rounded-md px-5 font-data text-[11px] uppercase tracking-[0.14em] text-white"
               onClick={() =>
                 document
                   .querySelector("#rankings")
@@ -109,7 +132,21 @@ export function Personas() {
               }
             >
               Return to rankings
-            </button>
+            </DitherButton>
+            <DitherButton
+              type="button"
+              color="orange"
+              variant="hatched"
+              bloom="low"
+              className="h-11 rounded-md px-5 font-data text-[11px] uppercase tracking-[0.14em] text-white"
+              onClick={() =>
+                document
+                  .querySelector("#compare")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              Compare stacks
+            </DitherButton>
           </div>
         </Reveal>
       </div>

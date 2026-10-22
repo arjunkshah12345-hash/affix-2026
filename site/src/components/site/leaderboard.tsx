@@ -6,44 +6,35 @@ import { useFrameworkDetail } from "./framework-detail"
 import { Reveal, SectionLabel, Stagger, StaggerItem } from "./reveal"
 
 function rhsTone(rhs: number) {
-  if (rhs <= 22) return "text-emerald-800"
-  if (rhs <= 30) return "text-amber-800"
-  return "text-accent"
+  if (rhs <= 22) return "text-emerald-400"
+  if (rhs <= 30) return "text-amber-300"
+  return "text-rose-400"
 }
 
 export function Leaderboard() {
   const { open } = useFrameworkDetail()
 
   return (
-    <section id="rankings" className="relative py-24 md:py-32">
+    <section id="rankings" className="relative py-28 md:py-36">
       <div className="mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
           <SectionLabel>Rankings</SectionLabel>
-          <h2 className="mt-3 max-w-[22ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            Composite ranking and rewrite hazard
+          <h2 className="mt-4 max-w-[20ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
+            Fitness today. Rewrite risk next.
           </h2>
-          <p className="mt-4 max-w-[50ch] text-muted-foreground">
-            Ordered by AFFIX. RHS estimates the probability that primary
-            orchestration is replaced within twelve months. Select a row for the
-            dossier.
+          <p className="mt-5 max-w-[48ch] text-muted-foreground">
+            AFFIX is the weighted composite. RHS estimates replacement of primary
+            orchestration within twelve months. Click a row for the dossier.
           </p>
         </Reveal>
 
-        <div className="mt-10 hidden grid-cols-[3rem_1fr_5rem_5rem_5rem] gap-4 border-b border-foreground/12 pb-3 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground md:grid">
-          <span>#</span>
-          <span>Framework</span>
-          <span className="text-right">AFFIX</span>
-          <span className="text-right">RHS ↓</span>
-          <span className="text-right">LIE ↓</span>
-        </div>
-
-        <Stagger className="space-y-0">
+        <Stagger className="mt-14 border-t border-white/8">
           {frameworks.map((f, i) => (
             <StaggerItem key={f.id}>
               <button
                 type="button"
                 onClick={() => open(f.id)}
-                className="group grid w-full grid-cols-[3rem_1fr] items-center gap-3 border-b border-foreground/10 py-4 text-left transition hover:bg-foreground/[0.03] md:grid-cols-[3rem_1fr_5rem_5rem_5rem] md:gap-4 md:py-5"
+                className="group grid w-full grid-cols-[2.5rem_1fr_auto] items-center gap-3 border-b border-white/8 py-5 text-left transition hover:bg-white/[0.02] md:grid-cols-[3rem_1fr_5.5rem_5rem_4.5rem] md:gap-4 md:py-6"
               >
                 <span className="font-data text-[12px] text-muted-foreground">
                   {String(i + 1).padStart(2, "0")}
@@ -52,28 +43,22 @@ export function Leaderboard() {
                   <p className="font-display text-lg font-semibold tracking-tight transition group-hover:text-accent md:text-xl">
                     {f.framework}
                   </p>
-                  <p className="mt-0.5 truncate font-data text-[11px] text-muted-foreground">
-                    {f.primary_lang} · {f.category}
+                  <p className="mt-0.5 truncate font-data text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                    {f.primary_lang} · {f.id}
                   </p>
                 </div>
-                <p className="font-data text-xl tabular-nums text-accent md:text-right md:text-lg">
-                  <span className="mr-2 font-data text-[10px] uppercase text-muted-foreground md:hidden">
-                    AFFIX
-                  </span>
+                <p className="font-data text-xl tabular-nums text-accent md:text-right">
                   {f.AFFIX.toFixed(1)}
                 </p>
                 <p
                   className={cn(
-                    "font-data text-sm tabular-nums md:text-right",
+                    "hidden font-data text-sm tabular-nums md:block md:text-right",
                     rhsTone(f.RHS)
                   )}
                 >
-                  <span className="mr-2 font-data text-[10px] uppercase text-muted-foreground md:hidden">
-                    RHS
-                  </span>
                   {f.RHS.toFixed(1)}
                 </p>
-                <p className="hidden font-data text-sm tabular-nums text-foreground md:block md:text-right">
+                <p className="hidden font-data text-sm tabular-nums text-muted-foreground md:block md:text-right">
                   {f.LIE}
                 </p>
               </button>

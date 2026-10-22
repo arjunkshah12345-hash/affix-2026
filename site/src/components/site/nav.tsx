@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { DitherButton } from "@/components/dither-kit"
 import { cn } from "@/lib/utils"
 
 const links = [
@@ -16,7 +17,7 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12)
+    const onScroll = () => setScrolled(window.scrollY > 16)
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
@@ -25,40 +26,46 @@ export function Nav() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-[background,box-shadow,border-color] duration-500",
+        "fixed inset-x-0 top-0 z-50 transition-[background,border-color,backdrop-filter] duration-500",
         scrolled
-          ? "border-b border-foreground/10 bg-background/85 backdrop-blur-md"
+          ? "border-b border-white/8 bg-[#050505]/75 backdrop-blur-xl"
           : "border-b border-transparent bg-transparent"
       )}
     >
-      <div className="mx-auto flex h-14 max-w-[1120px] items-center justify-between px-5 md:h-16 md:px-8">
+      <div className="mx-auto flex h-16 max-w-[1120px] items-center justify-between px-5 md:px-8">
         <a href="#top" className="group flex items-baseline gap-2">
           <span className="font-display text-lg font-semibold tracking-tight text-foreground">
             AFFIX
           </span>
-          <span className="font-data text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+          <span className="font-data text-[10px] uppercase tracking-[0.2em] text-muted-foreground transition group-hover:text-accent">
             2026
           </span>
         </a>
 
-        <nav className="hidden items-center gap-6 md:flex lg:gap-7">
+        <nav className="hidden items-center gap-6 lg:flex">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
+              className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground transition hover:text-foreground"
             >
               {l.label}
             </a>
           ))}
         </nav>
 
-        <a
-          href="#rankings"
-          className="inline-flex h-9 items-center rounded-sm bg-foreground px-3.5 font-data text-[10px] uppercase tracking-[0.14em] text-background transition hover:bg-accent"
+        <DitherButton
+          type="button"
+          color="orange"
+          variant="gradient"
+          bloom="low"
+          className="h-9 rounded-md px-4 font-data text-[11px] uppercase tracking-[0.14em] text-white"
+          onClick={() =>
+            document.querySelector("#rankings")?.scrollIntoView({ behavior: "smooth" })
+          }
         >
           Rankings
-        </a>
+        </DitherButton>
       </div>
     </header>
   )

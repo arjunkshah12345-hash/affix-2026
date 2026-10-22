@@ -20,10 +20,10 @@ export function Reveal({
   return (
     <motion.div
       className={className}
-      initial={reduce ? false : { opacity: 0, y: 18 }}
+      initial={reduce ? false : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-8% 0px" }}
-      transition={{ duration: 0.7, delay, ease }}
+      viewport={{ once: true, margin: "-10% 0px" }}
+      transition={{ duration: 0.75, delay, ease }}
       {...props}
     >
       {children}
@@ -44,10 +44,10 @@ export function Stagger({
       className={className}
       initial={reduce ? false : "hidden"}
       whileInView="show"
-      viewport={{ once: true, margin: "-6% 0px" }}
+      viewport={{ once: true, margin: "-8% 0px" }}
       variants={{
         hidden: {},
-        show: { transition: { staggerChildren: 0.06 } },
+        show: { transition: { staggerChildren: 0.055 } },
       }}
     >
       {children}
@@ -82,7 +82,7 @@ export function StaggerItem({
 
 export function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="font-data text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+    <p className="font-data text-[11px] uppercase tracking-[0.2em] text-accent">
       {children}
     </p>
   )

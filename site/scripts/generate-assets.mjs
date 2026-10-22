@@ -6,7 +6,7 @@
  *   public/apple-touch-icon.png (180)
  *   public/favicon.ico
  *
- * Palette: cool paper / deep ink / carmine
+ * Palette: near-black YC / warm orange
  * Fonts: Syne + IBM Plex Mono (scripts/fonts) — stand-ins for Bricolage / Source Sans
  */
 import { createCanvas, GlobalFonts } from "@napi-rs/canvas"
@@ -21,11 +21,11 @@ const publicDir = path.join(root, "public")
 const brandDir = path.resolve(root, "../assets/brand")
 const fontsDir = path.join(__dirname, "fonts")
 
-const BG = "#F4F5F7"
-const FG = "#1A1F2E"
-const MUTED = "#5C6478"
-const ACCENT = "#B33A2B"
-const ACCENT_HOT = "#9A2F22"
+const BG = "#050505"
+const FG = "#F5F0E8"
+const MUTED = "#9A9080"
+const ACCENT = "#F59E0B"
+const ACCENT_HOT = "#FF8A1A"
 const LINE = "rgba(179,58,43,0.28)"
 const GRID = "rgba(26,31,46,0.06)"
 

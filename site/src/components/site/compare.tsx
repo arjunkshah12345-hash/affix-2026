@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react"
 import {
+  DitherAvatar,
+  DitherGradient,
   Legend,
   Radar,
   RadarChart,
@@ -49,21 +51,30 @@ export function Compare() {
   }))
 
   const radarConfig = {
-    left: { label: left.framework, color: "red" as const },
-    right: { label: right.framework, color: "blue" as const },
+    left: { label: left.framework, color: "orange" as const },
+    right: { label: right.framework, color: "grey" as const },
   }
 
   const presets = comparisons.slice(0, 6)
 
   return (
-    <section id="compare" className="relative py-24 md:py-32">
-      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
+    <section id="compare" className="relative overflow-hidden py-28 md:py-36">
+      <DitherGradient
+        from="orange"
+        to="transparent"
+        direction="right"
+        cell={3}
+        opacity={0.12}
+        bloom="low"
+        className="pointer-events-none absolute inset-y-0 left-0 w-1/3"
+      />
+      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
           <SectionLabel>Head-to-head</SectionLabel>
-          <h2 className="mt-3 max-w-[20ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            Paired dimensional comparison
+          <h2 className="mt-4 max-w-[16ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
+            Pick two. Decide.
           </h2>
-          <p className="mt-4 max-w-[46ch] text-[15px] leading-relaxed text-muted-foreground md:text-base">
+          <p className="mt-5 max-w-[46ch] text-muted-foreground">
             Dimension radar from the score matrix. Verdicts use curated
             comparisons when available; otherwise they are derived from scores.
           </p>
@@ -80,12 +91,18 @@ export function Compare() {
                   setRightId(c.rightId)
                 }}
                 className={cn(
-                  "border px-2.5 py-1.5 font-data text-[10px] uppercase tracking-[0.12em] transition",
+                  "inline-flex items-center gap-2 border px-2.5 py-1.5 font-data text-[10px] uppercase tracking-[0.12em] transition",
                   leftId === c.leftId && rightId === c.rightId
                     ? "border-accent/50 bg-accent/10 text-accent"
-                    : "border-foreground/12 text-muted-foreground hover:border-foreground/25 hover:text-foreground"
+                    : "border-white/8 text-muted-foreground hover:border-white/20 hover:text-foreground"
                 )}
               >
+                <DitherAvatar
+                  name={`${c.leftId}${c.rightId}`}
+                  hue={28}
+                  bloom="low"
+                  className="size-4 shrink-0 rounded-[2px]"
+                />
                 {c.leftId} · {c.rightId}
               </button>
             ))}
@@ -109,10 +126,10 @@ export function Compare() {
 
         <div className="mt-14 grid gap-14 lg:grid-cols-2 lg:gap-16">
           <Reveal delay={0.08} className="min-w-0">
-            <p className="mb-4 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            <p className="mb-4 font-data text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
               Profile · {left.id} vs {right.id}
             </p>
-            <div className="border border-foreground/10 bg-foreground/[0.03] p-4 md:p-5">
+            <div className="border border-white/8 bg-white/[0.02] p-4 md:p-5">
               <RadarChart
                 data={radarData}
                 config={radarConfig}
@@ -131,7 +148,7 @@ export function Compare() {
           </Reveal>
 
           <Reveal delay={0.12}>
-            <p className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            <p className="font-data text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
               {curated ? "Curated verdict" : "Derived from scores"}
             </p>
             <p className="mt-4 font-display text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
@@ -147,7 +164,7 @@ export function Compare() {
                 </li>
               ))}
             </ul>
-            <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-foreground/12 pt-6">
+            <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-white/8 pt-6">
               <Stat label="AFFIX" a={left.AFFIX} b={right.AFFIX} higher />
               <Stat label="RHS ↓" a={left.RHS} b={right.RHS} />
               <Stat label="PR" a={left.PR} b={right.PR} higher />
@@ -178,7 +195,7 @@ function Select({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-2 w-full appearance-none border border-foreground/12 bg-background px-3 py-2.5 font-data text-[12px] text-foreground outline-none transition focus:border-accent/40"
+        className="mt-2 w-full appearance-none border border-white/8 bg-[#050505] px-3 py-2.5 font-data text-[12px] text-foreground outline-none transition focus:border-accent/40"
       >
         {frameworks
           .filter((f) => f.id !== exclude)

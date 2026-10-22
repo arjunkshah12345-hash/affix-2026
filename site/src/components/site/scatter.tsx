@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import { DitherGradient } from "@/components/dither-kit"
 import { frameworks } from "@/data/content"
 import { Reveal, SectionLabel } from "./reveal"
 
@@ -42,14 +43,23 @@ export function Scatter() {
   const yTicks = [ymin, Math.round((ymin + ymax) / 2), ymax]
 
   return (
-    <section id="map" className="relative py-24 md:py-32">
-      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
+    <section id="map" className="relative overflow-hidden py-28 md:py-36">
+      <DitherGradient
+        from="orange"
+        to="transparent"
+        direction="up"
+        cell={3}
+        opacity={0.12}
+        bloom="low"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-56"
+      />
+      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
           <SectionLabel>Map</SectionLabel>
-          <h2 className="mt-3 max-w-[24ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            AFFIX versus rewrite hazard
+          <h2 className="mt-4 max-w-[18ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
+            Fitness vs rewrite risk
           </h2>
-          <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted-foreground md:text-base">
+          <p className="mt-5 max-w-[52ch] text-muted-foreground">
             Scatter of composite fitness (AFFIX) against rewrite hazard (RHS).
             Preferred region: high AFFIX, low RHS. Axes are scaled within the
             study sample, not to absolute capability.
@@ -57,7 +67,7 @@ export function Scatter() {
         </Reveal>
 
         <Reveal delay={0.08} className="mt-14">
-          <div className="relative overflow-hidden border border-foreground/12 bg-background">
+          <div className="relative overflow-hidden border border-white/8 bg-[#080808]">
             <svg
               viewBox={`0 0 ${W} ${H}`}
               className="h-auto w-full"
@@ -66,27 +76,23 @@ export function Scatter() {
             >
               <defs>
                 <pattern
-                  id="scatter-paper"
+                  id="scatter-dark"
                   width="6"
                   height="6"
                   patternUnits="userSpaceOnUse"
                 >
-                  <rect width="6" height="6" fill="oklch(0.968 0.006 250)" />
-                  <rect
-                    width="1"
-                    height="1"
-                    fill="oklch(0.22 0.03 265 / 0.06)"
-                  />
+                  <rect width="6" height="6" fill="#080808" />
+                  <rect width="1" height="1" fill="rgba(255,255,255,0.04)" />
                   <rect
                     x="3"
                     y="3"
                     width="1"
                     height="1"
-                    fill="oklch(0.5 0.17 25 / 0.05)"
+                    fill="rgba(255,150,50,0.06)"
                   />
                 </pattern>
               </defs>
-              <rect width={W} height={H} fill="url(#scatter-paper)" />
+              <rect width={W} height={H} fill="url(#scatter-dark)" />
 
               {/* quadrant hint: high AFFIX / low RHS */}
               <rect
@@ -100,7 +106,7 @@ export function Scatter() {
                 height={
                   scale((ymin + ymax) / 2, ymin, ymax, H - PAD.b, PAD.t) - PAD.t
                 }
-                fill="oklch(0.5 0.17 25 / 0.06)"
+                fill="rgba(255,150,50,0.08)"
               />
 
               {xTicks.map((t) => {
@@ -112,14 +118,14 @@ export function Scatter() {
                       y1={PAD.t}
                       x2={x}
                       y2={H - PAD.b}
-                      stroke="oklch(0.22 0.03 265 / 0.1)"
+                      stroke="rgba(255,255,255,0.08)"
                     />
                     <text
                       x={x}
                       y={H - 18}
                       textAnchor="middle"
-                      fill="oklch(0.48 0.02 265)"
-                      fontFamily="var(--font-mono), monospace"
+                      fill="rgba(255,255,255,0.35)"
+                      fontFamily="var(--font-data), monospace"
                       fontSize="10"
                     >
                       {t}
@@ -136,14 +142,14 @@ export function Scatter() {
                       y1={y}
                       x2={W - PAD.r}
                       y2={y}
-                      stroke="oklch(0.22 0.03 265 / 0.1)"
+                      stroke="rgba(255,255,255,0.08)"
                     />
                     <text
                       x={PAD.l - 10}
                       y={y + 3}
                       textAnchor="end"
-                      fill="oklch(0.48 0.02 265)"
-                      fontFamily="var(--font-mono), monospace"
+                      fill="rgba(255,255,255,0.35)"
+                      fontFamily="var(--font-data), monospace"
                       fontSize="10"
                     >
                       {t}
@@ -156,8 +162,8 @@ export function Scatter() {
                 x={W / 2}
                 y={H - 6}
                 textAnchor="middle"
-                fill="oklch(0.35 0.03 265)"
-                fontFamily="var(--font-mono), monospace"
+                fill="rgba(255,255,255,0.45)"
+                fontFamily="var(--font-data), monospace"
                 fontSize="10"
                 letterSpacing="0.12em"
               >
@@ -167,8 +173,8 @@ export function Scatter() {
                 x={14}
                 y={H / 2}
                 textAnchor="middle"
-                fill="oklch(0.35 0.03 265)"
-                fontFamily="var(--font-mono), monospace"
+                fill="rgba(255,255,255,0.45)"
+                fontFamily="var(--font-data), monospace"
                 fontSize="10"
                 letterSpacing="0.12em"
                 transform={`rotate(-90 14 ${H / 2})`}
@@ -189,23 +195,17 @@ export function Scatter() {
                       cx={p.x}
                       cy={p.y}
                       r={on ? 7 : 5}
-                      fill={
-                        on
-                          ? "oklch(0.5 0.17 25)"
-                          : "oklch(0.5 0.17 25 / 0.85)"
-                      }
-                      stroke={on ? "oklch(0.22 0.03 265)" : "transparent"}
+                      fill={on ? "rgb(255,150,50)" : "rgba(255,150,50,0.85)"}
+                      stroke={on ? "rgba(255,255,255,0.9)" : "transparent"}
                       strokeWidth={1.25}
                     />
                     <text
                       x={p.x + 9}
                       y={p.y + 3}
                       fill={
-                        on
-                          ? "oklch(0.22 0.03 265)"
-                          : "oklch(0.4 0.025 265)"
+                        on ? "rgb(255,195,130)" : "rgba(255,255,255,0.45)"
                       }
-                      fontFamily="var(--font-mono), monospace"
+                      fontFamily="var(--font-data), monospace"
                       fontSize="10"
                       fontWeight={on ? 600 : 400}
                     >
@@ -216,7 +216,7 @@ export function Scatter() {
               })}
             </svg>
 
-            <div className="border-t border-foreground/10 px-5 py-4">
+            <div className="border-t border-white/8 px-5 py-4">
               {active ? (
                 <p className="font-data text-[12px] text-muted-foreground">
                   <span className="text-accent">{active.framework}</span>

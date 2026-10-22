@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { DitherGradient } from "@/components/dither-kit"
 import {
   failureFrameworks,
   failureLegend,
@@ -11,10 +12,10 @@ import { cn } from "@/lib/utils"
 import { Reveal, SectionLabel } from "./reveal"
 
 const CELL: Record<FailureCoverage, { bg: string; label: string }> = {
-  first_class: { bg: "bg-emerald-600/85 text-white", label: "F" },
-  pattern: { bg: "bg-amber-500/80 text-foreground", label: "P" },
-  absent: { bg: "bg-rose-600/80 text-white", label: "A" },
-  unknown: { bg: "bg-foreground/15 text-foreground/70", label: "?" },
+  first_class: { bg: "bg-emerald-500/90 text-[#050505]", label: "F" },
+  pattern: { bg: "bg-amber-400/85 text-[#050505]", label: "P" },
+  absent: { bg: "bg-rose-500/85 text-white", label: "A" },
+  unknown: { bg: "bg-white/15 text-white/70", label: "?" },
 }
 
 const LEGEND_ORDER: FailureCoverage[] = [
@@ -35,14 +36,23 @@ export function Failures() {
   } | null>(null)
 
   return (
-    <section id="failures" className="relative py-24 md:py-32">
-      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
+    <section id="failures" className="relative overflow-hidden py-28 md:py-36">
+      <DitherGradient
+        from="orange"
+        to="transparent"
+        direction="up"
+        cell={3}
+        opacity={0.1}
+        bloom="low"
+        className="pointer-events-none absolute inset-x-0 top-0 h-48"
+      />
+      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
           <SectionLabel>Failure modes</SectionLabel>
-          <h2 className="mt-3 max-w-[24ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            Failure-mode coverage matrix
+          <h2 className="mt-4 max-w-[18ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
+            Where stacks break
           </h2>
-          <p className="mt-4 max-w-[48ch] text-[15px] leading-relaxed text-muted-foreground md:text-base">
+          <p className="mt-5 max-w-[48ch] text-muted-foreground">
             First-class API, documented pattern, or absent. Hover a cell for the
             named surface and evidence. FMC ranks rows.
           </p>
@@ -60,11 +70,11 @@ export function Failures() {
         </Reveal>
 
         <Reveal delay={0.1} className="mt-10">
-          <div className="overflow-x-auto border border-foreground/12">
+          <div className="overflow-x-auto border border-white/8">
             <table className="w-full min-w-[920px] border-collapse text-left">
               <thead>
-                <tr className="border-b border-foreground/10">
-                  <th className="sticky left-0 z-10 bg-background px-3 py-3 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                <tr className="border-b border-white/8">
+                  <th className="sticky left-0 z-10 bg-[#050505] px-3 py-3 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                     Framework
                   </th>
                   {failureModes.map((m) => (
@@ -87,9 +97,9 @@ export function Failures() {
                   .map((fw) => (
                     <tr
                       key={fw.id}
-                      className="border-b border-foreground/8 transition hover:bg-foreground/[0.03]"
+                      className="border-b border-white/8 transition hover:bg-white/[0.02]"
                     >
-                      <td className="sticky left-0 z-10 bg-background px-3 py-2.5">
+                      <td className="sticky left-0 z-10 bg-[#050505] px-3 py-2.5">
                         <span className="font-data text-[11px] text-foreground">
                           {fw.id}
                         </span>
@@ -108,7 +118,7 @@ export function Failures() {
                                 "inline-flex size-6 items-center justify-center rounded-sm font-data text-[9px] transition",
                                 CELL[cell].bg,
                                 hover?.fw === fw.id && hover.mode === m.code
-                                  ? "ring-1 ring-accent ring-offset-1 ring-offset-background"
+                                  ? "ring-1 ring-accent ring-offset-1 ring-offset-[#050505]"
                                   : ""
                               )}
                               onMouseEnter={() =>

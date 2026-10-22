@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
+import { DitherAvatar, DitherGradient } from "@/components/dither-kit"
 import {
   dimensions,
   formulas,
@@ -30,23 +31,32 @@ export function Methodology() {
     : null
 
   return (
-    <section id="method" className="relative py-24 md:py-32">
-      <div className="mx-auto max-w-[1120px] px-5 md:px-8">
+    <section id="method" className="relative overflow-hidden py-28 md:py-36">
+      <DitherGradient
+        from="orange"
+        to="transparent"
+        direction="right"
+        cell={3}
+        opacity={0.1}
+        bloom="low"
+        className="pointer-events-none absolute inset-y-0 left-0 w-1/2"
+      />
+      <div className="relative mx-auto max-w-[1120px] px-5 md:px-8">
         <Reveal>
           <SectionLabel>Methodology</SectionLabel>
-          <h2 className="mt-3 max-w-[24ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            Scoring dimensions and proprietary indices
+          <h2 className="mt-4 max-w-[18ch] font-display text-4xl font-semibold tracking-tight md:text-5xl">
+            How we score stacks
           </h2>
-          <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted-foreground md:text-base">
+          <p className="mt-5 max-w-[52ch] text-muted-foreground">
             {methodology.overview}
           </p>
         </Reveal>
 
-        <Reveal delay={0.06} className="mt-14">
-          <p className="mb-4 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+        <Reveal delay={0.06} className="mt-16">
+          <p className="mb-4 font-data text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
             Dimension weights · expand for 90 vs 60 rubrics
           </p>
-          <div className="flex h-2.5 w-full overflow-hidden rounded-sm border border-foreground/10">
+          <div className="flex h-2.5 w-full overflow-hidden rounded-sm border border-white/8">
             {dimensions.map((d) => (
               <button
                 key={d.code}
@@ -65,7 +75,7 @@ export function Methodology() {
                   background:
                     openCode === d.code
                       ? "var(--accent)"
-                      : `color-mix(in oklch, var(--foreground) ${18 + d.weight * 55}%, transparent)`,
+                      : `color-mix(in oklch, var(--foreground) ${14 + d.weight * 40}%, transparent)`,
                 }}
               />
             ))}
@@ -79,12 +89,18 @@ export function Methodology() {
                   setOpenCode((c) => (c === d.code ? null : d.code))
                 }
                 className={cn(
-                  "border px-2.5 py-1.5 font-data text-[10px] uppercase tracking-[0.14em] transition",
+                  "inline-flex items-center gap-2 border px-2.5 py-1.5 font-data text-[10px] uppercase tracking-[0.14em] transition",
                   openCode === d.code
                     ? "border-accent/50 bg-accent/10 text-accent"
-                    : "border-foreground/12 text-muted-foreground hover:border-foreground/25 hover:text-foreground"
+                    : "border-white/8 text-muted-foreground hover:border-white/20 hover:text-foreground"
                 )}
               >
+                <DitherAvatar
+                  name={d.code}
+                  hue={28}
+                  bloom="low"
+                  className="size-4 shrink-0 rounded-[2px]"
+                />
                 {d.code}{" "}
                 <span className="text-muted-foreground/80">
                   {(d.weight * 100).toFixed(0)}%
@@ -104,7 +120,7 @@ export function Methodology() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="mt-8 border-t border-foreground/12 pt-8"
+                    className="mt-8 border-t border-white/8 pt-8"
                   >
                     <h3 className="font-display text-2xl font-semibold tracking-tight">
                       {d.name}{" "}
@@ -137,7 +153,7 @@ export function Methodology() {
         </Reveal>
 
         <Reveal delay={0.1} className="mt-20">
-          <p className="mb-3 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+          <p className="mb-3 font-data text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
             Worked example · PydanticAI vs Vercel AI SDK
           </p>
           <h3 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
@@ -243,7 +259,7 @@ function FormulaCard({
   right: Side
 }) {
   return (
-    <div className="border-t border-foreground/12 pt-8">
+    <div className="border-t border-white/8 pt-8">
       <div className="flex items-baseline justify-between gap-4">
         <h4 className="font-display text-xl font-semibold tracking-tight">
           {title}
@@ -287,7 +303,7 @@ function SideBreakdown({ side, accent }: { side: Side; accent?: boolean }) {
           </li>
         ))}
       </ul>
-      <p className="mt-4 flex justify-between border-t border-foreground/10 pt-3 font-data text-sm">
+      <p className="mt-4 flex justify-between border-t border-white/8 pt-3 font-data text-sm">
         <span className="text-muted-foreground">Sum → published</span>
         <span className={accent ? "text-accent" : "text-foreground"}>
           {side.total.toFixed(1)} → {side.published}

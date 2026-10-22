@@ -1,14 +1,14 @@
 import type { Metadata } from "next"
-import { Bricolage_Grotesque, IBM_Plex_Mono, Source_Sans_3 } from "next/font/google"
+import { DM_Sans, IBM_Plex_Mono, Syne } from "next/font/google"
 import "./globals.css"
 
-const display = Bricolage_Grotesque({
+const display = Syne({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["500", "600", "700", "800"],
 })
 
-const sans = Source_Sans_3({
+const sans = DM_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://affix-2026.vercel.app"),
   title: "AFFIX-2026 — Agent Framework Fitness Index",
   description:
-    "Sixteen production AI frameworks ranked on AFFIX and rewrite hazard (RHS). PydanticAI leads at 87.6 AFFIX / RHS 17.3. Ten dimensions, twelve failure modes, seven proprietary indices.",
+    "Sixteen production AI frameworks ranked on AFFIX and rewrite hazard (RHS). PydanticAI leads at 87.6 AFFIX / RHS 17.3.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -35,23 +35,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AFFIX-2026 — Agent Framework Fitness Index",
     description:
-      "PydanticAI #1 of 16 frameworks (AFFIX 87.6, RHS 17.3). Comparative fitness and rewrite-hazard estimates from primary documentation.",
+      "PydanticAI #1 of 16 frameworks (AFFIX 87.6, RHS 17.3). Fitness today, rewrite risk within twelve months.",
     type: "website",
     siteName: "AFFIX-2026",
-    images: [
-      {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
-        alt: "AFFIX-2026 — Agent Framework Fitness Index. PydanticAI leads at 87.6.",
-      },
-    ],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "AFFIX-2026" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "AFFIX-2026 — Agent Framework Fitness Index",
-    description:
-      "16 frameworks ranked on fitness today and rewrite risk within twelve months.",
+    description: "16 frameworks. PydanticAI leads AFFIX. RHS scores rewrite risk.",
     images: ["/og.png"],
   },
 }
@@ -60,9 +52,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${display.variable} ${sans.variable} ${mono.variable} h-full`}
+      className={`dark ${display.variable} ${sans.variable} ${mono.variable} h-full`}
     >
-      <body className="flex min-h-full flex-col bg-background text-foreground">
+      <body className="flex min-h-full flex-col bg-[#050505] text-foreground">
         {children}
       </body>
     </html>
