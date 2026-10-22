@@ -2,6 +2,9 @@
 
 **Agent Framework Fitness Index eXtended** (study date 2026-10-22)
 
+**Live report:** [https://affix-2026.vercel.app](https://affix-2026.vercel.app)  
+**Repository:** [github.com/arjunkshah12345-hash/affix-2026](https://github.com/arjunkshah12345-hash/affix-2026)
+
 AFFIX-2026 is an independent comparative evaluation of production-relevant LLM and agent application frameworks. Sixteen Tier-A frameworks were scored on a weighted ten-dimension composite (**AFFIX**) and seven proprietary indices—including Lock-in Entropy (LIE), Failure-Mode Coverage (FMC), and Rewrite Hazard Score (**RHS**)—using multi-agent research adjudicated against primary documentation and API surface, not marketing copy. The study separates fitness for shipping today from the estimated probability of outgrowing primary orchestration within twelve months of production use.
 
 > **Score status:** All AFFIX and index values are **EST** (estimates) derived from primary docs, release notes, and observed APIs as of the study date. They are not runtime microbenchmarks.
@@ -25,7 +28,8 @@ RHS is lower-is-better (rewrite hazard). Full matrix: [`benchmark/scores/affix_m
 | [`site/`](site/) | Next.js interactive report (charts, personas, failure-mode matrix) |
 | [`benchmark/`](benchmark/) | Research corpus: dossiers, scores, findings, deep dives, publish pack |
 | [`research/`](research/) | Symlink to `benchmark/` (stable “research” entrypoint) |
-| [`video/`](video/) | Optional Remotion / motion package (when present) |
+| [`video/`](video/) | Remotion study film (`AffixLaunch`, 22.4s) — published copy in `site/public/video/` |
+| [`assets/`](assets/) | Brand kit (OG, icons) and selected screenshots |
 | [`dossiers/`](dossiers/) | Compact per-framework JSON/MD mirrors |
 
 ## Quick start (site)

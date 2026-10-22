@@ -75,7 +75,7 @@ export const AffixPoster: React.FC = () => {
               letterSpacing: "0.04em",
             }}
           >
-            affix.study
+            affix-2026.vercel.app
           </div>
           <div
             style={{

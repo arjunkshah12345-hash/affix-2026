@@ -64,7 +64,7 @@ export const EndCard: React.FC = () => {
               fontFamily: FONT_MONO,
             }}
           >
-            affix.study
+            affix-2026.vercel.app
           </div>
         </FadeUp>
 

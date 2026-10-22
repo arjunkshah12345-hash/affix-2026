@@ -21,6 +21,7 @@ const mono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://affix-2026.vercel.app"),
   title: "AFFIX-2026 — Agent Framework Fitness Index",
   description:
     "Sixteen production AI frameworks ranked on AFFIX and rewrite hazard (RHS). PydanticAI leads at 87.6 AFFIX / RHS 17.3. Ten dimensions, twelve failure modes, seven proprietary indices.",
