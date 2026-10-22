@@ -1,0 +1,63 @@
+{
+  "id": "SK",
+  "framework": "Microsoft Semantic Kernel",
+  "primary_lang": "C# / Python / Java",
+  "category": "Enterprise agents + plugins",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "Enterprise plugins/.NET agents under active succession to Agent Framework.",
+  "best_for": "Brownfield SK estates only (migrate to MS)",
+  "when_not_to_use": "Do not greenfield Semantic Kernel orchestration in 2026 \u2014 Microsoft Agent Framework is the successor; SK carries succession tax.",
+  "versions": {
+    "pypi": "semantic-kernel==1.45.0",
+    "notes": "Greenfield \u2192 prefer MS Agent Framework"
+  },
+  "api_primitives": {
+    "hitl": "Partial / experimental on SK agent orchestration",
+    "checkpoint": "Partial; prefer MS Agent Framework workflows for durable HITL",
+    "stream": "Streaming content in kernel/agents",
+    "structured": "Strong .NET typing; JSON schemas on functions",
+    "obs": "Azure-centric filters; portable OTel uneven",
+    "multiAgent": "Agent orchestration (experimental) \u2192 migrate to MS",
+    "mcp": "MCP plugins / Agent Framework MCP path"
+  },
+  "scores": {
+    "AF": 80.0,
+    "CS": 75.0,
+    "OB": 72.0,
+    "TC": 88.0,
+    "EG": 85.0,
+    "RE": 70.0,
+    "MF": 50.0,
+    "PH": 80.0,
+    "DX": 62.0,
+    "FP": 78.0
+  },
+  "affix_composite": 74.73,
+  "proprietary": {
+    "LIE": 48.0,
+    "CTI": 70.4,
+    "FMC": 68.0,
+    "GED": 80.0,
+    "RACS": 78.0,
+    "RHS": 28.9,
+    "PR": 81
+  },
+  "citations": [
+    "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+    "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-orchestration/",
+    "https://learn.microsoft.com/en-us/agent-framework/overview/",
+    "https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel",
+    "https://github.com/microsoft/semantic-kernel",
+    "https://github.com/microsoft/agent-framework",
+    "https://pypi.org/project/semantic-kernel/"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 85,
+    "MCP_server": 75,
+    "A2A_or_equiv": 85,
+    "OpenAPI_tool_bridge": 80,
+    "OTel_GenAI_portable": 75
+  },
+  "deep_notes_md": true
+}

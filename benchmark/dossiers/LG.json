@@ -1,0 +1,65 @@
+{
+  "id": "LG",
+  "framework": "LangGraph",
+  "primary_lang": "Python/TS",
+  "category": "Stateful graphs / agents",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "Low-level durable graph runtime; best control surface, highest cognitive tax.",
+  "best_for": "Regulated HITL, durable graphs, time-travel debugging",
+  "when_not_to_use": "Do not start greenfield LangGraph for a simple tool loop or MVP chat \u2014 CTI and LIE are high; prefer create_agent/PD/VS until you need interrupts, time-travel, or fan-out joins.",
+  "versions": {
+    "pypi": "langgraph==1.2.16",
+    "npm": "@langchain/langgraph",
+    "notes": "Runtime under LangChain create_agent"
+  },
+  "api_primitives": {
+    "hitl": "interrupt(payload) in nodes; resume via Command",
+    "checkpoint": "BaseCheckpointSaver (PostgresSaver/SqliteSaver); Store for cross-thread",
+    "stream": "stream modes: values/messages/events; stream.interrupts",
+    "structured": "TypedDict/Pydantic state + LangChain structured tools",
+    "obs": "LangSmith deep integration; state-transition traces",
+    "multiAgent": "Subgraphs, supervisor patterns, Send map-reduce",
+    "mcp": "Via LangChain MCP adapters / tool nodes"
+  },
+  "scores": {
+    "AF": 92.0,
+    "CS": 95.0,
+    "OB": 88.0,
+    "TC": 75.0,
+    "EG": 85.0,
+    "RE": 72.0,
+    "MF": 50.0,
+    "PH": 93.0,
+    "DX": 65.0,
+    "FP": 85.0
+  },
+  "affix_composite": 81.64,
+  "proprietary": {
+    "LIE": 68.0,
+    "CTI": 82.0,
+    "FMC": 90.0,
+    "GED": 92.0,
+    "RACS": 62.0,
+    "RHS": 28.7,
+    "PR": 84
+  },
+  "citations": [
+    "https://docs.langchain.com/oss/python/langgraph/overview",
+    "https://docs.langchain.com/oss/python/langgraph/interrupts",
+    "https://docs.langchain.com/oss/python/langgraph/persistence",
+    "https://docs.langchain.com/oss/python/langgraph/streaming",
+    "https://docs.langchain.com/oss/python/langgraph/workflows-agents",
+    "https://www.langchain.com/blog/deep-agents-vs-langchain-vs-langgraph",
+    "https://pypi.org/project/langgraph/",
+    "https://github.com/langchain-ai/langgraph"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 90,
+    "MCP_server": 75,
+    "A2A_or_equiv": 75,
+    "OpenAPI_tool_bridge": 85,
+    "OTel_GenAI_portable": 92
+  },
+  "deepened": true
+}

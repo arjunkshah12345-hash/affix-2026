@@ -1,0 +1,62 @@
+{
+  "id": "SP",
+  "framework": "Spring AI",
+  "primary_lang": "Java",
+  "category": "JVM enterprise AI (Spring ecosystem)",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "Spring-native AI: ChatClient, Advisors, Micrometer, MCP starters.",
+  "best_for": "JVM/Spring Boot estates needing ChatClient+MCP",
+  "when_not_to_use": "Do not recommend Spring AI to Next.js/Python shops \u2014 CTI explodes without Spring Boot DNA. Not a durable graph agent runtime.",
+  "versions": {
+    "maven": "spring-ai-bom 2.1.0-M1",
+    "notes": "Milestone BOM as of pin; confirm GA before prod pin"
+  },
+  "api_primitives": {
+    "hitl": "No first-class mid-graph interrupt; app-level approval patterns",
+    "checkpoint": "Spring-managed state; not agent-thread checkpointers",
+    "stream": "ChatClient streaming; reactive options",
+    "structured": "BeanOutputConverter / validateSchema structured output",
+    "obs": "Micrometer observations; Actuator",
+    "multiAgent": "Advisors + tools; limited native multi-agent graph DSL",
+    "mcp": "spring-ai-mcp starters (client + server)"
+  },
+  "scores": {
+    "AF": 80.0,
+    "CS": 70.0,
+    "OB": 85.0,
+    "TC": 88.0,
+    "EG": 75.0,
+    "RE": 72.0,
+    "MF": 70.0,
+    "PH": 88.0,
+    "DX": 70.0,
+    "FP": 85.0
+  },
+  "affix_composite": 78.23,
+  "proprietary": {
+    "LIE": 42.0,
+    "CTI": 28.0,
+    "FMC": 62.0,
+    "GED": 45.0,
+    "RACS": 72.0,
+    "RHS": 23.0,
+    "PR": 88
+  },
+  "citations": [
+    "https://spring.io/projects/spring-ai",
+    "https://docs.spring.io/spring-ai/reference/api/chatclient.html",
+    "https://docs.spring.io/spring-ai/reference/api/structured-output.html",
+    "https://docs.spring.io/spring-ai/reference/api/structured-output/validation.html",
+    "https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html",
+    "https://docs.spring.io/spring-ai/reference/"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 95,
+    "MCP_server": 95,
+    "A2A_or_equiv": 70,
+    "OpenAPI_tool_bridge": 90,
+    "OTel_GenAI_portable": 95
+  },
+  "deep_notes_md": true
+}

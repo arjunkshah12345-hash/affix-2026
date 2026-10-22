@@ -1,0 +1,782 @@
+{
+  "study_id": "AFFIX-2026",
+  "deliverable": "architecture_control_planes",
+  "as_of": "2026-10-21",
+  "companion_md": "benchmark/deep/architecture_control_planes.md",
+  "methodology_ref": "benchmark/METHODOLOGY.md",
+  "notation": {
+    "scores": "EST unless marked measured API fact",
+    "presence": "first_class | partial | diy | absent | n_a",
+    "durability_class": "none | session_memory | framework_checkpoint | wal_log | durable_engine"
+  },
+  "taxonomy_families": [
+    {
+      "id": "simple_tool_loop",
+      "description": "Single agent while-model-calls-tools loop with max turns",
+      "next_step_decider": "llm_tool_choice",
+      "typical_frameworks": ["OA_single", "PD", "VS", "SM", "MA_agent"]
+    },
+    {
+      "id": "handoff_runtime",
+      "description": "Specialist transfer via transfer tools within one run",
+      "next_step_decider": "llm_handoff_tool",
+      "typical_frameworks": ["OA", "SK_handoff", "MAF_handoff"]
+    },
+    {
+      "id": "conversation_network",
+      "description": "Multi-party turn protocols with speaker selection",
+      "next_step_decider": "channel_adapter_or_manager",
+      "typical_frameworks": ["AG2", "SK_group_chat"]
+    },
+    {
+      "id": "role_process",
+      "description": "Task list sequential or manager delegation",
+      "next_step_decider": "process_manager",
+      "typical_frameworks": ["CR"]
+    },
+    {
+      "id": "planner_magentic",
+      "description": "Planning manager coordinates specialists over evolving context",
+      "next_step_decider": "magentic_manager",
+      "typical_frameworks": ["SK_magentic", "MAF_magentic"]
+    },
+    {
+      "id": "graph_runtime",
+      "description": "Declarative or hybrid graphs with reducers/typed steps",
+      "next_step_decider": "edges_conditionals_plus_llm_nodes",
+      "typical_frameworks": ["LG", "AD", "MA_workflow", "CR_flows"]
+    },
+    {
+      "id": "durable_engine",
+      "description": "External durable execution with step/activity memoization",
+      "next_step_decider": "application_code_with_step_boundaries",
+      "typical_frameworks": ["IN", "Temporal", "PD_temporal", "OA_restate"]
+    }
+  ],
+  "primitives": [
+    {
+      "id": "next_step_decider",
+      "label": "Who chooses the next computational step"
+    },
+    {
+      "id": "state_model",
+      "label": "Primary mutable state abstraction"
+    },
+    {
+      "id": "durability_unit",
+      "label": "Smallest unit restored after crash/resume"
+    },
+    {
+      "id": "durability_class",
+      "label": "Durability taxonomy class"
+    },
+    {
+      "id": "hitl_mechanism",
+      "label": "First-class human pause/resume API"
+    },
+    {
+      "id": "hitl_determinism",
+      "label": "Whether pause requires a model turn",
+      "enum": ["deterministic_node", "approval_interrupt", "in_tool_pause", "prompt_only", "engine_wait"]
+    },
+    {
+      "id": "multi_agent_topology",
+      "label": "Native multi-agent shape"
+    },
+    {
+      "id": "history_isolation",
+      "label": "Controls on what next agent sees"
+    },
+    {
+      "id": "termination_bounds",
+      "label": "Built-in cost/turn bounds"
+    },
+    {
+      "id": "fan_out_join",
+      "label": "Map-reduce / parallel join support"
+    },
+    {
+      "id": "time_travel_fork",
+      "label": "Replay or fork prior states"
+    },
+    {
+      "id": "idempotency_stance",
+      "label": "How double-execution on resume is handled"
+    },
+    {
+      "id": "observability_hooks",
+      "label": "Trace/replay surface"
+    },
+    {
+      "id": "lock_in_surface",
+      "label": "Hardest-to-exit coupling"
+    },
+    {
+      "id": "cognitive_tax_est",
+      "label": "CTI concepts EST from dossiers"
+    },
+    {
+      "id": "control_surface_score_est",
+      "label": "AFFIX CS dimension EST"
+    },
+    {
+      "id": "production_breakage_modes",
+      "label": "Common production failure modes for this plane"
+    },
+    {
+      "id": "simple_loop_wins_when",
+      "label": "Conditions where tool loop beats this plane"
+    }
+  ],
+  "frameworks": [
+    {
+      "id": "LG",
+      "name": "LangGraph",
+      "family": "graph_runtime",
+      "languages": ["Python", "TypeScript"],
+      "affix_composite_est": 81.6,
+      "control_surface_score_est": 95,
+      "cognitive_tax_est": 82,
+      "fmc_est": 90,
+      "ged_est": 92,
+      "primitives": {
+        "next_step_decider": "StateGraph edges, conditional edges, Send fan-out, LLM nodes",
+        "state_model": "Typed state + Annotated reducers; Store for cross-thread KV",
+        "durability_unit": "super_step_checkpoint",
+        "durability_class": "framework_checkpoint",
+        "hitl_mechanism": "interrupt(payload) + Command(resume=...); requires checkpointer + thread_id",
+        "hitl_determinism": "in_tool_pause",
+        "multi_agent_topology": "subgraphs_supervisor_send_map_reduce",
+        "history_isolation": "state_channels_and_subgraph_namespaces",
+        "termination_bounds": "app_graph_design_plus_recursion_limits",
+        "fan_out_join": "first_class",
+        "time_travel_fork": "first_class",
+        "idempotency_stance": "pending_writes_skip_successful_siblings; pre-interrupt side effects must be app-idempotent",
+        "observability_hooks": "LangSmith + stream modes including interrupts",
+        "lock_in_surface": "checkpoint_schemas_agent_server_langsmith",
+        "presence": {
+          "checkpoint": "first_class",
+          "arbitrary_interrupt": "first_class",
+          "sessions_memory": "partial",
+          "durable_engine_native": "diy"
+        }
+      },
+      "production_breakage_modes": [
+        "InMemorySaver in production loses state across deploys",
+        "subgraph persistence misconfig drops interrupt/resume",
+        "async durability lag / durability-mode interrupt edge cases",
+        "CTI overkill for linear tool agents"
+      ],
+      "simple_loop_wins_when": [
+        "no multi-day HITL",
+        "no fan-out/join",
+        "create_agent suffices without raw StateGraph"
+      ],
+      "citations": [
+        "https://docs.langchain.com/oss/python/langgraph/persistence",
+        "https://docs.langchain.com/oss/python/langgraph/checkpointers",
+        "https://docs.langchain.com/oss/python/langgraph/interrupts",
+        "https://docs.langchain.com/oss/python/langgraph/overview"
+      ]
+    },
+    {
+      "id": "OA",
+      "name": "OpenAI Agents SDK",
+      "family": "handoff_runtime",
+      "languages": ["Python", "JavaScript"],
+      "affix_composite_est": 83.46,
+      "control_surface_score_est": 91,
+      "cognitive_tax_est": 14,
+      "fmc_est": 84,
+      "ged_est": 5.5,
+      "primitives": {
+        "next_step_decider": "LLM tool choice including transfer_to_* handoff tools",
+        "state_model": "Run context + Sessions (conversation history) + RunState for pauses",
+        "durability_unit": "runstate_interruption_plus_session_messages",
+        "durability_class": "session_memory",
+        "hitl_mechanism": "tool needs_approval → interruptions → RunState.approve/reject → resume",
+        "hitl_determinism": "approval_interrupt",
+        "multi_agent_topology": "handoff_chain_or_agents_as_tools",
+        "history_isolation": "handoff input_filter / nest_handoff_history; guardrails do not apply to handoff calls",
+        "termination_bounds": "MaxTurnsExceeded and app limits",
+        "fan_out_join": "partial",
+        "time_travel_fork": "diy",
+        "idempotency_stance": "resume continues run; tool idempotency app-owned; Restate optional for durable agents",
+        "observability_hooks": "OpenAI Traces spans (agent/generation/function/guardrail/handoff); ZDR disables",
+        "lock_in_surface": "responses_traces_sandbox_realtime_ops_gravity",
+        "presence": {
+          "checkpoint": "partial",
+          "arbitrary_interrupt": "partial",
+          "sessions_memory": "first_class",
+          "durable_engine_native": "partial"
+        }
+      },
+      "production_breakage_modes": [
+        "handoff history leakage of tool args/results without filters",
+        "guardrail boundary surprises (first/final agent only; handoffs bypass tool guardrails)",
+        "sessions mistaken for crash-durable workflow state",
+        "tracing unavailable under ZDR"
+      ],
+      "simple_loop_wins_when": [
+        "single specialist agent",
+        "no transfer topology",
+        "no nested Agent.as_tool approvals"
+      ],
+      "citations": [
+        "https://openai.github.io/openai-agents-python/",
+        "https://openai.github.io/openai-agents-python/handoffs/",
+        "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+        "https://openai.github.io/openai-agents-python/sessions/",
+        "https://openai.github.io/openai-agents-python/running_agents/"
+      ]
+    },
+    {
+      "id": "AG",
+      "name": "AutoGen / AG2",
+      "family": "conversation_network",
+      "languages": ["Python"],
+      "affix_composite_est": 76.77,
+      "control_surface_score_est": 85,
+      "cognitive_tax_est": 38,
+      "fmc_est": 74,
+      "ged_est": 9.5,
+      "primitives": {
+        "next_step_decider": "Channel adapters (conversation/consulting/discussion/workflow TransitionGraph); Classic GroupChat speaker selection",
+        "state_model": "Hub WAL + adapter fold state + Context Variables + KnowledgeStore",
+        "durability_unit": "wal_envelope_fold",
+        "durability_class": "wal_log",
+        "hitl_mechanism": "await context.input inside tool + hitl_hook; HumanClient participant",
+        "hitl_determinism": "in_tool_pause",
+        "multi_agent_topology": "network_channels_plus_classic_groupchat",
+        "history_isolation": "channel view policies / WindowedSummary / audience on envelopes",
+        "termination_bounds": "TTL max_turns TerminateTarget; conversation never auto-closes",
+        "fan_out_join": "partial",
+        "time_travel_fork": "partial",
+        "idempotency_stance": "WAL replay for adapter state; side-effect idempotency app-owned",
+        "observability_hooks": "TelemetryMiddleware OTel GenAI spans",
+        "lock_in_surface": "hub_channel_wal_classic_vs_v1_split",
+        "presence": {
+          "checkpoint": "partial",
+          "arbitrary_interrupt": "partial",
+          "sessions_memory": "partial",
+          "durable_engine_native": "diy"
+        }
+      },
+      "production_breakage_modes": [
+        "unbounded conversation channel cost",
+        "Classic vs v1 package/import migration breaks",
+        "WAL poll timeouts missing messages",
+        "compaction drops working memory if only success events observed"
+      ],
+      "simple_loop_wins_when": [
+        "no debate or consensus protocol required",
+        "sequential research→write can be a workflow elsewhere",
+        "team cannot afford Hub/Passport/Rules CTI"
+      ],
+      "citations": [
+        "https://docs.ag2.ai/latest/docs/beta/network/adapters_overview/",
+        "https://docs.ag2.ai/latest/docs/beta/network/workflow/",
+        "https://github.com/ag2ai/ag2",
+        "https://docs.ag2.ai/docs/user-guide/telemetry/"
+      ]
+    },
+    {
+      "id": "CR",
+      "name": "CrewAI",
+      "family": "role_process",
+      "languages": ["Python"],
+      "affix_composite_est": 79.79,
+      "control_surface_score_est": 81,
+      "cognitive_tax_est": 18,
+      "fmc_est": 71,
+      "ged_est": 6.5,
+      "primitives": {
+        "next_step_decider": "Process.sequential | Process.hierarchical manager; Flows @start/@listen/router",
+        "state_model": "Crew/task context + Flow self.state + hierarchical memory scopes",
+        "durability_unit": "task_or_flow_checkpoint",
+        "durability_class": "framework_checkpoint",
+        "hitl_mechanism": "task human_input; Flow @human_feedback; enterprise webhook HITL",
+        "hitl_determinism": "deterministic_node",
+        "multi_agent_topology": "role_crew_manager_delegation",
+        "history_isolation": "task context parameters; memory scope tree",
+        "termination_bounds": "max RPM/iterations/guardrails",
+        "fan_out_join": "partial",
+        "time_travel_fork": "partial",
+        "idempotency_stance": "restore skips completed tasks; auto-checkpoint writes best-effort",
+        "observability_hooks": "CrewAI AMP tracing + third-party sinks",
+        "lock_in_surface": "amp_tracing_enterprise_hitl_default_embeddings",
+        "presence": {
+          "checkpoint": "first_class",
+          "arbitrary_interrupt": "partial",
+          "sessions_memory": "first_class",
+          "durable_engine_native": "diy"
+        }
+      },
+      "production_breakage_modes": [
+        "hierarchical without manager_llm/manager_agent",
+        "human feedback pollutes task context",
+        "HITL webhook resume URL drops",
+        "weak concurrent state race primitives vs graph reducers"
+      ],
+      "simple_loop_wins_when": [
+        "one agent one task",
+        "roles are cosmetic prompt splits",
+        "no need for Flows event graph"
+      ],
+      "citations": [
+        "https://docs.crewai.com/v1.15.28/en/concepts/processes",
+        "https://docs.crewai.com/v1.15.28/en/concepts/flows",
+        "https://docs.crewai.com/v1.15.23/en/concepts/checkpointing",
+        "https://docs.crewai.com/edge/en/learn/hierarchical-process"
+      ]
+    },
+    {
+      "id": "SK",
+      "name": "Semantic Kernel / Magentic (→ MAF)",
+      "family": "planner_magentic",
+      "languages": ["C#", "Python", "Java"],
+      "affix_composite_est": 74.44,
+      "control_surface_score_est": 74,
+      "cognitive_tax_est": 32,
+      "fmc_est": 68,
+      "ged_est": 8.0,
+      "primitives": {
+        "next_step_decider": "Concurrent|Sequential|Handoff|GroupChat|Magentic manager planning",
+        "state_model": "Agent threads / chat history; Magentic shared context + progress ledger",
+        "durability_unit": "runtime_specific_not_unified",
+        "durability_class": "session_memory",
+        "hitl_mechanism": "group human participant; Magentic plan review HITL",
+        "hitl_determinism": "prompt_only",
+        "multi_agent_topology": "five_pattern_catalog_plus_maf_workflows",
+        "history_isolation": "orchestration_pattern_specific",
+        "termination_bounds": "app_level_manager_caps",
+        "fan_out_join": "first_class",
+        "time_travel_fork": "diy",
+        "idempotency_stance": "experimental APIs; prefer MAF for greenfield durability story",
+        "observability_hooks": "ILogger / App Insights gravity; less GenAI-span cookbook than AG2/ADK",
+        "lock_in_surface": "azure_foundry_samples_plus_sk_to_maf_succession",
+        "presence": {
+          "checkpoint": "partial",
+          "arbitrary_interrupt": "partial",
+          "sessions_memory": "first_class",
+          "durable_engine_native": "diy"
+        },
+        "api_stability": "sk_orchestration_experimental_maf_successor"
+      },
+      "production_breakage_modes": [
+        "building on experimental SK orchestration before RC",
+        "double migration SK→MAF",
+        "Magentic open-ended loops without cost caps",
+        "Python/.NET feature skew"
+      ],
+      "simple_loop_wins_when": [
+        "solution path known (use sequential/handoff or non-SK workflow)",
+        "no need for Magentic-One-style generalist collaboration",
+        "greenfield can start on MAF instead of SK agents"
+      ],
+      "citations": [
+        "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-orchestration/",
+        "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-orchestration/handoff",
+        "https://learn.microsoft.com/en-us/agent-framework/workflows/orchestrations/magentic",
+        "https://learn.microsoft.com/en-us/agent-framework/overview/",
+        "https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel"
+      ]
+    },
+    {
+      "id": "AD",
+      "name": "Google ADK",
+      "family": "graph_runtime",
+      "languages": ["Python", "TypeScript", "Go", "Java", "Kotlin"],
+      "affix_composite_est": 82.76,
+      "control_surface_score_est": 88,
+      "cognitive_tax_est": 28,
+      "fmc_est": 81,
+      "ged_est": 9.0,
+      "primitives": {
+        "next_step_decider": "Graph edges, dynamic programmatic workflows, collaborative coordinator, sequence/loop/parallel templates",
+        "state_model": "Sessions/state/memory/artifacts + node I/O; compaction/caching",
+        "durability_unit": "node_checkpoint",
+        "durability_class": "framework_checkpoint",
+        "hitl_mechanism": "RequestInput HITL nodes (no model required); tool confirmation flows",
+        "hitl_determinism": "deterministic_node",
+        "multi_agent_topology": "workflows_plus_a2a_cross_runtime",
+        "history_isolation": "node_input_output_schemas_and_limited_contexts",
+        "termination_bounds": "RunConfig resume/cancel + app limits",
+        "fan_out_join": "first_class",
+        "time_travel_fork": "partial",
+        "idempotency_stance": "rerunOnResume must be configured; non-idempotent tools at risk on re-run",
+        "observability_hooks": "OTel GenAI + Cloud Trace / Monocle",
+        "lock_in_surface": "gcp_agent_runtime_cloud_run_gke_gravity",
+        "presence": {
+          "checkpoint": "first_class",
+          "arbitrary_interrupt": "first_class",
+          "sessions_memory": "first_class",
+          "durable_engine_native": "diy"
+        }
+      },
+      "production_breakage_modes": [
+        "rerunOnResume double work",
+        "LiteLLM gaps vs Gemini-centric examples",
+        "compaction drops tool-critical details",
+        "experimental agent routing instability"
+      ],
+      "simple_loop_wins_when": [
+        "single LlmAgent + tools without graph",
+        "no deterministic HITL node required",
+        "no A2A cross-runtime need"
+      ],
+      "citations": [
+        "https://adk.dev/workflows/",
+        "https://adk.dev/graphs/dynamic/",
+        "https://adk.dev/graphs/human-input/",
+        "https://adk.dev/a2a/",
+        "https://adk.dev/observability/traces/"
+      ]
+    },
+    {
+      "id": "MA",
+      "name": "Mastra",
+      "family": "graph_runtime",
+      "languages": ["TypeScript"],
+      "affix_composite_est": 82.5,
+      "control_surface_score_est": 85,
+      "cognitive_tax_est": 34,
+      "fmc_est": 72,
+      "ged_est": 78,
+      "primitives": {
+        "next_step_decider": "Agent tool loop OR workflow .then/.branch/.parallel",
+        "state_model": "Workflow step state + memory layers (working/semantic/observational)",
+        "durability_unit": "workflow_snapshot_step",
+        "durability_class": "framework_checkpoint",
+        "hitl_mechanism": "workflow suspend/resume",
+        "hitl_determinism": "deterministic_node",
+        "multi_agent_topology": "agents_plus_workflows_composition",
+        "history_isolation": "typed step schemas + memory scopes",
+        "termination_bounds": "workflow/step design + app limits",
+        "fan_out_join": "first_class",
+        "time_travel_fork": "partial",
+        "idempotency_stance": "built-in engine snapshots; Inngest runner for stronger durability",
+        "observability_hooks": "Studio + scorers/evals + observability sinks",
+        "lock_in_surface": "mastra_workflow_dsl_and_platform_gravity_moderate",
+        "presence": {
+          "checkpoint": "first_class",
+          "arbitrary_interrupt": "first_class",
+          "sessions_memory": "first_class",
+          "durable_engine_native": "partial"
+        }
+      },
+      "production_breakage_modes": [
+        "using agents for predetermined multi-step ETL",
+        "using workflows for open-ended research",
+        "assuming built-in engine equals Inngest/Temporal without runner",
+        "smaller TS hiring pool than LG/Python"
+      ],
+      "simple_loop_wins_when": [
+        "product chat + tools + structured output only",
+        "no predetermined step graph",
+        "pair VS UI without Mastra workflows"
+      ],
+      "citations": [
+        "https://mastra.ai/docs/workflows/overview",
+        "https://mastra.ai/docs/workflows/suspend-and-resume",
+        "https://mastra.ai/docs/workflows/control-flow",
+        "https://mastra.ai/docs/agents/overview",
+        "https://mastra.ai/articles/langgraph"
+      ]
+    },
+    {
+      "id": "IN",
+      "name": "Inngest durable agents / AgentKit",
+      "family": "durable_engine",
+      "languages": ["TypeScript"],
+      "affix_composite_est": 78.8,
+      "control_surface_score_est": 92,
+      "cognitive_tax_est": 26,
+      "fmc_est": 85,
+      "ged_est": 55,
+      "primitives": {
+        "next_step_decider": "Application loop; model chooses tools; optional AgentKit Network routers",
+        "state_model": "Inngest run + step memoization; AgentKit shared State for networks",
+        "durability_unit": "step_run_result",
+        "durability_class": "durable_engine",
+        "hitl_mechanism": "step.waitForEvent (zero worker while waiting)",
+        "hitl_determinism": "engine_wait",
+        "multi_agent_topology": "step.invoke_subagents_and_agentkit_networks",
+        "history_isolation": "step_boundaries_and_network_state",
+        "termination_bounds": "function timeouts + loop limits in code",
+        "fan_out_join": "partial",
+        "time_travel_fork": "partial",
+        "idempotency_stance": "completed steps memoized on replay; keep nondeterminism inside steps",
+        "observability_hooks": "step trajectory traces",
+        "lock_in_surface": "inngest_platform_or_self_host",
+        "presence": {
+          "checkpoint": "first_class",
+          "arbitrary_interrupt": "first_class",
+          "sessions_memory": "diy",
+          "durable_engine_native": "first_class"
+        }
+      },
+      "production_breakage_modes": [
+        "nondeterminism outside step.run breaks replay",
+        "AgentKit Networks + platform CTI spike if learned together",
+        "not a RAG/UI framework — must compose with VS/MA"
+      ],
+      "simple_loop_wins_when": [
+        "runs finish within process lifetime and loss is OK",
+        "no multi-hour waits",
+        "no need for step memoization of paid model calls"
+      ],
+      "citations": [
+        "https://www.inngest.com/docs/durable-execution/durable-agents",
+        "https://www.inngest.com/docs/durable-execution",
+        "https://agentkit.inngest.com/",
+        "https://agentkit.inngest.com/concepts/networks"
+      ]
+    },
+    {
+      "id": "TEMPORAL",
+      "name": "Temporal (incl. PydanticAI integration)",
+      "family": "durable_engine",
+      "languages": ["polyglot"],
+      "affix_composite_est": null,
+      "control_surface_score_est": 94,
+      "cognitive_tax_est": 40,
+      "fmc_est": 90,
+      "ged_est": 50,
+      "primitives": {
+        "next_step_decider": "Deterministic workflow code; activities for model/tools/MCP",
+        "state_model": "Temporal event history",
+        "durability_unit": "activity_completion",
+        "durability_class": "durable_engine",
+        "hitl_mechanism": "signals / updates for human decisions; long-running workflows",
+        "hitl_determinism": "engine_wait",
+        "multi_agent_topology": "child_workflows_and_activity_fanout",
+        "history_isolation": "workflow_vs_activity_boundary",
+        "termination_bounds": "workflow/activity timeouts and retry policies",
+        "fan_out_join": "first_class",
+        "time_travel_fork": "partial",
+        "idempotency_stance": "activities retried from start; must be idempotent or heartbeat-aware",
+        "observability_hooks": "Temporal UI histories + SDK metrics",
+        "lock_in_surface": "temporal_server_and_determinism_discipline",
+        "presence": {
+          "checkpoint": "first_class",
+          "arbitrary_interrupt": "first_class",
+          "sessions_memory": "diy",
+          "durable_engine_native": "first_class"
+        }
+      },
+      "production_breakage_modes": [
+        "I/O inside workflow code breaks determinism",
+        "non-idempotent activities double side effects on retry",
+        "ops burden of workers/server for teams that only needed a chat loop"
+      ],
+      "simple_loop_wins_when": [
+        "no crash survival requirement",
+        "no multi-day waits",
+        "team has no Temporal ops capacity"
+      ],
+      "citations": [
+        "https://docs.temporal.io/ai",
+        "https://pydantic.dev/docs/ai/capabilities/durable_execution/temporal/",
+        "https://temporal.io/blog/of-course-you-can-build-dynamic-ai-agents-with-temporal"
+      ]
+    }
+  ],
+  "comparison_matrix": {
+    "rows": [
+      "durability_class",
+      "hitl_determinism",
+      "fan_out_join",
+      "time_travel_fork",
+      "native_debate_topology",
+      "native_handoff_tools",
+      "zero_compute_long_wait",
+      "api_stability_risk"
+    ],
+    "cells": {
+      "LG": {
+        "durability_class": "framework_checkpoint",
+        "hitl_determinism": "in_tool_pause",
+        "fan_out_join": "first_class",
+        "time_travel_fork": "first_class",
+        "native_debate_topology": "diy",
+        "native_handoff_tools": "diy",
+        "zero_compute_long_wait": "partial",
+        "api_stability_risk": "low"
+      },
+      "OA": {
+        "durability_class": "session_memory",
+        "hitl_determinism": "approval_interrupt",
+        "fan_out_join": "partial",
+        "time_travel_fork": "diy",
+        "native_debate_topology": "absent",
+        "native_handoff_tools": "first_class",
+        "zero_compute_long_wait": "partial",
+        "api_stability_risk": "low"
+      },
+      "AG": {
+        "durability_class": "wal_log",
+        "hitl_determinism": "in_tool_pause",
+        "fan_out_join": "partial",
+        "time_travel_fork": "partial",
+        "native_debate_topology": "first_class",
+        "native_handoff_tools": "partial",
+        "zero_compute_long_wait": "diy",
+        "api_stability_risk": "high"
+      },
+      "CR": {
+        "durability_class": "framework_checkpoint",
+        "hitl_determinism": "deterministic_node",
+        "fan_out_join": "partial",
+        "time_travel_fork": "partial",
+        "native_debate_topology": "absent",
+        "native_handoff_tools": "absent",
+        "zero_compute_long_wait": "partial",
+        "api_stability_risk": "medium"
+      },
+      "SK": {
+        "durability_class": "session_memory",
+        "hitl_determinism": "prompt_only",
+        "fan_out_join": "first_class",
+        "time_travel_fork": "diy",
+        "native_debate_topology": "first_class",
+        "native_handoff_tools": "first_class",
+        "zero_compute_long_wait": "diy",
+        "api_stability_risk": "high"
+      },
+      "AD": {
+        "durability_class": "framework_checkpoint",
+        "hitl_determinism": "deterministic_node",
+        "fan_out_join": "first_class",
+        "time_travel_fork": "partial",
+        "native_debate_topology": "partial",
+        "native_handoff_tools": "partial",
+        "zero_compute_long_wait": "partial",
+        "api_stability_risk": "medium"
+      },
+      "MA": {
+        "durability_class": "framework_checkpoint",
+        "hitl_determinism": "deterministic_node",
+        "fan_out_join": "first_class",
+        "time_travel_fork": "partial",
+        "native_debate_topology": "diy",
+        "native_handoff_tools": "diy",
+        "zero_compute_long_wait": "partial",
+        "api_stability_risk": "low"
+      },
+      "IN": {
+        "durability_class": "durable_engine",
+        "hitl_determinism": "engine_wait",
+        "fan_out_join": "partial",
+        "time_travel_fork": "partial",
+        "native_debate_topology": "partial",
+        "native_handoff_tools": "diy",
+        "zero_compute_long_wait": "first_class",
+        "api_stability_risk": "low"
+      },
+      "TEMPORAL": {
+        "durability_class": "durable_engine",
+        "hitl_determinism": "engine_wait",
+        "fan_out_join": "first_class",
+        "time_travel_fork": "partial",
+        "native_debate_topology": "diy",
+        "native_handoff_tools": "diy",
+        "zero_compute_long_wait": "first_class",
+        "api_stability_risk": "low"
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "title": "Control planes optimize different failure units",
+      "claim": "LG super-step checkpoints, Inngest/Temporal step/activity memoization, OA RunState+sessions, AG2 WAL folds, and Crew task checkpoints are not interchangeable 'stateful agent' features.",
+      "severity": "critical",
+      "falsifier": "Demonstrate semantic equivalence of resume-after-kill for a non-idempotent payment tool across LG interrupt, OA session resume, and Inngest step.run without app idempotency keys."
+    },
+    {
+      "id": "F2",
+      "title": "HITL quality is ternary, not binary",
+      "claim": "Deterministic nodes (ADK RequestInput, Crew @human_feedback, Mastra suspend), approval interruptions (OA needs_approval), and in-tool pauses (AG2 context.input, LG interrupt) are distinct; prompt-only ask-user is not a control plane.",
+      "severity": "high",
+      "falsifier": "Show compliance auditors accept prompt-only HITL as equivalent to RequestInput/interrupt resume with durable persistence."
+    },
+    {
+      "id": "F3",
+      "title": "Highest CS does not minimize rewrite hazard",
+      "claim": "LangGraph CS=95 coexists with higher RHS than Mastra/OA because CTI + weak RACS + checkpoint lock-in dominate 12-month stack survival.",
+      "severity": "high",
+      "falsifier": "LG-first teams rewrite primary orchestration less often than MA/PD at equal multi-agent complexity."
+    },
+    {
+      "id": "F4",
+      "title": "Topology false friends are the top POC-to-prod killer",
+      "claim": "OA handoffs, AG2 channels/GroupChat, Crew hierarchical, and Magentic are not synonyms; they diverge on speaker cardinality, termination, history visibility, and pause determinism.",
+      "severity": "critical",
+      "falsifier": "A single isolation+cost spec satisfied unchanged by OA handoff, AG2 discussion, and Crew hierarchical on the same task."
+    },
+    {
+      "id": "F5",
+      "title": "Durable engines beat framework checkpointers for zero-compute waits",
+      "claim": "Multi-hour/day approvals should use Temporal signals or Inngest waitForEvent; framework checkpointers keep place but do not match engine wait/memoization contracts.",
+      "severity": "high",
+      "falsifier": "Framework checkpointer alone provides worker-free multi-day wait with model-call memoization equivalent to Inngest/Temporal."
+    },
+    {
+      "id": "F6",
+      "title": "Simple tool loops dominate the median production agent",
+      "claim": "Most shipped agents never need fan-out, debate, or Magentic; over-selecting rich planes raises CTI/failure surface without KPI lift.",
+      "severity": "medium",
+      "falsifier": "Product analytics show >50% of production runs use ≥3 agents with non-linear topology in a representative SaaS cohort."
+    },
+    {
+      "id": "F7",
+      "title": "Microsoft and AG2 carry succession tax on the control plane itself",
+      "claim": "SK experimental orchestration→MAF and AG Classic→Network v1 make the coordination API unstable even when model adapters are fine.",
+      "severity": "high",
+      "falsifier": "SK orchestration frozen as LTS without MAF pressure for 24 months AND AG2 v1 drop-in compatible with Classic."
+    },
+    {
+      "id": "F8",
+      "title": "Compose layers; do not seek one framework for UI + graph + durability",
+      "claim": "Winning stacks layer typed UX × orchestration × durability; single-framework absolutism under-hardens or over-taxes.",
+      "severity": "medium",
+      "falsifier": "Single package matching VS UI DX + MA workflow FMC + Inngest/Temporal PH without adjacency."
+    }
+  ],
+  "decision_heuristics": [
+    {
+      "when": "linear tools, short runs, no mid-run compliance gate",
+      "choose": "simple_tool_loop",
+      "examples": ["OA single agent", "PydanticAI", "Mastra agent", "Vercel AI SDK"]
+    },
+    {
+      "when": "specialist transfer chain with history filters",
+      "choose": "OA_handoffs"
+    },
+    {
+      "when": "role tasks with manager delegation",
+      "choose": "CR_process_or_flows"
+    },
+    {
+      "when": "debate/consensus protocols",
+      "choose": "AG2_channels"
+    },
+    {
+      "when": "unknown open-ended plan with hard caps",
+      "choose": "SK_MAF_magentic_or_AD_collaborative"
+    },
+    {
+      "when": "predetermined multi-step + typed steps (TS)",
+      "choose": "MA_workflows"
+    },
+    {
+      "when": "arbitrary interrupt + time travel + fan-out",
+      "choose": "LG_or_AD_graphs"
+    },
+    {
+      "when": "must survive deploys / multi-day waits / memoize paid calls",
+      "choose": "IN_or_TEMPORAL_wrapping_loop"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "id": "MA",
+  "framework": "Mastra",
+  "primary_lang": "TypeScript",
+  "category": "TS agent platform (agents + workflows + memory)",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "TypeScript agents + workflows + memory; the TS continuum bet beside AI SDK.",
+  "best_for": "TypeScript agent OS: workflows, memory, HITL beside AI SDK UI",
+  "when_not_to_use": "Do not use Mastra for JVM estates or when you only need a chat UI without workflows/memory \u2014 AI SDK alone is enough; also avoid if you refuse any TS agent-platform opinions.",
+  "versions": {
+    "npm": "@mastra/core@1.79.0",
+    "notes": "Mastra platform packages co-versioned"
+  },
+  "api_primitives": {
+    "hitl": "Tool approval / suspend execution on agents and workflows",
+    "checkpoint": "Workflow suspend/resume; memory + storage adapters",
+    "stream": "Agent and workflow fullStream / streaming responses",
+    "structured": "structured output with Zod/Valibot/JSON Schema",
+    "obs": "Logging, tracing, eval primitives on agents",
+    "multiAgent": "Subagents; workflow .then/.branch composition",
+    "mcp": "Tools invoke remote MCP servers; MCP-first agent surface"
+  },
+  "scores": {
+    "AF": 88.0,
+    "CS": 85.0,
+    "OB": 88.0,
+    "TC": 86.0,
+    "EG": 72.0,
+    "RE": 78.0,
+    "MF": 70.0,
+    "PH": 80.0,
+    "DX": 86.0,
+    "FP": 88.0
+  },
+  "affix_composite": 82.49,
+  "proprietary": {
+    "LIE": 32.0,
+    "CTI": 34.0,
+    "FMC": 72.0,
+    "GED": 78.0,
+    "RACS": 84.0,
+    "RHS": 20.8,
+    "PR": 89
+  },
+  "citations": [
+    "https://mastra.ai/docs/agents/overview",
+    "https://mastra.ai/docs/agents/human-in-the-loop",
+    "https://mastra.ai/docs/agents/structured-output",
+    "https://mastra.ai/docs/agents/tools",
+    "https://mastra.ai/docs/workflows/overview",
+    "https://mastra.ai/docs/memory/overview",
+    "https://mastra.ai/",
+    "https://github.com/mastra-ai/mastra"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 95,
+    "MCP_server": 85,
+    "A2A_or_equiv": 80,
+    "OpenAPI_tool_bridge": 90,
+    "OTel_GenAI_portable": 95
+  },
+  "deep_notes_md": true
+}

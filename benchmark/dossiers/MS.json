@@ -1,0 +1,62 @@
+{
+  "id": "MS",
+  "framework": "Microsoft Agent Framework",
+  "primary_lang": "Python/.NET",
+  "category": "Enterprise agents (AutoGen/SK successor)",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "Microsoft's enterprise agent/workflow successor to Semantic Kernel orchestration.",
+  "best_for": "Greenfield Microsoft/.NET enterprise agents",
+  "when_not_to_use": "Do not choose MS if you are outside Microsoft/.NET/Azure estates without a migration plan; brownfield SK apps should budget succession, not pretend SK orchestration is LTS.",
+  "versions": {
+    "pypi": "agent-framework==1.22.0",
+    "notes": "Microsoft Agent Framework; SK succession path"
+  },
+  "api_primitives": {
+    "hitl": "Workflow request/response to external/human operators",
+    "checkpoint": "Workflow persistence / executor state",
+    "stream": "Streaming chat/agent responses in .NET/Python APIs",
+    "structured": "Strong typed contracts on .NET; schema validation",
+    "obs": "Azure Monitor / OTel integrations",
+    "multiAgent": "Workflows composing multiple agents/executors",
+    "mcp": "MCP tool bridges in Agent Framework docs"
+  },
+  "scores": {
+    "AF": 86.0,
+    "CS": 88.0,
+    "OB": 86.0,
+    "TC": 90.0,
+    "EG": 80.0,
+    "RE": 75.0,
+    "MF": 48.0,
+    "PH": 88.0,
+    "DX": 70.0,
+    "FP": 88.0
+  },
+  "affix_composite": 80.91,
+  "proprietary": {
+    "LIE": 52,
+    "CTI": 36,
+    "FMC": 80,
+    "GED": 86,
+    "RACS": 76,
+    "RHS": 19.4,
+    "PR": 88
+  },
+  "citations": [
+    "https://learn.microsoft.com/en-us/agent-framework/overview/",
+    "https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop",
+    "https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel",
+    "https://github.com/microsoft/agent-framework",
+    "https://pypi.org/project/agent-framework/",
+    "https://langfuse.com/blog/2025-03-19-ai-agent-comparison"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 90,
+    "MCP_server": 80,
+    "A2A_or_equiv": 90,
+    "OpenAPI_tool_bridge": 88,
+    "OTel_GenAI_portable": 90
+  },
+  "deep_notes_md": true
+}

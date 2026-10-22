@@ -1,0 +1,178 @@
+{
+  "study": "AFFIX-2026",
+  "artifact": "ecosystem_signals",
+  "as_of": "2026-10-21",
+  "measurement_notes": {
+    "stars": "GitHub REST API live pull 2026-10-21",
+    "pypi": "https://pypistats.org/api/packages/{name}/recent field data.last_month",
+    "npm": "https://api.npmjs.org/downloads/point/last-month/{pkg}",
+    "jobs": "EST relative index 0-100; LC=100 baseline; not absolute LinkedIn counts",
+    "EG": "from benchmark/scores/affix_matrix.json"
+  },
+  "frameworks": [
+    {
+      "id": "LC",
+      "framework": "LangChain",
+      "EG": 95,
+      "github": {"repo": "langchain-ai/langchain", "stars": 148230, "forks": 24876, "license": "MIT", "url": "https://github.com/langchain-ai/langchain"},
+      "downloads": {"registry": "pypi", "package": "langchain", "last_month": 170457766, "last_week": 37281283, "last_day": 5580548, "source": "https://pypistats.org/api/packages/langchain/recent"},
+      "jobs_EST": 100,
+      "jobs_rationale_EST": "Ubiquitous GenAI JD keyword; hiring moat"
+    },
+    {
+      "id": "VS",
+      "framework": "Vercel AI SDK",
+      "EG": 95,
+      "github": {"repo": "vercel/ai", "stars": 27440, "forks": 5409, "license": "NOASSERTION", "url": "https://github.com/vercel/ai"},
+      "downloads": {"registry": "npm", "package": "ai", "last_month": 118618237, "window": "2026-09-19/2026-10-18", "source": "https://api.npmjs.org/downloads/point/last-month/ai", "vendor_claim_monthly": "20M+", "vendor_claim_url": "https://vercel.com/blog/ai-sdk-6"},
+      "jobs_EST": 92,
+      "jobs_rationale_EST": "Next.js + AI SDK product eng demand"
+    },
+    {
+      "id": "CR",
+      "framework": "CrewAI",
+      "EG": 90,
+      "github": {"repo": "crewAIInc/crewAI", "stars": 59966, "forks": 8827, "license": "MIT", "url": "https://github.com/crewAIInc/crewAI"},
+      "downloads": {"registry": "pypi", "package": "crewai", "last_month": 2442764, "source": "https://pypistats.org/api/packages/crewai/recent"},
+      "jobs_EST": 78
+    },
+    {
+      "id": "LG",
+      "framework": "LangGraph",
+      "EG": 85,
+      "github": {"repo": "langchain-ai/langgraph", "stars": 43679, "forks": 7480, "license": "MIT", "url": "https://github.com/langchain-ai/langgraph"},
+      "downloads": {"registry": "pypi", "package": "langgraph", "last_month": 44769952, "source": "https://pypistats.org/api/packages/langgraph/recent"},
+      "jobs_EST": 88
+    },
+    {
+      "id": "SK",
+      "framework": "Semantic Kernel",
+      "EG": 85,
+      "github": {"repo": "microsoft/semantic-kernel", "stars": 28687, "forks": 4832, "license": "MIT", "url": "https://github.com/microsoft/semantic-kernel"},
+      "downloads": {"registry": "pypi", "package": "semantic-kernel", "last_month": 300767, "source": "https://pypistats.org/api/packages/semantic-kernel/recent"},
+      "jobs_EST": 70
+    },
+    {
+      "id": "OA",
+      "framework": "OpenAI Agents SDK",
+      "EG": 82,
+      "github": {"repo": "openai/openai-agents-python", "stars": 30206, "forks": 4914, "license": "MIT", "url": "https://github.com/openai/openai-agents-python"},
+      "downloads": {"registry": "pypi", "package": "openai-agents", "last_month": 12449784, "source": "https://pypistats.org/api/packages/openai-agents/recent"},
+      "jobs_EST": 75
+    },
+    {
+      "id": "DS",
+      "framework": "DSPy",
+      "EG": 82,
+      "github": {"repo": "stanfordnlp/dspy", "stars": 38725, "forks": 3441, "license": "MIT", "url": "https://github.com/stanfordnlp/dspy"},
+      "downloads": {"registry": "pypi", "package": "dspy", "last_month": 5312050, "source": "https://pypistats.org/api/packages/dspy/recent"},
+      "jobs_EST": 55
+    },
+    {
+      "id": "LI",
+      "framework": "LlamaIndex",
+      "EG": 80,
+      "github": {"repo": "run-llama/llama_index", "stars": 52607, "forks": 8404, "license": "MIT", "url": "https://github.com/run-llama/llama_index"},
+      "downloads": {"registry": "pypi", "package": "llama-index", "last_month": 2937852, "source": "https://pypistats.org/api/packages/llama-index/recent"},
+      "jobs_EST": 72
+    },
+    {
+      "id": "AD",
+      "framework": "Google ADK",
+      "EG": 80,
+      "github": {"repo": "google/adk-python", "stars": 21953, "forks": 4204, "license": "Apache-2.0", "url": "https://github.com/google/adk-python"},
+      "downloads": {"registry": "pypi", "package": "google-adk", "last_month": 10109331, "source": "https://pypistats.org/api/packages/google-adk/recent"},
+      "jobs_EST": 68
+    },
+    {
+      "id": "MS",
+      "framework": "Microsoft Agent Framework",
+      "EG": 80,
+      "github": null,
+      "downloads": null,
+      "jobs_EST": 65,
+      "jobs_rationale_EST": "Succession from SK; Azure JD adjacency",
+      "docs": ["https://learn.microsoft.com/en-us/agent-framework/overview/"]
+    },
+    {
+      "id": "PD",
+      "framework": "PydanticAI",
+      "EG": 78,
+      "github": {"repo": "pydantic/pydantic-ai", "stars": 20774, "forks": 2987, "license": "MIT", "url": "https://github.com/pydantic/pydantic-ai"},
+      "downloads": {"registry": "pypi", "package": "pydantic-ai", "last_month": 5383780, "source": "https://pypistats.org/api/packages/pydantic-ai/recent"},
+      "jobs_EST": 58
+    },
+    {
+      "id": "AG",
+      "framework": "AutoGen/AG2",
+      "EG": 78,
+      "github": {"repo": "ag2ai/ag2", "stars": 5008, "forks": 754, "license": "Apache-2.0", "url": "https://github.com/ag2ai/ag2", "note": "Stars understate historic AutoGen mindshare"},
+      "downloads": {"registry": "pypi", "package": "ag2", "last_month": 164672, "source": "https://pypistats.org/api/packages/ag2/recent"},
+      "jobs_EST": 50
+    },
+    {
+      "id": "SP",
+      "framework": "Spring AI",
+      "EG": 75,
+      "github": null,
+      "downloads": null,
+      "jobs_EST": 62,
+      "docs": ["https://spring.io/projects/spring-ai"]
+    },
+    {
+      "id": "SM",
+      "framework": "smolagents",
+      "EG": 75,
+      "github": {"repo": "huggingface/smolagents", "stars": 29965, "forks": 3121, "license": "Apache-2.0", "url": "https://github.com/huggingface/smolagents"},
+      "downloads": {"registry": "pypi", "package": "smolagents", "last_month": 425605, "source": "https://pypistats.org/api/packages/smolagents/recent"},
+      "jobs_EST": 40
+    },
+    {
+      "id": "MA",
+      "framework": "Mastra",
+      "EG": 72,
+      "github": {"repo": "mastra-ai/mastra", "stars": 28988, "forks": 3028, "license": "NOASSERTION", "url": "https://github.com/mastra-ai/mastra"},
+      "downloads": {"registry": "npm", "package": "@mastra/core", "last_month": 8027650, "window": "2026-09-19/2026-10-18", "source": "https://api.npmjs.org/downloads/point/last-month/@mastra/core"},
+      "jobs_EST": 48
+    },
+    {
+      "id": "HS",
+      "framework": "Haystack",
+      "EG": 70,
+      "github": {"repo": "deepset-ai/haystack", "stars": 26804, "forks": 3318, "license": "Apache-2.0", "url": "https://github.com/deepset-ai/haystack"},
+      "downloads": {"registry": "pypi", "package": "haystack-ai", "last_month": 566454, "source": "https://pypistats.org/api/packages/haystack-ai/recent"},
+      "jobs_EST": 52
+    }
+  ],
+  "observability_sinks": [
+    {
+      "id": "Phoenix",
+      "github": {"repo": "Arize-ai/phoenix", "stars": 11942, "url": "https://github.com/Arize-ai/phoenix"},
+      "downloads": {"registry": "pypi", "package": "arize-phoenix", "last_month": 626210, "source": "https://pypistats.org/api/packages/arize-phoenix/recent"},
+      "docs": ["https://arize.com/phoenix/", "https://github.com/Arize-ai/openinference"]
+    },
+    {
+      "id": "LangSmith",
+      "type": "vendor_product",
+      "docs": ["https://docs.langchain.com/langsmith/observability"],
+      "eg_effect": "Commercial multiplier for LC/LG hiring and ops gravity"
+    }
+  ],
+  "jobs_EST_method": {
+    "baseline": "LC=100",
+    "definition": "Relative mid-level hireability / JD co-occurrence US+EU English Q3-Q4 2026 EST",
+    "soft_sources": [
+      "https://www.linkedin.com/pulse/reverse-sourcing-13-brain-linkedin-x-ray-job-queries-diane-rocher-27qae",
+      "https://www.simplilearn.com/career-roadmap/agentic-ai-engineer-usa",
+      "https://vercel.com/blog/ai-sdk-6",
+      "https://www.speakeasy.com/blog/ai-agent-framework-comparison"
+    ],
+    "falsifier": "LinkedIn Recruiter exact-match reverses top-5 order LC/VS/LG/CR/OA"
+  },
+  "roundup_sources": [
+    "https://www.langchain.com/resources/ai-agent-frameworks",
+    "https://www.speakeasy.com/blog/ai-agent-framework-comparison",
+    "https://www.braintrust.dev/articles/best-ai-agent-frameworks-2026",
+    "https://langfuse.com/blog/2025-03-19-ai-agent-comparison"
+  ]
+}

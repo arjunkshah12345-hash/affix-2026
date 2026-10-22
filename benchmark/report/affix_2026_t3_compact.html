@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AFFIX-2026</title>
+<style>
+  :root {
+    --mono: var(--font-mono), ui-monospace, Menlo, monospace;
+    --sans: var(--font-sans), system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; color: var(--foreground); font-family: var(--sans); font-size: 14px; line-height: 1.45; }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  h1 { font-size: 1.55rem; font-weight: 700; margin: 0 0 8px; letter-spacing: -0.02em; }
+  .lede { color: var(--muted-foreground); margin: 0 0 18px; max-width: 62ch; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
+  @media (max-width: 560px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; }
+  .kpi .k { font-family: var(--mono); font-size: 10px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: .08em; }
+  .kpi .v { font-family: var(--mono); font-size: 1.15rem; font-weight: 600; margin-top: 4px; color: var(--foreground); }
+  .kpi .v em { font-style: normal; color: var(--accent); }
+  h2 { font-size: 1rem; margin: 22px 0 10px; }
+  .sub { color: var(--muted-foreground); font-size: 12px; margin: -4px 0 12px; }
+  .scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+  table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 11px; }
+  th, td { padding: 8px 8px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+  th { background: var(--secondary); color: var(--secondary-foreground); font-weight: 500; text-align: right; cursor: default; }
+  th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
+  tr:hover td { background: var(--accent-surface); }
+  .affix { color: var(--accent); font-weight: 600; }
+  .good { color: var(--success); }
+  .mid { color: var(--warning); }
+  .bad { color: var(--destructive); }
+  #scatter { width: 100%; height: 280px; display: block; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); }
+  .findings { display: grid; gap: 8px; }
+  .finding { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
+  .finding .n { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: .1em; }
+  .finding h3 { font-size: 13px; margin: 4px 0 6px; }
+  .finding p { margin: 0; color: var(--muted-foreground); font-size: 12px; }
+  .note { margin-top: 16px; font-size: 11px; color: var(--muted-foreground); font-family: var(--mono); }
+</style>
+</head>
+<body>
+  <p class="eyebrow">AFFIX-2026 · proprietary benchmark</p>
+  <h1>AI Framework Fitness Index</h1>
+  <p class="lede">16 Tier-A agent frameworks scored on a 10-dimension composite plus rewrite hazard (RHS), lock-in entropy (LIE), and protocol readiness (PR). Scores are EST from API/docs reality.</p>
+  <div class="kpis">
+    <div class="kpi"><div class="k">AFFIX leader</div><div class="v"><em>PydanticAI</em><br/>87.6</div></div>
+    <div class="kpi"><div class="k">Lowest RHS</div><div class="v"><em>PydanticAI</em><br/>17.3</div></div>
+    <div class="kpi"><div class="k">Best CS / HITL</div><div class="v"><em>LangGraph</em><br/>CS 95</div></div>
+    <div class="kpi"><div class="k">Best RACS</div><div class="v"><em>LlamaIndex</em><br/>92</div></div>
+  </div>
+
+  <h2>Leaderboard</h2>
+  <p class="sub">RHS ↓ = rewrite hazard · LIE ↓ = lock-in · green RHS ≤ 22</p>
+  <div class="scroll">
+    <table>
+      <thead><tr>
+        <th>#</th><th>Framework</th><th>AFFIX</th><th>RHS↓</th><th>LIE↓</th><th>CTI↓</th><th>FMC↑</th><th>RACS↑</th><th>PR↑</th>
+      </tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </div>
+
+  <h2>AFFIX vs Rewrite Hazard</h2>
+  <p class="sub">Upper-left is ideal (high fitness, low rewrite risk). Y inverted.</p>
+  <canvas id="scatter" width="700" height="280"></canvas>
+
+  <h2>Headline proprietary findings</h2>
+  <div class="findings">
+    <div class="finding"><div class="n">01</div><h3>AFFIX ≠ rewrite-safe</h3><p>Vercel AI SDK ranks #6 on AFFIX (81.5) but RHS 32.9 — high-hazard as a sole agent OS. PydanticAI wins both fitness and rewrite-safety.</p></div>
+    <div class="finding"><div class="n">02</div><h3>Lock-in is ops gravity</h3><p>OpenAI Agents SDK LIE=55 despite LiteLLM portability — coupling is Traces, sessions, sandbox, and Responses defaults.</p></div>
+    <div class="finding"><div class="n">03</div><h3>DX surplus predicts cliffs</h3><p>When DX−PH ≥ 15 (VS, smolagents, CrewAI), plan a hardening companion by month 3 or compose durability (Inngest/Temporal).</p></div>
+    <div class="finding"><div class="n">04</div><h3>Compose layers, don’t crown one king</h3><p>UI (VS) × orchestration (Mastra / LangGraph / PydanticAI) × durability (Temporal / Inngest) beats seeking a single framework.</p></div>
+    <div class="finding"><div class="n">05</div><h3>Topology false friends</h3><p>OA handoffs ≠ AG2 GroupChat ≠ Crew hierarchical process — treating them as synonyms breaks isolation/compliance POCs.</p></div>
+  </div>
+  <p class="note">Full interactive report + dossiers on disk · study id AFFIX-2026 · 2026-10-21</p>
+
+<script>
+const DATA = [{"id": "PD", "framework": "PydanticAI", "AFFIX": 87.64, "RHS": 17.3, "LIE": 22.0, "CTI": 30.0, "FMC": 78.0, "RACS": 80.0, "PR": 91, "CS": 88.0, "DX": 88.0, "PH": 90.0, "OB": 92.0, "TC": 96.0, "primary_lang": "Python"}, {"id": "OA", "framework": "OpenAI Agents SDK", "AFFIX": 82.71, "RHS": 24.2, "LIE": 55.0, "CTI": 30.8, "FMC": 82.0, "RACS": 55.0, "PR": 81, "CS": 90.0, "DX": 90.0, "PH": 88.0, "OB": 88.0, "TC": 85.0, "primary_lang": "Python (also JS SDK)"}, {"id": "AD", "framework": "Google ADK (Agent Development Kit)", "AFFIX": 82.5, "RHS": 25.1, "LIE": 45.0, "CTI": 61.6, "FMC": 80.0, "RACS": 72.0, "PR": 96, "CS": 88.0, "DX": 80.0, "PH": 88.0, "OB": 90.0, "TC": 75.0, "primary_lang": "Python / TypeScript / Go / Java / Kotlin"}, {"id": "MA", "framework": "Mastra", "AFFIX": 82.49, "RHS": 20.8, "LIE": 32.0, "CTI": 34.0, "FMC": 72.0, "RACS": 84.0, "PR": 89, "CS": 85.0, "DX": 86.0, "PH": 80.0, "OB": 88.0, "TC": 86.0, "primary_lang": "TypeScript"}, {"id": "LG", "framework": "LangGraph", "AFFIX": 81.64, "RHS": 28.7, "LIE": 68.0, "CTI": 82.0, "FMC": 90.0, "RACS": 62.0, "PR": 84, "CS": 95.0, "DX": 65.0, "PH": 93.0, "OB": 88.0, "TC": 75.0, "primary_lang": "Python/TS"}, {"id": "VS", "framework": "Vercel AI SDK", "AFFIX": 81.52, "RHS": 32.9, "LIE": 35.0, "CTI": 22.0, "FMC": 55.0, "RACS": 65.0, "PR": 87, "CS": 72.0, "DX": 94.0, "PH": 68.0, "OB": 70.0, "TC": 92.0, "primary_lang": "TypeScript"}, {"id": "MS", "framework": "Microsoft Agent Framework", "AFFIX": 80.91, "RHS": 19.4, "LIE": 52, "CTI": 36, "FMC": 80, "RACS": 76, "PR": 88, "CS": 88.0, "DX": 70.0, "PH": 88.0, "OB": 86.0, "TC": 90.0, "primary_lang": "Python/.NET"}, {"id": "CR", "framework": "CrewAI", "AFFIX": 79.6, "RHS": 28.4, "LIE": 38.0, "CTI": 39.6, "FMC": 70.0, "RACS": 70.0, "PR": 78, "CS": 80.0, "DX": 92.0, "PH": 76.0, "OB": 78.0, "TC": 78.0, "primary_lang": "Python"}, {"id": "LI", "framework": "LlamaIndex", "AFFIX": 78.61, "RHS": 24.3, "LIE": 58.0, "CTI": 70.0, "FMC": 72.0, "RACS": 92.0, "PR": 76, "CS": 80.0, "DX": 78.0, "PH": 78.0, "OB": 75.0, "TC": 82.0, "primary_lang": "Python/TS"}, {"id": "HS", "framework": "Haystack", "AFFIX": 78.6, "RHS": 27.0, "LIE": 42.0, "CTI": 55.0, "FMC": 68.0, "RACS": 85.0, "PR": 82, "CS": 78.0, "DX": 82.0, "PH": 72.0, "OB": 80.0, "TC": 80.0, "primary_lang": "Python"}, {"id": "SP", "framework": "Spring AI", "AFFIX": 78.23, "RHS": 23.0, "LIE": 42.0, "CTI": 28.0, "FMC": 62.0, "RACS": 72.0, "PR": 88, "CS": 70.0, "DX": 70.0, "PH": 88.0, "OB": 85.0, "TC": 88.0, "primary_lang": "Java"}, {"id": "LC", "framework": "LangChain", "AFFIX": 76.82, "RHS": 32.8, "LIE": 72.0, "CTI": 78.0, "FMC": 74.0, "RACS": 70.0, "PR": 86, "CS": 72.0, "DX": 80.0, "PH": 75.0, "OB": 90.0, "TC": 70.0, "primary_lang": "Python/TS"}, {"id": "AG", "framework": "AutoGen / AG2", "AFFIX": 76.51, "RHS": 36.0, "LIE": 42.0, "CTI": 83.6, "FMC": 72.0, "RACS": 62.0, "PR": 76, "CS": 85.0, "DX": 68.0, "PH": 72.0, "OB": 82.0, "TC": 72.0, "primary_lang": "Python"}, {"id": "SK", "framework": "Microsoft Semantic Kernel", "AFFIX": 74.73, "RHS": 28.9, "LIE": 48.0, "CTI": 70.4, "FMC": 68.0, "RACS": 78.0, "PR": 81, "CS": 75.0, "DX": 62.0, "PH": 80.0, "OB": 72.0, "TC": 88.0, "primary_lang": "C# / Python / Java"}, {"id": "SM", "framework": "Hugging Face smolagents", "AFFIX": 71.22, "RHS": 40.0, "LIE": 18.0, "CTI": 22.0, "FMC": 45.0, "RACS": 48.0, "PR": 78, "CS": 55.0, "DX": 95.0, "PH": 68.0, "OB": 50.0, "TC": 60.0, "primary_lang": "Python"}, {"id": "DS", "framework": "DSPy", "AFFIX": 71.19, "RHS": 44.3, "LIE": 15.0, "CTI": 48.0, "FMC": 35.0, "RACS": 58.0, "PR": 49, "CS": 55.0, "DX": 72.0, "PH": 55.0, "OB": 60.0, "TC": 85.0, "primary_lang": "Python"}];
+const tb = document.getElementById('tb');
+DATA.forEach((f,i) => {
+  const rc = f.RHS <= 22 ? 'good' : f.RHS <= 30 ? 'mid' : 'bad';
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${i+1}</td><td>${f.framework} <span style="opacity:.55">(${f.id})</span></td><td class="affix">${f.AFFIX.toFixed(2)}</td><td class="${rc}">${Number(f.RHS).toFixed(1)}</td><td>${f.LIE}</td><td>${Number(f.CTI).toFixed(1)}</td><td>${f.FMC}</td><td>${f.RACS}</td><td>${f.PR}</td>`;
+  tb.appendChild(tr);
+});
+
+const canvas = document.getElementById('scatter');
+const ctx = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
+const pad = {l:44,r:16,t:16,b:32};
+const xs = DATA.map(d=>d.AFFIX), ys = DATA.map(d=>d.RHS);
+const xMin=Math.min(...xs)-1, xMax=Math.max(...xs)+1, yMin=Math.min(...ys)-1, yMax=Math.max(...ys)+1;
+const xS=v=>pad.l+((v-xMin)/(xMax-xMin))*(W-pad.l-pad.r);
+const yS=v=>pad.t+((v-yMin)/(yMax-yMin))*(H-pad.t-pad.b); // low RHS at top after invert? wait we want low at top so invert:
+const ySi=v=>pad.t+((yMax-v)/(yMax-yMin))*(H-pad.t-pad.b);
+const css = getComputedStyle(document.documentElement);
+const fg = css.getPropertyValue('--foreground').trim() || '#eee';
+const muted = css.getPropertyValue('--muted-foreground').trim() || '#888';
+const accent = css.getPropertyValue('--accent').trim() || '#c4783a';
+const border = css.getPropertyValue('--border').trim() || '#333';
+const card = css.getPropertyValue('--card').trim() || '#111';
+ctx.fillStyle = card; ctx.fillRect(0,0,W,H);
+ctx.strokeStyle = border; ctx.strokeRect(pad.l, pad.t, W-pad.l-pad.r, H-pad.t-pad.b);
+ctx.fillStyle = muted; ctx.font = '11px ui-monospace, monospace';
+ctx.fillText('AFFIX →', W/2-20, H-8);
+ctx.save(); ctx.translate(12, H/2+40); ctx.rotate(-Math.PI/2); ctx.fillText('← RHS (safer up)', 0, 0); ctx.restore();
+DATA.forEach(f => {
+  const x=xS(f.AFFIX), y=ySi(f.RHS);
+  ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2);
+  ctx.fillStyle = accent; ctx.fill();
+  ctx.fillStyle = fg; ctx.font = '10px ui-monospace, monospace';
+  ctx.fillText(f.id, x+7, y+3);
+});
+</script>
+</body>
+</html>

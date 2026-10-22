@@ -1,0 +1,64 @@
+{
+  "id": "VS",
+  "framework": "Vercel AI SDK",
+  "primary_lang": "TypeScript",
+  "category": "App-layer AI / agent toolkit",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "Default TypeScript app-layer AI toolkit for streamed UIs and typed tools.",
+  "best_for": "Product UI streaming chat/tools on Next.js/React",
+  "when_not_to_use": "Do not run AI SDK alone as a durable/compliance agent OS. ToolLoopAgent is in-memory; WorkflowAgent requires @ai-sdk/workflow. Weak native RAG platform and concurrent state control.",
+  "versions": {
+    "npm": "ai@7.0.148",
+    "notes": "AI SDK 7; WorkflowAgent via @ai-sdk/workflow + workflow@5"
+  },
+  "api_primitives": {
+    "hitl": "toolApproval on generateText/streamText/ToolLoopAgent; WorkflowAgent durable approval",
+    "checkpoint": "WorkflowAgent (@ai-sdk/workflow) persists steps; ToolLoopAgent is in-memory",
+    "stream": "streamText, useChat, UIMessage parts, createAgentUIStreamResponse",
+    "structured": "Output.object/array/choice/json/text with Zod/Valibot/JSON Schema",
+    "obs": "telemetry API (AI SDK 7); DevTools; OTel-oriented exporters",
+    "multiAgent": "ToolLoopAgent loops; handoffs via tools; not a graph OS",
+    "mcp": "createMCPClient from @ai-sdk/mcp (HTTP/SSE transports)"
+  },
+  "scores": {
+    "AF": 82.0,
+    "CS": 72.0,
+    "OB": 70.0,
+    "TC": 92.0,
+    "EG": 95.0,
+    "RE": 88.0,
+    "MF": 75.0,
+    "PH": 68.0,
+    "DX": 94.0,
+    "FP": 85.0
+  },
+  "affix_composite": 81.52,
+  "proprietary": {
+    "LIE": 35.0,
+    "CTI": 22.0,
+    "FMC": 55.0,
+    "GED": 42.0,
+    "RACS": 65.0,
+    "RHS": 32.9,
+    "PR": 87
+  },
+  "citations": [
+    "https://ai-sdk.dev/",
+    "https://ai-sdk.dev/docs/ai-sdk-core/generating-structured-data",
+    "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+    "https://ai-sdk.dev/docs/agents/workflow-agent",
+    "https://ai-sdk.dev/docs/ai-sdk-core/mcp-tools",
+    "https://ai-sdk.dev/docs/ai-sdk-core/telemetry",
+    "https://vercel.com/changelog/ai-sdk-7",
+    "https://github.com/vercel/ai"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 95,
+    "MCP_server": 80,
+    "A2A_or_equiv": 75,
+    "OpenAPI_tool_bridge": 95,
+    "OTel_GenAI_portable": 90
+  },
+  "deepened": true
+}

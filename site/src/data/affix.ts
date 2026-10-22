@@ -1,0 +1,53 @@
+/**
+ * Compatibility barrel — prefer `@/data/content` for new code.
+ * Re-exports score rows + SITE_CONTENT-derived study metadata.
+ */
+export {
+  asOf,
+  bestControl,
+  bestRacs,
+  comparisons,
+  content,
+  DIMENSION_KEYS,
+  dimensions,
+  failures,
+  failureFrameworks,
+  failureLegend,
+  failureModes,
+  findings,
+  formulas,
+  frameworks,
+  generateComparison,
+  getComparison,
+  getSiteFramework,
+  indices,
+  leader,
+  matrix,
+  matrixFrameworkById,
+  methodology,
+  personas,
+  prTerms,
+  rhsTerms,
+  safest,
+  siteFrameworkById,
+  siteFrameworks,
+  study,
+  weights,
+  type Comparison,
+  type Dimension,
+  type DimensionCode,
+  type FailureCoverage,
+  type FailureFramework,
+  type FailureMode,
+  type Finding,
+  type FrameworkPrimitives,
+  type FrameworkScores,
+  type IndexCode,
+  type IndexDef,
+  type MatrixFramework,
+  type Persona,
+  type SiteFramework,
+} from "./content"
+
+/** Alias used by older components: matrix row name field. */
+export type Framework = import("./content").MatrixFramework

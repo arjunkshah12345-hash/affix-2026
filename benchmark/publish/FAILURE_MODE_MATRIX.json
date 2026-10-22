@@ -1,0 +1,3280 @@
+{
+  "study": "AFFIX-2026",
+  "as_of": "2026-10-22",
+  "definition": "First-class API support for common production failure modes \u2014 not roll-your-own inside a tool.",
+  "legend": {
+    "first_class": "Native first-class API in the framework (named surface, documented failure\u2192recovery)",
+    "pattern": "Official docs recommend a pattern, middleware, or companion package \u2014 not a core native API",
+    "absent": "No documented first-class API or recommended pattern; team must invent",
+    "unknown": "Could not verify from primary docs at audit time"
+  },
+  "coverage_scale": [
+    "first_class",
+    "pattern",
+    "absent",
+    "unknown"
+  ],
+  "notes": "FMC% is a weighted judgment (DUR/HIT/SCH weighted higher), not a raw first_class count. All cells EST from dossiers + primary docs.",
+  "modes": [
+    {
+      "code": "TMO",
+      "name": "Timeouts / deadline propagation",
+      "why": "Hung tools exhaust budgets"
+    },
+    {
+      "code": "PTF",
+      "name": "Partial tool failure / retry isolation",
+      "why": "One bad tool should not kill the run blindly"
+    },
+    {
+      "code": "SCH",
+      "name": "Schema drift / structured-output repair",
+      "why": "Models violate contracts"
+    },
+    {
+      "code": "COV",
+      "name": "Context overflow / compaction",
+      "why": "Long threads blow windows"
+    },
+    {
+      "code": "CSR",
+      "name": "Concurrent state races",
+      "why": "Fan-out agents corrupt shared state"
+    },
+    {
+      "code": "HIT",
+      "name": "Mid-run human interrupt + resume",
+      "why": "Compliance / approval"
+    },
+    {
+      "code": "DUR",
+      "name": "Crash recovery / durable checkpoint",
+      "why": "Process death mid-agent"
+    },
+    {
+      "code": "IDE",
+      "name": "Idempotent tool / exactly-once hints",
+      "why": "Double charges / double writes"
+    },
+    {
+      "code": "GRD",
+      "name": "Guardrails (input/output/tool)",
+      "why": "Safety / PII"
+    },
+    {
+      "code": "STR",
+      "name": "Streaming error surfacing",
+      "why": "UI must show partial failure"
+    },
+    {
+      "code": "TRC",
+      "name": "Trace/replay for failed runs",
+      "why": "MTTR"
+    },
+    {
+      "code": "SBOX",
+      "name": "Code-execution isolation",
+      "why": "Code-act RCE risk"
+    }
+  ],
+  "by_mode": [
+    {
+      "code": "TMO",
+      "name": "Timeouts / deadline propagation",
+      "why": "Hung tools exhaust budgets",
+      "coverage_counts": {
+        "first_class": 14,
+        "pattern": 2,
+        "absent": 0,
+        "unknown": 0
+      },
+      "frameworks": [
+        {
+          "id": "LG",
+          "framework": "LangGraph",
+          "coverage": "first_class",
+          "api": "node/tool timeouts + RetryPolicy on graph nodes",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+          "note": "Graph API documents retry/timeout controls on nodes"
+        },
+        {
+          "id": "OA",
+          "framework": "OpenAI Agents SDK",
+          "coverage": "first_class",
+          "api": "run/config timeouts; MaxTurnsExceeded",
+          "evidence_url": "https://openai.github.io/openai-agents-python/running_agents/",
+          "note": "Runner lifecycle exposes turn/time budgets"
+        },
+        {
+          "id": "AD",
+          "framework": "Google ADK",
+          "coverage": "first_class",
+          "api": "RunConfig timeout / cancel",
+          "evidence_url": "https://adk.dev/api-reference/typescript/interfaces/RunConfig.html",
+          "note": "RunConfig surfaces runtime deadlines"
+        },
+        {
+          "id": "MS",
+          "framework": "Microsoft Agent Framework",
+          "coverage": "first_class",
+          "api": "workflow/executor timeouts",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Agent Framework workflow execution budgets"
+        },
+        {
+          "id": "PD",
+          "framework": "PydanticAI",
+          "coverage": "first_class",
+          "api": "Agent usage limits / model request timeouts",
+          "evidence_url": "https://pydantic.dev/docs/ai/core-concepts/agent/",
+          "note": "Agent settings include timeout and usage limits"
+        },
+        {
+          "id": "LC",
+          "framework": "LangChain",
+          "coverage": "first_class",
+          "api": "runnable config timeouts; agent max iterations",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "RunnableConfig / agent loop budgets"
+        },
+        {
+          "id": "MA",
+          "framework": "Mastra",
+          "coverage": "first_class",
+          "api": "agent/workflow step timeouts",
+          "evidence_url": "https://mastra.ai/docs/agents/overview",
+          "note": "Agent runtime timeout knobs"
+        },
+        {
+          "id": "LI",
+          "framework": "LlamaIndex",
+          "coverage": "first_class",
+          "api": "workflow/handler timeouts",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/",
+          "note": "Workflow step timeout configuration"
+        },
+        {
+          "id": "AG",
+          "framework": "AutoGen / AG2",
+          "coverage": "first_class",
+          "api": "reply/timeout controls on agents",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "Agent reply and termination timeouts"
+        },
+        {
+          "id": "CR",
+          "framework": "CrewAI",
+          "coverage": "first_class",
+          "api": "max_rpm / max_iter / task timeouts",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Crew/task iteration and RPM budgets"
+        },
+        {
+          "id": "SK",
+          "framework": "Semantic Kernel",
+          "coverage": "first_class",
+          "api": "HttpClient/kernel timeouts; agent invocation limits",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "Kernel/agent invocation timeout patterns"
+        },
+        {
+          "id": "HS",
+          "framework": "Haystack",
+          "coverage": "first_class",
+          "api": "component/pipeline timeouts",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/pipelines",
+          "note": "Pipeline component timeout settings"
+        },
+        {
+          "id": "SP",
+          "framework": "Spring AI",
+          "coverage": "first_class",
+          "api": "ChatClient / WebClient timeouts",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/api/chatclient.html",
+          "note": "Spring WebClient/ChatClient deadline propagation"
+        },
+        {
+          "id": "VS",
+          "framework": "Vercel AI SDK",
+          "coverage": "first_class",
+          "api": "abortSignal / maxRetries / stopWhen",
+          "evidence_url": "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+          "note": "ToolLoopAgent stopWhen + abort signals"
+        },
+        {
+          "id": "SM",
+          "framework": "smolagents",
+          "coverage": "pattern",
+          "api": "max_steps on agents; external process timeouts",
+          "evidence_url": "https://huggingface.co/docs/smolagents/en/reference/agents",
+          "note": "Step caps exist; deadline propagation is DIY"
+        },
+        {
+          "id": "DS",
+          "framework": "DSPy",
+          "coverage": "pattern",
+          "api": "LM timeout kwargs / program-level caps",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Provider timeouts; no agent deadline API"
+        }
+      ]
+    },
+    {
+      "code": "PTF",
+      "name": "Partial tool failure / retry isolation",
+      "why": "One bad tool should not kill the run blindly",
+      "coverage_counts": {
+        "first_class": 9,
+        "pattern": 6,
+        "absent": 1,
+        "unknown": 0
+      },
+      "frameworks": [
+        {
+          "id": "LG",
+          "framework": "LangGraph",
+          "coverage": "first_class",
+          "api": "RetryPolicy; tool errors return to graph",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+          "note": "Per-node retry isolation"
+        },
+        {
+          "id": "OA",
+          "framework": "OpenAI Agents SDK",
+          "coverage": "first_class",
+          "api": "tool error \u2192 model; retry knobs on tools",
+          "evidence_url": "https://openai.github.io/openai-agents-python/tools/",
+          "note": "Failed tools surface without killing entire Runner by default"
+        },
+        {
+          "id": "AD",
+          "framework": "Google ADK",
+          "coverage": "first_class",
+          "api": "tool error events; retry/confirm patterns",
+          "evidence_url": "https://adk.dev/events/",
+          "note": "Events capture tool failures for recovery"
+        },
+        {
+          "id": "MS",
+          "framework": "Microsoft Agent Framework",
+          "coverage": "first_class",
+          "api": "executor failure handling / retries",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Workflow executors isolate step failures"
+        },
+        {
+          "id": "PD",
+          "framework": "PydanticAI",
+          "coverage": "first_class",
+          "api": "ModelRetry / tool exception \u2192 model retry",
+          "evidence_url": "https://pydantic.dev/docs/ai/core-concepts/agent/",
+          "note": "Validation and tool failures trigger retries"
+        },
+        {
+          "id": "LC",
+          "framework": "LangChain",
+          "coverage": "pattern",
+          "api": "RunnableRetry / middleware; uneven default isolation",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "Retries via LC utilities, not a single agent PTF API"
+        },
+        {
+          "id": "MA",
+          "framework": "Mastra",
+          "coverage": "first_class",
+          "api": "tool error handling on agent loop",
+          "evidence_url": "https://mastra.ai/docs/agents/tools",
+          "note": "Tool failures returned into agent loop"
+        },
+        {
+          "id": "LI",
+          "framework": "LlamaIndex",
+          "coverage": "first_class",
+          "api": "workflow step retries / error events",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/",
+          "note": "Step-level failure handling"
+        },
+        {
+          "id": "AG",
+          "framework": "AutoGen / AG2",
+          "coverage": "first_class",
+          "api": "tool execution error messages to LLM",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "Tool failures continue chat loop"
+        },
+        {
+          "id": "CR",
+          "framework": "CrewAI",
+          "coverage": "pattern",
+          "api": "task retry / guardrail retry patterns",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Retry documented; not graph-style isolation"
+        },
+        {
+          "id": "SK",
+          "framework": "Semantic Kernel",
+          "coverage": "pattern",
+          "api": "function filters + retry middleware",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "Filters/plugins for retries; not first-class PTF"
+        },
+        {
+          "id": "HS",
+          "framework": "Haystack",
+          "coverage": "first_class",
+          "api": "component error routing in pipelines",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/pipelines",
+          "note": "Pipeline branches on component errors"
+        },
+        {
+          "id": "SP",
+          "framework": "Spring AI",
+          "coverage": "pattern",
+          "api": "RetryTemplate / advisor patterns",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "Spring Retry/advisors \u2014 app pattern"
+        },
+        {
+          "id": "VS",
+          "framework": "Vercel AI SDK",
+          "coverage": "pattern",
+          "api": "maxRetries on generateText; tool errors to model",
+          "evidence_url": "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+          "note": "Retries exist; isolation is loop-default, not policy API"
+        },
+        {
+          "id": "SM",
+          "framework": "smolagents",
+          "coverage": "pattern",
+          "api": "code-act exception \u2192 agent retry step",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "Informal retry via agent loop"
+        },
+        {
+          "id": "DS",
+          "framework": "DSPy",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/current/getting-started/react-and-tools/",
+          "note": "ReAct demos; no production PTF policy API"
+        }
+      ]
+    },
+    {
+      "code": "SCH",
+      "name": "Schema drift / structured-output repair",
+      "why": "Models violate contracts",
+      "coverage_counts": {
+        "first_class": 10,
+        "pattern": 5,
+        "absent": 1,
+        "unknown": 0
+      },
+      "frameworks": [
+        {
+          "id": "LG",
+          "framework": "LangGraph",
+          "coverage": "pattern",
+          "api": "TypedDict/Pydantic state; LC with_structured_output",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+          "note": "Schema via LangChain types more than core graph"
+        },
+        {
+          "id": "OA",
+          "framework": "OpenAI Agents SDK",
+          "coverage": "first_class",
+          "api": "Agent output_type / structured outputs",
+          "evidence_url": "https://openai.github.io/openai-agents-python/",
+          "note": "Native structured agent outputs"
+        },
+        {
+          "id": "AD",
+          "framework": "Google ADK",
+          "coverage": "pattern",
+          "api": "typed tools / schema configs",
+          "evidence_url": "https://adk.dev/",
+          "note": "Schemas on tools; repair path less first-class"
+        },
+        {
+          "id": "MS",
+          "framework": "Microsoft Agent Framework",
+          "coverage": "first_class",
+          "api": ".NET typed contracts / schema validation",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Strong typed I/O on Agent Framework"
+        },
+        {
+          "id": "PD",
+          "framework": "PydanticAI",
+          "coverage": "first_class",
+          "api": "Agent(..., output_type=Model) + validation retry",
+          "evidence_url": "https://pydantic.dev/docs/ai/core-concepts/output/",
+          "note": "Pydantic validation with ModelRetry"
+        },
+        {
+          "id": "LC",
+          "framework": "LangChain",
+          "coverage": "pattern",
+          "api": "with_structured_output / tool schemas",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "Strong helpers; repair middleware varies"
+        },
+        {
+          "id": "MA",
+          "framework": "Mastra",
+          "coverage": "first_class",
+          "api": "structuredOutput Zod/Valibot/JSON Schema",
+          "evidence_url": "https://mastra.ai/docs/agents/structured-output",
+          "note": "First-class structured output on agents"
+        },
+        {
+          "id": "LI",
+          "framework": "LlamaIndex",
+          "coverage": "first_class",
+          "api": "structured LLM / Pydantic outputs",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/",
+          "note": "Structured outputs in workflows"
+        },
+        {
+          "id": "AG",
+          "framework": "AutoGen / AG2",
+          "coverage": "pattern",
+          "api": "typed messages / function schemas",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "Partial typing vs PD/VS"
+        },
+        {
+          "id": "CR",
+          "framework": "CrewAI",
+          "coverage": "pattern",
+          "api": "Pydantic task output models",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Task models; weaker auto-repair"
+        },
+        {
+          "id": "SK",
+          "framework": "Semantic Kernel",
+          "coverage": "first_class",
+          "api": "JSON schema on kernel functions",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "Strong .NET schema contracts"
+        },
+        {
+          "id": "HS",
+          "framework": "Haystack",
+          "coverage": "first_class",
+          "api": "OutputAdapter / schema validation components",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/agent",
+          "note": "Pipeline components for structured I/O"
+        },
+        {
+          "id": "SP",
+          "framework": "Spring AI",
+          "coverage": "first_class",
+          "api": "BeanOutputConverter + validateSchema",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/api/structured-output.html",
+          "note": "Self-correcting structured output"
+        },
+        {
+          "id": "VS",
+          "framework": "Vercel AI SDK",
+          "coverage": "first_class",
+          "api": "Output.object/array/choice/json/text",
+          "evidence_url": "https://ai-sdk.dev/docs/ai-sdk-core/generating-structured-data",
+          "note": "Best-in-set DX for structured generation"
+        },
+        {
+          "id": "SM",
+          "framework": "smolagents",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "Code-act returns over schema contracts"
+        },
+        {
+          "id": "DS",
+          "framework": "DSPy",
+          "coverage": "first_class",
+          "api": "Signatures / typed predictors",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Compile-time contract core of DSPy"
+        }
+      ]
+    },
+    {
+      "code": "COV",
+      "name": "Context overflow / compaction",
+      "why": "Long threads blow windows",
+      "coverage_counts": {
+        "first_class": 3,
+        "pattern": 10,
+        "absent": 3,
+        "unknown": 0
+      },
+      "frameworks": [
+        {
+          "id": "LG",
+          "framework": "LangGraph",
+          "coverage": "pattern",
+          "api": "summarization middleware (often LC)",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/short-term-memory",
+          "note": "Compaction via LC middleware more than graph core"
+        },
+        {
+          "id": "OA",
+          "framework": "OpenAI Agents SDK",
+          "coverage": "pattern",
+          "api": "Sessions trim/compaction helpers",
+          "evidence_url": "https://openai.github.io/openai-agents-python/sessions/",
+          "note": "Sessions help; not LG-class reducers"
+        },
+        {
+          "id": "AD",
+          "framework": "Google ADK",
+          "coverage": "first_class",
+          "api": "EventsCompaction / ContextCompactionTrigger",
+          "evidence_url": "https://adk.dev/api-reference/kotlin/google-adk-kotlin-core/com.google.adk.kt.events/-event-compaction/index.html",
+          "note": "Named compaction APIs"
+        },
+        {
+          "id": "MS",
+          "framework": "Microsoft Agent Framework",
+          "coverage": "pattern",
+          "api": "session/context trimming patterns",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Context management via sessions"
+        },
+        {
+          "id": "PD",
+          "framework": "PydanticAI",
+          "coverage": "pattern",
+          "api": "message history processors / Harness memory",
+          "evidence_url": "https://pydantic.dev/docs/ai/overview/",
+          "note": "History shaping via processors/Harness"
+        },
+        {
+          "id": "LC",
+          "framework": "LangChain",
+          "coverage": "first_class",
+          "api": "summarization / short-term memory middleware",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/short-term-memory",
+          "note": "Documented compaction middleware"
+        },
+        {
+          "id": "MA",
+          "framework": "Mastra",
+          "coverage": "pattern",
+          "api": "memory processors / working memory",
+          "evidence_url": "https://mastra.ai/docs/memory/overview",
+          "note": "Memory adapters; overflow not auto-resolved"
+        },
+        {
+          "id": "LI",
+          "framework": "LlamaIndex",
+          "coverage": "pattern",
+          "api": "chat memory / context window strategies",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/managing_state/",
+          "note": "State/memory patterns for long chats"
+        },
+        {
+          "id": "AG",
+          "framework": "AutoGen / AG2",
+          "coverage": "first_class",
+          "api": "context handling / knowledge in harness",
+          "evidence_url": "http://classic.docs.ag2.ai/latest/docs/blog/2026/06/17/AG2-Agent-Harness/",
+          "note": "Harness addresses long-memory agents"
+        },
+        {
+          "id": "CR",
+          "framework": "CrewAI",
+          "coverage": "pattern",
+          "api": "memory/context trim in crews",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Memory features; not automatic compaction API"
+        },
+        {
+          "id": "SK",
+          "framework": "Semantic Kernel",
+          "coverage": "pattern",
+          "api": "chat history reducers",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "History reduction patterns"
+        },
+        {
+          "id": "HS",
+          "framework": "Haystack",
+          "coverage": "pattern",
+          "api": "pipeline memory / document windowing",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/pipelines",
+          "note": "RAG windowing over agent compaction"
+        },
+        {
+          "id": "SP",
+          "framework": "Spring AI",
+          "coverage": "pattern",
+          "api": "advisor/message window patterns",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/api/chatclient.html",
+          "note": "Advisors for history; not compaction API"
+        },
+        {
+          "id": "VS",
+          "framework": "Vercel AI SDK",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+          "note": "No first-class context compaction API"
+        },
+        {
+          "id": "SM",
+          "framework": "smolagents",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "No compaction surface"
+        },
+        {
+          "id": "DS",
+          "framework": "DSPy",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Optimizer concern, not serve compaction"
+        }
+      ]
+    },
+    {
+      "code": "CSR",
+      "name": "Concurrent state races",
+      "why": "Fan-out agents corrupt shared state",
+      "coverage_counts": {
+        "first_class": 4,
+        "pattern": 7,
+        "absent": 5,
+        "unknown": 0
+      },
+      "frameworks": [
+        {
+          "id": "LG",
+          "framework": "LangGraph",
+          "coverage": "first_class",
+          "api": "Annotated reducers + Send map-reduce",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+          "note": "Fan-out Send with state reducers"
+        },
+        {
+          "id": "OA",
+          "framework": "OpenAI Agents SDK",
+          "coverage": "pattern",
+          "api": "handoffs / nested runs; limited shared-state reducers",
+          "evidence_url": "https://openai.github.io/openai-agents-python/handoffs/",
+          "note": "Multi-agent via handoffs, not reducer CSR"
+        },
+        {
+          "id": "AD",
+          "framework": "Google ADK",
+          "coverage": "first_class",
+          "api": "graph parallelism + session state rules",
+          "evidence_url": "https://adk.dev/agents/multi-agents/",
+          "note": "Multi-agent trees with state discipline"
+        },
+        {
+          "id": "MS",
+          "framework": "Microsoft Agent Framework",
+          "coverage": "first_class",
+          "api": "workflow fan-out/join executors",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Workflow composition for concurrency"
+        },
+        {
+          "id": "PD",
+          "framework": "PydanticAI",
+          "coverage": "pattern",
+          "api": "Pydantic Graph / SubAgents; BYO reducers",
+          "evidence_url": "https://pydantic.dev/docs/ai/overview/",
+          "note": "Graph helps; race control not LG-class default"
+        },
+        {
+          "id": "LC",
+          "framework": "LangChain",
+          "coverage": "pattern",
+          "api": "inherits LG reducers when on graphs",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "CSR strength depends on LG compilation"
+        },
+        {
+          "id": "MA",
+          "framework": "Mastra",
+          "coverage": "pattern",
+          "api": "workflow .parallel; memory race EST",
+          "evidence_url": "https://mastra.ai/docs/workflows/overview",
+          "note": "Parallel steps; concurrent state less proven"
+        },
+        {
+          "id": "LI",
+          "framework": "LlamaIndex",
+          "coverage": "first_class",
+          "api": "Context edit_state / workflow concurrency",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/managing_state/",
+          "note": "Explicit state management APIs"
+        },
+        {
+          "id": "AG",
+          "framework": "AutoGen / AG2",
+          "coverage": "pattern",
+          "api": "GroupChat / Network concurrency",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "Rich topologies; weaker shared-state reducers"
+        },
+        {
+          "id": "CR",
+          "framework": "CrewAI",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.crewai.com/v1.15.28/en/concepts/flows",
+          "note": "Flows/checkpoints exist; CSR under-specified vs graphs"
+        },
+        {
+          "id": "SK",
+          "framework": "Semantic Kernel",
+          "coverage": "pattern",
+          "api": "orchestration concurrency filters",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-orchestration/",
+          "note": "Experimental orchestration"
+        },
+        {
+          "id": "HS",
+          "framework": "Haystack",
+          "coverage": "pattern",
+          "api": "pipeline parallelism; shared state limited",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/pipelines",
+          "note": "Component parallelism \u2260 agent CSR"
+        },
+        {
+          "id": "SP",
+          "framework": "Spring AI",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "No graph-native concurrent state reducers"
+        },
+        {
+          "id": "VS",
+          "framework": "Vercel AI SDK",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+          "note": "Single-loop agent; no fan-out reducers"
+        },
+        {
+          "id": "SM",
+          "framework": "smolagents",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/examples/multiagents",
+          "note": "Managed multi-agent examples without CSR API"
+        },
+        {
+          "id": "DS",
+          "framework": "DSPy",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Module composition, not concurrent state OS"
+        }
+      ]
+    },
+    {
+      "code": "HIT",
+      "name": "Mid-run human interrupt + resume",
+      "why": "Compliance / approval",
+      "coverage_counts": {
+        "first_class": 11,
+        "pattern": 2,
+        "absent": 3,
+        "unknown": 0
+      },
+      "frameworks": [
+        {
+          "id": "LG",
+          "framework": "LangGraph",
+          "coverage": "first_class",
+          "api": "interrupt() + Command resume + checkpointer",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+          "note": "Gold-standard arbitrary mid-graph HITL"
+        },
+        {
+          "id": "OA",
+          "framework": "OpenAI Agents SDK",
+          "coverage": "first_class",
+          "api": "needs_approval interruptions + RunState",
+          "evidence_url": "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+          "note": "Approval-centric pause/serialize/resume"
+        },
+        {
+          "id": "AD",
+          "framework": "Google ADK",
+          "coverage": "first_class",
+          "api": "RequestInput deterministic HITL nodes",
+          "evidence_url": "https://adk.dev/graphs/human-input/",
+          "note": "Graph nodes request structured human input"
+        },
+        {
+          "id": "MS",
+          "framework": "Microsoft Agent Framework",
+          "coverage": "first_class",
+          "api": "workflow request/response HITL",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop",
+          "note": "External/human operator request-response"
+        },
+        {
+          "id": "PD",
+          "framework": "PydanticAI",
+          "coverage": "first_class",
+          "api": "deferred tool approval / Harness + durable engines",
+          "evidence_url": "https://pydantic.dev/docs/ai/capabilities/durable_execution/overview/",
+          "note": "HITL via durable execution + Harness"
+        },
+        {
+          "id": "LC",
+          "framework": "LangChain",
+          "coverage": "first_class",
+          "api": "HumanInTheLoopMiddleware \u2192 LG interrupt",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/human-in-the-loop",
+          "note": "First-class middleware compiling to LG"
+        },
+        {
+          "id": "MA",
+          "framework": "Mastra",
+          "coverage": "first_class",
+          "api": "tool approval / workflow suspend",
+          "evidence_url": "https://mastra.ai/docs/agents/human-in-the-loop",
+          "note": "Agent and workflow suspend for approval"
+        },
+        {
+          "id": "LI",
+          "framework": "LlamaIndex",
+          "coverage": "first_class",
+          "api": "InputRequiredEvent / HumanResponseEvent",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/human_in_the_loop/",
+          "note": "Event-based HITL in workflows"
+        },
+        {
+          "id": "AG",
+          "framework": "AutoGen / AG2",
+          "coverage": "first_class",
+          "api": "HumanProxyAgent / human input requests",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "Human-in-loop chat patterns"
+        },
+        {
+          "id": "CR",
+          "framework": "CrewAI",
+          "coverage": "first_class",
+          "api": "HITL task/flow interruption + webhooks",
+          "evidence_url": "https://docs.crewai.com/v1.15.2/en/learn/human-in-the-loop",
+          "note": "Documented HITL workflows"
+        },
+        {
+          "id": "SK",
+          "framework": "Semantic Kernel",
+          "coverage": "pattern",
+          "api": "experimental agent orchestration HITL",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-orchestration/",
+          "note": "Prefer MS Agent Framework for durable HITL"
+        },
+        {
+          "id": "HS",
+          "framework": "Haystack",
+          "coverage": "first_class",
+          "api": "ConfirmationHook on Agent tool calls",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/human-in-the-loop",
+          "note": "Confirm/reject/modify tool params"
+        },
+        {
+          "id": "SP",
+          "framework": "Spring AI",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "App-level approval only; no mid-agent interrupt API"
+        },
+        {
+          "id": "VS",
+          "framework": "Vercel AI SDK",
+          "coverage": "pattern",
+          "api": "toolApproval; durable via WorkflowAgent",
+          "evidence_url": "https://ai-sdk.dev/docs/agents/workflow-agent",
+          "note": "Core approval is soft; durable HITL needs @ai-sdk/workflow"
+        },
+        {
+          "id": "SM",
+          "framework": "smolagents",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "No durable interrupt API"
+        },
+        {
+          "id": "DS",
+          "framework": "DSPy",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "HITL-as-Tool demos are community patterns, not runtime"
+        }
+      ]
+    },
+    {
+      "code": "DUR",
+      "name": "Crash recovery / durable checkpoint",
+      "why": "Process death mid-agent",
+      "coverage_counts": {
+        "first_class": 9,
+        "pattern": 3,
+        "absent": 4,
+        "unknown": 0
+      },
+      "frameworks": [
+        {
+          "id": "LG",
+          "framework": "LangGraph",
+          "coverage": "first_class",
+          "api": "BaseCheckpointSaver (Postgres/SQLite) + thread_id",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+          "note": "Thread checkpointers survive process death"
+        },
+        {
+          "id": "OA",
+          "framework": "OpenAI Agents SDK",
+          "coverage": "first_class",
+          "api": "RunState serialize + Sessions; Temporal/Restate",
+          "evidence_url": "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+          "note": "Paused runs serializable; durable backends"
+        },
+        {
+          "id": "AD",
+          "framework": "Google ADK",
+          "coverage": "first_class",
+          "api": "Session/state + deploy resume/cancel",
+          "evidence_url": "https://adk.dev/context/",
+          "note": "Session services for resume across runs"
+        },
+        {
+          "id": "MS",
+          "framework": "Microsoft Agent Framework",
+          "coverage": "first_class",
+          "api": "workflow persistence / executor state",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop",
+          "note": "Workflow checkpointing with HITL"
+        },
+        {
+          "id": "PD",
+          "framework": "PydanticAI",
+          "coverage": "first_class",
+          "api": "Temporal/DBOS/Prefect/Restate/\u2026 adapters",
+          "evidence_url": "https://pydantic.dev/docs/ai/capabilities/durable_execution/overview/",
+          "note": "First-party durable execution adapters"
+        },
+        {
+          "id": "LC",
+          "framework": "LangChain",
+          "coverage": "first_class",
+          "api": "create_agent + LangGraph checkpointer",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/human-in-the-loop",
+          "note": "DUR via LG persistence when checkpointer set"
+        },
+        {
+          "id": "MA",
+          "framework": "Mastra",
+          "coverage": "first_class",
+          "api": "workflow suspend/resume + storage adapters",
+          "evidence_url": "https://mastra.ai/docs/workflows/overview",
+          "note": "Workflow persistence adapters"
+        },
+        {
+          "id": "LI",
+          "framework": "LlamaIndex",
+          "coverage": "first_class",
+          "api": "Context.to_dict + DBOS durable workflows",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/durable_workflows/",
+          "note": "Docs: ephemeral by default; DBOS/checkpoint for DUR"
+        },
+        {
+          "id": "AG",
+          "framework": "AutoGen / AG2",
+          "coverage": "pattern",
+          "api": "session helpers; not LG-class default",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "State helpers without default crash-safe threads"
+        },
+        {
+          "id": "CR",
+          "framework": "CrewAI",
+          "coverage": "first_class",
+          "api": "CheckpointConfig; resume/fork snapshots",
+          "evidence_url": "https://docs.crewai.com/v1.15.2/en/concepts/checkpointing",
+          "note": "Crew/flow/agent checkpointing"
+        },
+        {
+          "id": "SK",
+          "framework": "Semantic Kernel",
+          "coverage": "pattern",
+          "api": "migrate to MS Agent Framework workflows",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel",
+          "note": "SK path partial; MS is succession"
+        },
+        {
+          "id": "HS",
+          "framework": "Haystack",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/human-in-the-loop",
+          "note": "ConfirmationHook HITL without thread checkpointer"
+        },
+        {
+          "id": "SP",
+          "framework": "Spring AI",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "Spring-managed beans \u2260 agent-thread checkpoints"
+        },
+        {
+          "id": "VS",
+          "framework": "Vercel AI SDK",
+          "coverage": "pattern",
+          "api": "WorkflowAgent in @ai-sdk/workflow",
+          "evidence_url": "https://ai-sdk.dev/docs/agents/workflow-agent",
+          "note": "ToolLoopAgent in-memory; DUR is companion package"
+        },
+        {
+          "id": "SM",
+          "framework": "smolagents",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "No crash-recovery API"
+        },
+        {
+          "id": "DS",
+          "framework": "DSPy",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Optimizer-first; no serve-path checkpoint OS"
+        }
+      ]
+    },
+    {
+      "code": "IDE",
+      "name": "Idempotent tool / exactly-once hints",
+      "why": "Double charges / double writes",
+      "coverage_counts": {
+        "first_class": 0,
+        "pattern": 8,
+        "absent": 8,
+        "unknown": 0
+      },
+      "frameworks": [
+        {
+          "id": "LG",
+          "framework": "LangGraph",
+          "coverage": "pattern",
+          "api": "idempotent checkpointer writes; tool IDE BYO",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+          "note": "Persistence idempotent; tool exactly-once not first-class"
+        },
+        {
+          "id": "OA",
+          "framework": "OpenAI Agents SDK",
+          "coverage": "pattern",
+          "api": "docs warn on side effects; no exactly-once tool API",
+          "evidence_url": "https://openai.github.io/openai-agents-python/tools/",
+          "note": "Tool authors must design idempotency"
+        },
+        {
+          "id": "AD",
+          "framework": "Google ADK",
+          "coverage": "pattern",
+          "api": "at-least-once resume; idempotent tools recommended",
+          "evidence_url": "https://adk.dev/events/",
+          "note": "Event replay implies tool IDE discipline"
+        },
+        {
+          "id": "MS",
+          "framework": "Microsoft Agent Framework",
+          "coverage": "pattern",
+          "api": "workflow replay \u2192 idempotent activities pattern",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Durable workflows assume idempotent steps"
+        },
+        {
+          "id": "PD",
+          "framework": "PydanticAI",
+          "coverage": "pattern",
+          "api": "durable engines: design idempotent tools",
+          "evidence_url": "https://pydantic.dev/docs/ai/capabilities/durable_execution/overview/",
+          "note": "Engine retries; no native exactly-once tool hint"
+        },
+        {
+          "id": "LC",
+          "framework": "LangChain",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "No first-class idempotency key on tools"
+        },
+        {
+          "id": "MA",
+          "framework": "Mastra",
+          "coverage": "pattern",
+          "api": "workflow retry \u2192 idempotent side effects",
+          "evidence_url": "https://mastra.ai/docs/workflows/overview",
+          "note": "Documented as developer responsibility"
+        },
+        {
+          "id": "LI",
+          "framework": "LlamaIndex",
+          "coverage": "pattern",
+          "api": "durable workflows: at-least-once; require idempotent tools",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/durable_workflows/",
+          "note": "Docs explicitly require idempotent side effects"
+        },
+        {
+          "id": "AG",
+          "framework": "AutoGen / AG2",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "No exactly-once tool API"
+        },
+        {
+          "id": "CR",
+          "framework": "CrewAI",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.crewai.com/v1.15.2/en/concepts/checkpointing",
+          "note": "Checkpoints without tool idempotency keys"
+        },
+        {
+          "id": "SK",
+          "framework": "Semantic Kernel",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "No first-class IDE surface"
+        },
+        {
+          "id": "HS",
+          "framework": "Haystack",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/agent",
+          "note": "No tool idempotency API"
+        },
+        {
+          "id": "SP",
+          "framework": "Spring AI",
+          "coverage": "pattern",
+          "api": "Spring Retry / IdempotentReceiver patterns",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "Enterprise Spring patterns, not agent-tool IDE"
+        },
+        {
+          "id": "VS",
+          "framework": "Vercel AI SDK",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://ai-sdk.dev/docs/agents/workflow-agent",
+          "note": "Workflow retries without tool idempotency API"
+        },
+        {
+          "id": "SM",
+          "framework": "smolagents",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "Code-act side effects unmanaged"
+        },
+        {
+          "id": "DS",
+          "framework": "DSPy",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "No serve-path IDE"
+        }
+      ]
+    },
+    {
+      "code": "GRD",
+      "name": "Guardrails (input/output/tool)",
+      "why": "Safety / PII",
+      "coverage_counts": {
+        "first_class": 9,
+        "pattern": 5,
+        "absent": 2,
+        "unknown": 0
+      },
+      "frameworks": [
+        {
+          "id": "LG",
+          "framework": "LangGraph",
+          "coverage": "pattern",
+          "api": "LC guardrail middleware / custom nodes",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "Rails via middleware more than graph core"
+        },
+        {
+          "id": "OA",
+          "framework": "OpenAI Agents SDK",
+          "coverage": "first_class",
+          "api": "input/output/tool guardrails",
+          "evidence_url": "https://openai.github.io/openai-agents-python/guardrails/",
+          "note": "Native parallel guardrail APIs"
+        },
+        {
+          "id": "AD",
+          "framework": "Google ADK",
+          "coverage": "first_class",
+          "api": "safety / tool confirmation rails",
+          "evidence_url": "https://adk.dev/",
+          "note": "Safety and confirmation built into ADK"
+        },
+        {
+          "id": "MS",
+          "framework": "Microsoft Agent Framework",
+          "coverage": "first_class",
+          "api": "content safety / approval gates",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Enterprise safety integrations"
+        },
+        {
+          "id": "PD",
+          "framework": "PydanticAI",
+          "coverage": "first_class",
+          "api": "Harness guardrails capability",
+          "evidence_url": "https://pydantic.dev/docs/ai/overview/",
+          "note": "Guardrails via Harness capabilities"
+        },
+        {
+          "id": "LC",
+          "framework": "LangChain",
+          "coverage": "first_class",
+          "api": "middleware guardrails on create_agent",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "Documented agent middleware rails"
+        },
+        {
+          "id": "MA",
+          "framework": "Mastra",
+          "coverage": "first_class",
+          "api": "agent guardrails / scorers",
+          "evidence_url": "https://mastra.ai/docs/agents/overview",
+          "note": "First-class guardrail primitives"
+        },
+        {
+          "id": "LI",
+          "framework": "LlamaIndex",
+          "coverage": "pattern",
+          "api": "callback/observability guards",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/observability/",
+          "note": "Guards via callbacks more than rails API"
+        },
+        {
+          "id": "AG",
+          "framework": "AutoGen / AG2",
+          "coverage": "pattern",
+          "api": "governance / channel TTL patterns",
+          "evidence_url": "https://docs.ag2.ai/docs/user-guide/telemetry/",
+          "note": "Partial governance surfaces"
+        },
+        {
+          "id": "CR",
+          "framework": "CrewAI",
+          "coverage": "first_class",
+          "api": "task/crew guardrails",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Documented guardrail hooks"
+        },
+        {
+          "id": "SK",
+          "framework": "Semantic Kernel",
+          "coverage": "first_class",
+          "api": "filters / content safety plugins",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "Filter pipeline for safety"
+        },
+        {
+          "id": "HS",
+          "framework": "Haystack",
+          "coverage": "first_class",
+          "api": "pipeline validators / safety components",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/pipelines",
+          "note": "Composable validation components"
+        },
+        {
+          "id": "SP",
+          "framework": "Spring AI",
+          "coverage": "pattern",
+          "api": "Spring Security + advisors",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "App security patterns vs agent GRD API"
+        },
+        {
+          "id": "VS",
+          "framework": "Vercel AI SDK",
+          "coverage": "pattern",
+          "api": "middleware / toolApproval as soft rails",
+          "evidence_url": "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+          "note": "No dedicated guardrails module"
+        },
+        {
+          "id": "SM",
+          "framework": "smolagents",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "Sandbox \u2260 content guardrails"
+        },
+        {
+          "id": "DS",
+          "framework": "DSPy",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "No runtime guardrail API"
+        }
+      ]
+    },
+    {
+      "code": "STR",
+      "name": "Streaming error surfacing",
+      "why": "UI must show partial failure",
+      "coverage_counts": {
+        "first_class": 14,
+        "pattern": 1,
+        "absent": 1,
+        "unknown": 0
+      },
+      "frameworks": [
+        {
+          "id": "LG",
+          "framework": "LangGraph",
+          "coverage": "first_class",
+          "api": "stream modes values/messages/events; stream.interrupts",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/streaming",
+          "note": "Streaming includes interrupt/error surfaces"
+        },
+        {
+          "id": "OA",
+          "framework": "OpenAI Agents SDK",
+          "coverage": "first_class",
+          "api": "Runner streaming events",
+          "evidence_url": "https://openai.github.io/openai-agents-python/running_agents/",
+          "note": "Streamed run events for UI"
+        },
+        {
+          "id": "AD",
+          "framework": "Google ADK",
+          "coverage": "first_class",
+          "api": "Events stream / artifact updates",
+          "evidence_url": "https://adk.dev/events/",
+          "note": "Event stream for partial failures"
+        },
+        {
+          "id": "MS",
+          "framework": "Microsoft Agent Framework",
+          "coverage": "first_class",
+          "api": "streaming chat/agent responses",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Streaming APIs in .NET/Python"
+        },
+        {
+          "id": "PD",
+          "framework": "PydanticAI",
+          "coverage": "first_class",
+          "api": "StreamedRunResult / AG-UI bridges",
+          "evidence_url": "https://pydantic.dev/docs/ai/core-concepts/agent/",
+          "note": "First-class stream results"
+        },
+        {
+          "id": "LC",
+          "framework": "LangChain",
+          "coverage": "first_class",
+          "api": "agent/graph streaming helpers",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "Stream events for agents"
+        },
+        {
+          "id": "MA",
+          "framework": "Mastra",
+          "coverage": "first_class",
+          "api": "fullStream on agents/workflows",
+          "evidence_url": "https://mastra.ai/docs/agents/overview",
+          "note": "fullStream surfaces step errors"
+        },
+        {
+          "id": "LI",
+          "framework": "LlamaIndex",
+          "coverage": "first_class",
+          "api": "workflow event streams",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/",
+          "note": "Handler/event streaming"
+        },
+        {
+          "id": "AG",
+          "framework": "AutoGen / AG2",
+          "coverage": "first_class",
+          "api": "streaming tokens/messages",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "Group chat streaming"
+        },
+        {
+          "id": "CR",
+          "framework": "CrewAI",
+          "coverage": "first_class",
+          "api": "streaming task/crew outputs",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Streamed crew outputs"
+        },
+        {
+          "id": "SK",
+          "framework": "Semantic Kernel",
+          "coverage": "first_class",
+          "api": "streaming content in agents",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "Streaming kernel content"
+        },
+        {
+          "id": "HS",
+          "framework": "Haystack",
+          "coverage": "first_class",
+          "api": "streaming generators on components",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/pipelines",
+          "note": "Component streaming"
+        },
+        {
+          "id": "SP",
+          "framework": "Spring AI",
+          "coverage": "first_class",
+          "api": "ChatClient streaming / reactive",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/api/chatclient.html",
+          "note": "Reactive streaming ChatClient"
+        },
+        {
+          "id": "VS",
+          "framework": "Vercel AI SDK",
+          "coverage": "first_class",
+          "api": "streamText / useChat / UIMessage parts",
+          "evidence_url": "https://ai-sdk.dev/",
+          "note": "Best-in-set UI streaming"
+        },
+        {
+          "id": "SM",
+          "framework": "smolagents",
+          "coverage": "pattern",
+          "api": "partial step streaming",
+          "evidence_url": "https://huggingface.co/docs/smolagents/en/reference/agents",
+          "note": "Step logs more than UI error stream"
+        },
+        {
+          "id": "DS",
+          "framework": "DSPy",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Not a product UI streaming runtime"
+        }
+      ]
+    },
+    {
+      "code": "TRC",
+      "name": "Trace/replay for failed runs",
+      "why": "MTTR",
+      "coverage_counts": {
+        "first_class": 12,
+        "pattern": 3,
+        "absent": 1,
+        "unknown": 0
+      },
+      "frameworks": [
+        {
+          "id": "LG",
+          "framework": "LangGraph",
+          "coverage": "first_class",
+          "api": "LangSmith state-transition traces / time-travel",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+          "note": "Deep trace + checkpoint replay"
+        },
+        {
+          "id": "OA",
+          "framework": "OpenAI Agents SDK",
+          "coverage": "first_class",
+          "api": "built-in tracing processors",
+          "evidence_url": "https://openai.github.io/openai-agents-python/tracing/",
+          "note": "Native trace export"
+        },
+        {
+          "id": "AD",
+          "framework": "Google ADK",
+          "coverage": "first_class",
+          "api": "OpenTelemetry traces",
+          "evidence_url": "https://adk.dev/observability/traces/",
+          "note": "OTel-first observability"
+        },
+        {
+          "id": "MS",
+          "framework": "Microsoft Agent Framework",
+          "coverage": "first_class",
+          "api": "Azure Monitor / OTel",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Enterprise telemetry"
+        },
+        {
+          "id": "PD",
+          "framework": "PydanticAI",
+          "coverage": "first_class",
+          "api": "Logfire + plain OTel",
+          "evidence_url": "https://pydantic.dev/docs/ai/integrations/logfire/",
+          "note": "logfire.instrument_pydantic_ai"
+        },
+        {
+          "id": "LC",
+          "framework": "LangChain",
+          "coverage": "first_class",
+          "api": "LangSmith observability",
+          "evidence_url": "https://docs.langchain.com/langsmith/observability",
+          "note": "First-class LangSmith"
+        },
+        {
+          "id": "MA",
+          "framework": "Mastra",
+          "coverage": "first_class",
+          "api": "logging/tracing/eval scorers",
+          "evidence_url": "https://mastra.ai/docs/agents/overview",
+          "note": "Agent tracing primitives"
+        },
+        {
+          "id": "LI",
+          "framework": "LlamaIndex",
+          "coverage": "first_class",
+          "api": "workflow observability integrations",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/observability/",
+          "note": "Workflow observability docs"
+        },
+        {
+          "id": "AG",
+          "framework": "AutoGen / AG2",
+          "coverage": "first_class",
+          "api": "OTel middleware telemetry guide",
+          "evidence_url": "https://docs.ag2.ai/docs/user-guide/telemetry/",
+          "note": "Documented telemetry"
+        },
+        {
+          "id": "CR",
+          "framework": "CrewAI",
+          "coverage": "first_class",
+          "api": "observability/tracing docs",
+          "evidence_url": "https://docs.crewai.com/edge/en/observability/tracing",
+          "note": "CrewAI tracing"
+        },
+        {
+          "id": "SK",
+          "framework": "Semantic Kernel",
+          "coverage": "pattern",
+          "api": "Azure-centric filters; portable OTel uneven",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "Strong in Azure; portability partial"
+        },
+        {
+          "id": "HS",
+          "framework": "Haystack",
+          "coverage": "first_class",
+          "api": "tracing + OpenTelemetry",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/tracing",
+          "note": "Pipeline tracing"
+        },
+        {
+          "id": "SP",
+          "framework": "Spring AI",
+          "coverage": "first_class",
+          "api": "Micrometer observations / Actuator",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "JVM observability first-class"
+        },
+        {
+          "id": "VS",
+          "framework": "Vercel AI SDK",
+          "coverage": "pattern",
+          "api": "telemetry API + DevTools",
+          "evidence_url": "https://ai-sdk.dev/docs/ai-sdk-core/telemetry",
+          "note": "Telemetry present; replay thinner than LangSmith"
+        },
+        {
+          "id": "SM",
+          "framework": "smolagents",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "External AgentOps etc. only"
+        },
+        {
+          "id": "DS",
+          "framework": "DSPy",
+          "coverage": "pattern",
+          "api": "logging/eval traces; not agent MTTR replay",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Optimizer logs \u2260 failed-run replay OS"
+        }
+      ]
+    },
+    {
+      "code": "SBOX",
+      "name": "Code-execution isolation",
+      "why": "Code-act RCE risk",
+      "coverage_counts": {
+        "first_class": 2,
+        "pattern": 2,
+        "absent": 12,
+        "unknown": 0
+      },
+      "frameworks": [
+        {
+          "id": "LG",
+          "framework": "LangGraph",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/overview",
+          "note": "No first-party code sandbox"
+        },
+        {
+          "id": "OA",
+          "framework": "OpenAI Agents SDK",
+          "coverage": "first_class",
+          "api": "Sandbox agents / sandbox clients",
+          "evidence_url": "https://openai.github.io/openai-agents-python/",
+          "note": "Documented sandbox agent path"
+        },
+        {
+          "id": "AD",
+          "framework": "Google ADK",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://adk.dev/",
+          "note": "Container deploy \u2260 code-act sandbox API"
+        },
+        {
+          "id": "MS",
+          "framework": "Microsoft Agent Framework",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "No first-party code-exec sandbox"
+        },
+        {
+          "id": "PD",
+          "framework": "PydanticAI",
+          "coverage": "pattern",
+          "api": "Harness sandboxes (E2B/Modal)",
+          "evidence_url": "https://pydantic.dev/docs/ai/overview/",
+          "note": "Via Harness companion, not core Agent"
+        },
+        {
+          "id": "LC",
+          "framework": "LangChain",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "BYO sandbox tools"
+        },
+        {
+          "id": "MA",
+          "framework": "Mastra",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://mastra.ai/docs/agents/overview",
+          "note": "No native code-act sandbox"
+        },
+        {
+          "id": "LI",
+          "framework": "LlamaIndex",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/",
+          "note": "No first-party code sandbox"
+        },
+        {
+          "id": "AG",
+          "framework": "AutoGen / AG2",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "BYO code execution isolation"
+        },
+        {
+          "id": "CR",
+          "framework": "CrewAI",
+          "coverage": "pattern",
+          "api": "tool backend sandboxes (partial)",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Some tool backends isolate; not universal SBOX API"
+        },
+        {
+          "id": "SK",
+          "framework": "Semantic Kernel",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "No native code sandbox"
+        },
+        {
+          "id": "HS",
+          "framework": "Haystack",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/agent",
+          "note": "No code-act sandbox"
+        },
+        {
+          "id": "SP",
+          "framework": "Spring AI",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "JVM process isolation \u2260 code-act SBOX"
+        },
+        {
+          "id": "VS",
+          "framework": "Vercel AI SDK",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://ai-sdk.dev/",
+          "note": "No code-execution sandbox in AI SDK"
+        },
+        {
+          "id": "SM",
+          "framework": "smolagents",
+          "coverage": "first_class",
+          "api": "E2B / Docker / Modal / local sandboxes",
+          "evidence_url": "https://huggingface.co/docs/smolagents/en/tutorials/secure_code_execution",
+          "note": "Sandbox backends are the product strength"
+        },
+        {
+          "id": "DS",
+          "framework": "DSPy",
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "No code-act sandbox runtime"
+        }
+      ]
+    }
+  ],
+  "frameworks": [
+    {
+      "id": "LG",
+      "name": "LangGraph",
+      "FMC": 90.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "first_class",
+        "SCH": "pattern",
+        "COV": "pattern",
+        "CSR": "first_class",
+        "HIT": "first_class",
+        "DUR": "first_class",
+        "IDE": "pattern",
+        "GRD": "pattern",
+        "STR": "first_class",
+        "TRC": "first_class",
+        "SBOX": "absent"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "node/tool timeouts + RetryPolicy on graph nodes",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+          "note": "Graph API documents retry/timeout controls on nodes"
+        },
+        "PTF": {
+          "coverage": "first_class",
+          "api": "RetryPolicy; tool errors return to graph",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+          "note": "Per-node retry isolation"
+        },
+        "SCH": {
+          "coverage": "pattern",
+          "api": "TypedDict/Pydantic state; LC with_structured_output",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+          "note": "Schema via LangChain types more than core graph"
+        },
+        "COV": {
+          "coverage": "pattern",
+          "api": "summarization middleware (often LC)",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/short-term-memory",
+          "note": "Compaction via LC middleware more than graph core"
+        },
+        "CSR": {
+          "coverage": "first_class",
+          "api": "Annotated reducers + Send map-reduce",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+          "note": "Fan-out Send with state reducers"
+        },
+        "HIT": {
+          "coverage": "first_class",
+          "api": "interrupt() + Command resume + checkpointer",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+          "note": "Gold-standard arbitrary mid-graph HITL"
+        },
+        "DUR": {
+          "coverage": "first_class",
+          "api": "BaseCheckpointSaver (Postgres/SQLite) + thread_id",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+          "note": "Thread checkpointers survive process death"
+        },
+        "IDE": {
+          "coverage": "pattern",
+          "api": "idempotent checkpointer writes; tool IDE BYO",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+          "note": "Persistence idempotent; tool exactly-once not first-class"
+        },
+        "GRD": {
+          "coverage": "pattern",
+          "api": "LC guardrail middleware / custom nodes",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "Rails via middleware more than graph core"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "stream modes values/messages/events; stream.interrupts",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/streaming",
+          "note": "Streaming includes interrupt/error surfaces"
+        },
+        "TRC": {
+          "coverage": "first_class",
+          "api": "LangSmith state-transition traces / time-travel",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+          "note": "Deep trace + checkpoint replay"
+        },
+        "SBOX": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.langchain.com/oss/python/langgraph/overview",
+          "note": "No first-party code sandbox"
+        }
+      },
+      "notes": "interrupt() + checkpointer; SCH/COV often via LangChain middleware; SBOX absent"
+    },
+    {
+      "id": "OA",
+      "name": "OpenAI Agents SDK",
+      "FMC": 82.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "first_class",
+        "SCH": "first_class",
+        "COV": "pattern",
+        "CSR": "pattern",
+        "HIT": "first_class",
+        "DUR": "first_class",
+        "IDE": "pattern",
+        "GRD": "first_class",
+        "STR": "first_class",
+        "TRC": "first_class",
+        "SBOX": "first_class"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "run/config timeouts; MaxTurnsExceeded",
+          "evidence_url": "https://openai.github.io/openai-agents-python/running_agents/",
+          "note": "Runner lifecycle exposes turn/time budgets"
+        },
+        "PTF": {
+          "coverage": "first_class",
+          "api": "tool error \u2192 model; retry knobs on tools",
+          "evidence_url": "https://openai.github.io/openai-agents-python/tools/",
+          "note": "Failed tools surface without killing entire Runner by default"
+        },
+        "SCH": {
+          "coverage": "first_class",
+          "api": "Agent output_type / structured outputs",
+          "evidence_url": "https://openai.github.io/openai-agents-python/",
+          "note": "Native structured agent outputs"
+        },
+        "COV": {
+          "coverage": "pattern",
+          "api": "Sessions trim/compaction helpers",
+          "evidence_url": "https://openai.github.io/openai-agents-python/sessions/",
+          "note": "Sessions help; not LG-class reducers"
+        },
+        "CSR": {
+          "coverage": "pattern",
+          "api": "handoffs / nested runs; limited shared-state reducers",
+          "evidence_url": "https://openai.github.io/openai-agents-python/handoffs/",
+          "note": "Multi-agent via handoffs, not reducer CSR"
+        },
+        "HIT": {
+          "coverage": "first_class",
+          "api": "needs_approval interruptions + RunState",
+          "evidence_url": "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+          "note": "Approval-centric pause/serialize/resume"
+        },
+        "DUR": {
+          "coverage": "first_class",
+          "api": "RunState serialize + Sessions; Temporal/Restate",
+          "evidence_url": "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+          "note": "Paused runs serializable; durable backends"
+        },
+        "IDE": {
+          "coverage": "pattern",
+          "api": "docs warn on side effects; no exactly-once tool API",
+          "evidence_url": "https://openai.github.io/openai-agents-python/tools/",
+          "note": "Tool authors must design idempotency"
+        },
+        "GRD": {
+          "coverage": "first_class",
+          "api": "input/output/tool guardrails",
+          "evidence_url": "https://openai.github.io/openai-agents-python/guardrails/",
+          "note": "Native parallel guardrail APIs"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "Runner streaming events",
+          "evidence_url": "https://openai.github.io/openai-agents-python/running_agents/",
+          "note": "Streamed run events for UI"
+        },
+        "TRC": {
+          "coverage": "first_class",
+          "api": "built-in tracing processors",
+          "evidence_url": "https://openai.github.io/openai-agents-python/tracing/",
+          "note": "Native trace export"
+        },
+        "SBOX": {
+          "coverage": "first_class",
+          "api": "Sandbox agents / sandbox clients",
+          "evidence_url": "https://openai.github.io/openai-agents-python/",
+          "note": "Documented sandbox agent path"
+        }
+      },
+      "notes": "Tool approval + RunState; sole H-cluster first_class SBOX"
+    },
+    {
+      "id": "AD",
+      "name": "Google ADK",
+      "FMC": 80.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "first_class",
+        "SCH": "pattern",
+        "COV": "first_class",
+        "CSR": "first_class",
+        "HIT": "first_class",
+        "DUR": "first_class",
+        "IDE": "pattern",
+        "GRD": "first_class",
+        "STR": "first_class",
+        "TRC": "first_class",
+        "SBOX": "absent"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "RunConfig timeout / cancel",
+          "evidence_url": "https://adk.dev/api-reference/typescript/interfaces/RunConfig.html",
+          "note": "RunConfig surfaces runtime deadlines"
+        },
+        "PTF": {
+          "coverage": "first_class",
+          "api": "tool error events; retry/confirm patterns",
+          "evidence_url": "https://adk.dev/events/",
+          "note": "Events capture tool failures for recovery"
+        },
+        "SCH": {
+          "coverage": "pattern",
+          "api": "typed tools / schema configs",
+          "evidence_url": "https://adk.dev/",
+          "note": "Schemas on tools; repair path less first-class"
+        },
+        "COV": {
+          "coverage": "first_class",
+          "api": "EventsCompaction / ContextCompactionTrigger",
+          "evidence_url": "https://adk.dev/api-reference/kotlin/google-adk-kotlin-core/com.google.adk.kt.events/-event-compaction/index.html",
+          "note": "Named compaction APIs"
+        },
+        "CSR": {
+          "coverage": "first_class",
+          "api": "graph parallelism + session state rules",
+          "evidence_url": "https://adk.dev/agents/multi-agents/",
+          "note": "Multi-agent trees with state discipline"
+        },
+        "HIT": {
+          "coverage": "first_class",
+          "api": "RequestInput deterministic HITL nodes",
+          "evidence_url": "https://adk.dev/graphs/human-input/",
+          "note": "Graph nodes request structured human input"
+        },
+        "DUR": {
+          "coverage": "first_class",
+          "api": "Session/state + deploy resume/cancel",
+          "evidence_url": "https://adk.dev/context/",
+          "note": "Session services for resume across runs"
+        },
+        "IDE": {
+          "coverage": "pattern",
+          "api": "at-least-once resume; idempotent tools recommended",
+          "evidence_url": "https://adk.dev/events/",
+          "note": "Event replay implies tool IDE discipline"
+        },
+        "GRD": {
+          "coverage": "first_class",
+          "api": "safety / tool confirmation rails",
+          "evidence_url": "https://adk.dev/",
+          "note": "Safety and confirmation built into ADK"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "Events stream / artifact updates",
+          "evidence_url": "https://adk.dev/events/",
+          "note": "Event stream for partial failures"
+        },
+        "TRC": {
+          "coverage": "first_class",
+          "api": "OpenTelemetry traces",
+          "evidence_url": "https://adk.dev/observability/traces/",
+          "note": "OTel-first observability"
+        },
+        "SBOX": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://adk.dev/",
+          "note": "Container deploy \u2260 code-act sandbox API"
+        }
+      },
+      "notes": "RequestInput HITL + EventsCompaction; SBOX DIY"
+    },
+    {
+      "id": "MS",
+      "name": "Microsoft Agent Framework",
+      "FMC": 80,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "first_class",
+        "SCH": "first_class",
+        "COV": "pattern",
+        "CSR": "first_class",
+        "HIT": "first_class",
+        "DUR": "first_class",
+        "IDE": "pattern",
+        "GRD": "first_class",
+        "STR": "first_class",
+        "TRC": "first_class",
+        "SBOX": "absent"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "workflow/executor timeouts",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Agent Framework workflow execution budgets"
+        },
+        "PTF": {
+          "coverage": "first_class",
+          "api": "executor failure handling / retries",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Workflow executors isolate step failures"
+        },
+        "SCH": {
+          "coverage": "first_class",
+          "api": ".NET typed contracts / schema validation",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Strong typed I/O on Agent Framework"
+        },
+        "COV": {
+          "coverage": "pattern",
+          "api": "session/context trimming patterns",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Context management via sessions"
+        },
+        "CSR": {
+          "coverage": "first_class",
+          "api": "workflow fan-out/join executors",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Workflow composition for concurrency"
+        },
+        "HIT": {
+          "coverage": "first_class",
+          "api": "workflow request/response HITL",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop",
+          "note": "External/human operator request-response"
+        },
+        "DUR": {
+          "coverage": "first_class",
+          "api": "workflow persistence / executor state",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop",
+          "note": "Workflow checkpointing with HITL"
+        },
+        "IDE": {
+          "coverage": "pattern",
+          "api": "workflow replay \u2192 idempotent activities pattern",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Durable workflows assume idempotent steps"
+        },
+        "GRD": {
+          "coverage": "first_class",
+          "api": "content safety / approval gates",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Enterprise safety integrations"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "streaming chat/agent responses",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Streaming APIs in .NET/Python"
+        },
+        "TRC": {
+          "coverage": "first_class",
+          "api": "Azure Monitor / OTel",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "Enterprise telemetry"
+        },
+        "SBOX": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/overview/",
+          "note": "No first-party code-exec sandbox"
+        }
+      },
+      "notes": "Workflow request/response HITL; Azure gravity for TRC"
+    },
+    {
+      "id": "PD",
+      "name": "PydanticAI",
+      "FMC": 78.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "first_class",
+        "SCH": "first_class",
+        "COV": "pattern",
+        "CSR": "pattern",
+        "HIT": "first_class",
+        "DUR": "first_class",
+        "IDE": "pattern",
+        "GRD": "first_class",
+        "STR": "first_class",
+        "TRC": "first_class",
+        "SBOX": "pattern"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "Agent usage limits / model request timeouts",
+          "evidence_url": "https://pydantic.dev/docs/ai/core-concepts/agent/",
+          "note": "Agent settings include timeout and usage limits"
+        },
+        "PTF": {
+          "coverage": "first_class",
+          "api": "ModelRetry / tool exception \u2192 model retry",
+          "evidence_url": "https://pydantic.dev/docs/ai/core-concepts/agent/",
+          "note": "Validation and tool failures trigger retries"
+        },
+        "SCH": {
+          "coverage": "first_class",
+          "api": "Agent(..., output_type=Model) + validation retry",
+          "evidence_url": "https://pydantic.dev/docs/ai/core-concepts/output/",
+          "note": "Pydantic validation with ModelRetry"
+        },
+        "COV": {
+          "coverage": "pattern",
+          "api": "message history processors / Harness memory",
+          "evidence_url": "https://pydantic.dev/docs/ai/overview/",
+          "note": "History shaping via processors/Harness"
+        },
+        "CSR": {
+          "coverage": "pattern",
+          "api": "Pydantic Graph / SubAgents; BYO reducers",
+          "evidence_url": "https://pydantic.dev/docs/ai/overview/",
+          "note": "Graph helps; race control not LG-class default"
+        },
+        "HIT": {
+          "coverage": "first_class",
+          "api": "deferred tool approval / Harness + durable engines",
+          "evidence_url": "https://pydantic.dev/docs/ai/capabilities/durable_execution/overview/",
+          "note": "HITL via durable execution + Harness"
+        },
+        "DUR": {
+          "coverage": "first_class",
+          "api": "Temporal/DBOS/Prefect/Restate/\u2026 adapters",
+          "evidence_url": "https://pydantic.dev/docs/ai/capabilities/durable_execution/overview/",
+          "note": "First-party durable execution adapters"
+        },
+        "IDE": {
+          "coverage": "pattern",
+          "api": "durable engines: design idempotent tools",
+          "evidence_url": "https://pydantic.dev/docs/ai/capabilities/durable_execution/overview/",
+          "note": "Engine retries; no native exactly-once tool hint"
+        },
+        "GRD": {
+          "coverage": "first_class",
+          "api": "Harness guardrails capability",
+          "evidence_url": "https://pydantic.dev/docs/ai/overview/",
+          "note": "Guardrails via Harness capabilities"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "StreamedRunResult / AG-UI bridges",
+          "evidence_url": "https://pydantic.dev/docs/ai/core-concepts/agent/",
+          "note": "First-class stream results"
+        },
+        "TRC": {
+          "coverage": "first_class",
+          "api": "Logfire + plain OTel",
+          "evidence_url": "https://pydantic.dev/docs/ai/integrations/logfire/",
+          "note": "logfire.instrument_pydantic_ai"
+        },
+        "SBOX": {
+          "coverage": "pattern",
+          "api": "Harness sandboxes (E2B/Modal)",
+          "evidence_url": "https://pydantic.dev/docs/ai/overview/",
+          "note": "Via Harness companion, not core Agent"
+        }
+      },
+      "notes": "Durable engines + Harness; SBOX via Harness sandboxes (pattern)"
+    },
+    {
+      "id": "LC",
+      "name": "LangChain",
+      "FMC": 74.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "pattern",
+        "SCH": "pattern",
+        "COV": "first_class",
+        "CSR": "pattern",
+        "HIT": "first_class",
+        "DUR": "first_class",
+        "IDE": "absent",
+        "GRD": "first_class",
+        "STR": "first_class",
+        "TRC": "first_class",
+        "SBOX": "absent"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "runnable config timeouts; agent max iterations",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "RunnableConfig / agent loop budgets"
+        },
+        "PTF": {
+          "coverage": "pattern",
+          "api": "RunnableRetry / middleware; uneven default isolation",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "Retries via LC utilities, not a single agent PTF API"
+        },
+        "SCH": {
+          "coverage": "pattern",
+          "api": "with_structured_output / tool schemas",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "Strong helpers; repair middleware varies"
+        },
+        "COV": {
+          "coverage": "first_class",
+          "api": "summarization / short-term memory middleware",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/short-term-memory",
+          "note": "Documented compaction middleware"
+        },
+        "CSR": {
+          "coverage": "pattern",
+          "api": "inherits LG reducers when on graphs",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "CSR strength depends on LG compilation"
+        },
+        "HIT": {
+          "coverage": "first_class",
+          "api": "HumanInTheLoopMiddleware \u2192 LG interrupt",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/human-in-the-loop",
+          "note": "First-class middleware compiling to LG"
+        },
+        "DUR": {
+          "coverage": "first_class",
+          "api": "create_agent + LangGraph checkpointer",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/human-in-the-loop",
+          "note": "DUR via LG persistence when checkpointer set"
+        },
+        "IDE": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "No first-class idempotency key on tools"
+        },
+        "GRD": {
+          "coverage": "first_class",
+          "api": "middleware guardrails on create_agent",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "Documented agent middleware rails"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "agent/graph streaming helpers",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "Stream events for agents"
+        },
+        "TRC": {
+          "coverage": "first_class",
+          "api": "LangSmith observability",
+          "evidence_url": "https://docs.langchain.com/langsmith/observability",
+          "note": "First-class LangSmith"
+        },
+        "SBOX": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.langchain.com/oss/python/langchain/overview",
+          "note": "BYO sandbox tools"
+        }
+      },
+      "notes": "HITL middleware on LangGraph persistence; IDE absent"
+    },
+    {
+      "id": "MA",
+      "name": "Mastra",
+      "FMC": 72.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "first_class",
+        "SCH": "first_class",
+        "COV": "pattern",
+        "CSR": "pattern",
+        "HIT": "first_class",
+        "DUR": "first_class",
+        "IDE": "pattern",
+        "GRD": "first_class",
+        "STR": "first_class",
+        "TRC": "first_class",
+        "SBOX": "absent"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "agent/workflow step timeouts",
+          "evidence_url": "https://mastra.ai/docs/agents/overview",
+          "note": "Agent runtime timeout knobs"
+        },
+        "PTF": {
+          "coverage": "first_class",
+          "api": "tool error handling on agent loop",
+          "evidence_url": "https://mastra.ai/docs/agents/tools",
+          "note": "Tool failures returned into agent loop"
+        },
+        "SCH": {
+          "coverage": "first_class",
+          "api": "structuredOutput Zod/Valibot/JSON Schema",
+          "evidence_url": "https://mastra.ai/docs/agents/structured-output",
+          "note": "First-class structured output on agents"
+        },
+        "COV": {
+          "coverage": "pattern",
+          "api": "memory processors / working memory",
+          "evidence_url": "https://mastra.ai/docs/memory/overview",
+          "note": "Memory adapters; overflow not auto-resolved"
+        },
+        "CSR": {
+          "coverage": "pattern",
+          "api": "workflow .parallel; memory race EST",
+          "evidence_url": "https://mastra.ai/docs/workflows/overview",
+          "note": "Parallel steps; concurrent state less proven"
+        },
+        "HIT": {
+          "coverage": "first_class",
+          "api": "tool approval / workflow suspend",
+          "evidence_url": "https://mastra.ai/docs/agents/human-in-the-loop",
+          "note": "Agent and workflow suspend for approval"
+        },
+        "DUR": {
+          "coverage": "first_class",
+          "api": "workflow suspend/resume + storage adapters",
+          "evidence_url": "https://mastra.ai/docs/workflows/overview",
+          "note": "Workflow persistence adapters"
+        },
+        "IDE": {
+          "coverage": "pattern",
+          "api": "workflow retry \u2192 idempotent side effects",
+          "evidence_url": "https://mastra.ai/docs/workflows/overview",
+          "note": "Documented as developer responsibility"
+        },
+        "GRD": {
+          "coverage": "first_class",
+          "api": "agent guardrails / scorers",
+          "evidence_url": "https://mastra.ai/docs/agents/overview",
+          "note": "First-class guardrail primitives"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "fullStream on agents/workflows",
+          "evidence_url": "https://mastra.ai/docs/agents/overview",
+          "note": "fullStream surfaces step errors"
+        },
+        "TRC": {
+          "coverage": "first_class",
+          "api": "logging/tracing/eval scorers",
+          "evidence_url": "https://mastra.ai/docs/agents/overview",
+          "note": "Agent tracing primitives"
+        },
+        "SBOX": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://mastra.ai/docs/agents/overview",
+          "note": "No native code-act sandbox"
+        }
+      },
+      "notes": "Agent/workflow suspend + tool approval"
+    },
+    {
+      "id": "LI",
+      "name": "LlamaIndex",
+      "FMC": 68.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "first_class",
+        "SCH": "first_class",
+        "COV": "pattern",
+        "CSR": "first_class",
+        "HIT": "first_class",
+        "DUR": "first_class",
+        "IDE": "pattern",
+        "GRD": "pattern",
+        "STR": "first_class",
+        "TRC": "first_class",
+        "SBOX": "absent"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "workflow/handler timeouts",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/",
+          "note": "Workflow step timeout configuration"
+        },
+        "PTF": {
+          "coverage": "first_class",
+          "api": "workflow step retries / error events",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/",
+          "note": "Step-level failure handling"
+        },
+        "SCH": {
+          "coverage": "first_class",
+          "api": "structured LLM / Pydantic outputs",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/",
+          "note": "Structured outputs in workflows"
+        },
+        "COV": {
+          "coverage": "pattern",
+          "api": "chat memory / context window strategies",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/managing_state/",
+          "note": "State/memory patterns for long chats"
+        },
+        "CSR": {
+          "coverage": "first_class",
+          "api": "Context edit_state / workflow concurrency",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/managing_state/",
+          "note": "Explicit state management APIs"
+        },
+        "HIT": {
+          "coverage": "first_class",
+          "api": "InputRequiredEvent / HumanResponseEvent",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/human_in_the_loop/",
+          "note": "Event-based HITL in workflows"
+        },
+        "DUR": {
+          "coverage": "first_class",
+          "api": "Context.to_dict + DBOS durable workflows",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/durable_workflows/",
+          "note": "Docs: ephemeral by default; DBOS/checkpoint for DUR"
+        },
+        "IDE": {
+          "coverage": "pattern",
+          "api": "durable workflows: at-least-once; require idempotent tools",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/durable_workflows/",
+          "note": "Docs explicitly require idempotent side effects"
+        },
+        "GRD": {
+          "coverage": "pattern",
+          "api": "callback/observability guards",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/observability/",
+          "note": "Guards via callbacks more than rails API"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "workflow event streams",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/",
+          "note": "Handler/event streaming"
+        },
+        "TRC": {
+          "coverage": "first_class",
+          "api": "workflow observability integrations",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/observability/",
+          "note": "Workflow observability docs"
+        },
+        "SBOX": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://developers.llamaindex.ai/python/llamaagents/workflows/",
+          "note": "No first-party code sandbox"
+        }
+      },
+      "notes": "InputRequiredEvent; durable via Context/DBOS; docs require idempotent tools"
+    },
+    {
+      "id": "AG",
+      "name": "AutoGen / AG2",
+      "FMC": 72.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "first_class",
+        "SCH": "pattern",
+        "COV": "first_class",
+        "CSR": "pattern",
+        "HIT": "first_class",
+        "DUR": "pattern",
+        "IDE": "absent",
+        "GRD": "pattern",
+        "STR": "first_class",
+        "TRC": "first_class",
+        "SBOX": "absent"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "reply/timeout controls on agents",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "Agent reply and termination timeouts"
+        },
+        "PTF": {
+          "coverage": "first_class",
+          "api": "tool execution error messages to LLM",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "Tool failures continue chat loop"
+        },
+        "SCH": {
+          "coverage": "pattern",
+          "api": "typed messages / function schemas",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "Partial typing vs PD/VS"
+        },
+        "COV": {
+          "coverage": "first_class",
+          "api": "context handling / knowledge in harness",
+          "evidence_url": "http://classic.docs.ag2.ai/latest/docs/blog/2026/06/17/AG2-Agent-Harness/",
+          "note": "Harness addresses long-memory agents"
+        },
+        "CSR": {
+          "coverage": "pattern",
+          "api": "GroupChat / Network concurrency",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "Rich topologies; weaker shared-state reducers"
+        },
+        "HIT": {
+          "coverage": "first_class",
+          "api": "HumanProxyAgent / human input requests",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "Human-in-loop chat patterns"
+        },
+        "DUR": {
+          "coverage": "pattern",
+          "api": "session helpers; not LG-class default",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "State helpers without default crash-safe threads"
+        },
+        "IDE": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "No exactly-once tool API"
+        },
+        "GRD": {
+          "coverage": "pattern",
+          "api": "governance / channel TTL patterns",
+          "evidence_url": "https://docs.ag2.ai/docs/user-guide/telemetry/",
+          "note": "Partial governance surfaces"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "streaming tokens/messages",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "Group chat streaming"
+        },
+        "TRC": {
+          "coverage": "first_class",
+          "api": "OTel middleware telemetry guide",
+          "evidence_url": "https://docs.ag2.ai/docs/user-guide/telemetry/",
+          "note": "Documented telemetry"
+        },
+        "SBOX": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.ag2.ai/",
+          "note": "BYO code execution isolation"
+        }
+      },
+      "notes": "Topology-rich; DUR pattern vs LG; IDE absent"
+    },
+    {
+      "id": "CR",
+      "name": "CrewAI",
+      "FMC": 70.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "pattern",
+        "SCH": "pattern",
+        "COV": "pattern",
+        "CSR": "absent",
+        "HIT": "first_class",
+        "DUR": "first_class",
+        "IDE": "absent",
+        "GRD": "first_class",
+        "STR": "first_class",
+        "TRC": "first_class",
+        "SBOX": "pattern"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "max_rpm / max_iter / task timeouts",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Crew/task iteration and RPM budgets"
+        },
+        "PTF": {
+          "coverage": "pattern",
+          "api": "task retry / guardrail retry patterns",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Retry documented; not graph-style isolation"
+        },
+        "SCH": {
+          "coverage": "pattern",
+          "api": "Pydantic task output models",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Task models; weaker auto-repair"
+        },
+        "COV": {
+          "coverage": "pattern",
+          "api": "memory/context trim in crews",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Memory features; not automatic compaction API"
+        },
+        "CSR": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.crewai.com/v1.15.28/en/concepts/flows",
+          "note": "Flows/checkpoints exist; CSR under-specified vs graphs"
+        },
+        "HIT": {
+          "coverage": "first_class",
+          "api": "HITL task/flow interruption + webhooks",
+          "evidence_url": "https://docs.crewai.com/v1.15.2/en/learn/human-in-the-loop",
+          "note": "Documented HITL workflows"
+        },
+        "DUR": {
+          "coverage": "first_class",
+          "api": "CheckpointConfig; resume/fork snapshots",
+          "evidence_url": "https://docs.crewai.com/v1.15.2/en/concepts/checkpointing",
+          "note": "Crew/flow/agent checkpointing"
+        },
+        "IDE": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.crewai.com/v1.15.2/en/concepts/checkpointing",
+          "note": "Checkpoints without tool idempotency keys"
+        },
+        "GRD": {
+          "coverage": "first_class",
+          "api": "task/crew guardrails",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Documented guardrail hooks"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "streaming task/crew outputs",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Streamed crew outputs"
+        },
+        "TRC": {
+          "coverage": "first_class",
+          "api": "observability/tracing docs",
+          "evidence_url": "https://docs.crewai.com/edge/en/observability/tracing",
+          "note": "CrewAI tracing"
+        },
+        "SBOX": {
+          "coverage": "pattern",
+          "api": "tool backend sandboxes (partial)",
+          "evidence_url": "https://docs.crewai.com/",
+          "note": "Some tool backends isolate; not universal SBOX API"
+        }
+      },
+      "notes": "Checkpointing + HITL; CSR absent vs graph reducers"
+    },
+    {
+      "id": "SK",
+      "name": "Semantic Kernel",
+      "FMC": 68.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "pattern",
+        "SCH": "first_class",
+        "COV": "pattern",
+        "CSR": "pattern",
+        "HIT": "pattern",
+        "DUR": "pattern",
+        "IDE": "absent",
+        "GRD": "first_class",
+        "STR": "first_class",
+        "TRC": "pattern",
+        "SBOX": "absent"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "HttpClient/kernel timeouts; agent invocation limits",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "Kernel/agent invocation timeout patterns"
+        },
+        "PTF": {
+          "coverage": "pattern",
+          "api": "function filters + retry middleware",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "Filters/plugins for retries; not first-class PTF"
+        },
+        "SCH": {
+          "coverage": "first_class",
+          "api": "JSON schema on kernel functions",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "Strong .NET schema contracts"
+        },
+        "COV": {
+          "coverage": "pattern",
+          "api": "chat history reducers",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "History reduction patterns"
+        },
+        "CSR": {
+          "coverage": "pattern",
+          "api": "orchestration concurrency filters",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-orchestration/",
+          "note": "Experimental orchestration"
+        },
+        "HIT": {
+          "coverage": "pattern",
+          "api": "experimental agent orchestration HITL",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-orchestration/",
+          "note": "Prefer MS Agent Framework for durable HITL"
+        },
+        "DUR": {
+          "coverage": "pattern",
+          "api": "migrate to MS Agent Framework workflows",
+          "evidence_url": "https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel",
+          "note": "SK path partial; MS is succession"
+        },
+        "IDE": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "No first-class IDE surface"
+        },
+        "GRD": {
+          "coverage": "first_class",
+          "api": "filters / content safety plugins",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "Filter pipeline for safety"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "streaming content in agents",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "Streaming kernel content"
+        },
+        "TRC": {
+          "coverage": "pattern",
+          "api": "Azure-centric filters; portable OTel uneven",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "Strong in Azure; portability partial"
+        },
+        "SBOX": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+          "note": "No native code sandbox"
+        }
+      },
+      "notes": "Succession to MS Agent Framework; HIT/DUR pattern on SK path"
+    },
+    {
+      "id": "HS",
+      "name": "Haystack",
+      "FMC": 68.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "first_class",
+        "SCH": "first_class",
+        "COV": "pattern",
+        "CSR": "pattern",
+        "HIT": "first_class",
+        "DUR": "absent",
+        "IDE": "absent",
+        "GRD": "first_class",
+        "STR": "first_class",
+        "TRC": "first_class",
+        "SBOX": "absent"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "component/pipeline timeouts",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/pipelines",
+          "note": "Pipeline component timeout settings"
+        },
+        "PTF": {
+          "coverage": "first_class",
+          "api": "component error routing in pipelines",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/pipelines",
+          "note": "Pipeline branches on component errors"
+        },
+        "SCH": {
+          "coverage": "first_class",
+          "api": "OutputAdapter / schema validation components",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/agent",
+          "note": "Pipeline components for structured I/O"
+        },
+        "COV": {
+          "coverage": "pattern",
+          "api": "pipeline memory / document windowing",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/pipelines",
+          "note": "RAG windowing over agent compaction"
+        },
+        "CSR": {
+          "coverage": "pattern",
+          "api": "pipeline parallelism; shared state limited",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/pipelines",
+          "note": "Component parallelism \u2260 agent CSR"
+        },
+        "HIT": {
+          "coverage": "first_class",
+          "api": "ConfirmationHook on Agent tool calls",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/human-in-the-loop",
+          "note": "Confirm/reject/modify tool params"
+        },
+        "DUR": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/human-in-the-loop",
+          "note": "ConfirmationHook HITL without thread checkpointer"
+        },
+        "IDE": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/agent",
+          "note": "No tool idempotency API"
+        },
+        "GRD": {
+          "coverage": "first_class",
+          "api": "pipeline validators / safety components",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/pipelines",
+          "note": "Composable validation components"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "streaming generators on components",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/pipelines",
+          "note": "Component streaming"
+        },
+        "TRC": {
+          "coverage": "first_class",
+          "api": "tracing + OpenTelemetry",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/tracing",
+          "note": "Pipeline tracing"
+        },
+        "SBOX": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.haystack.deepset.ai/docs/agent",
+          "note": "No code-act sandbox"
+        }
+      },
+      "notes": "ConfirmationHook HITL; DUR absent (no thread checkpointer)"
+    },
+    {
+      "id": "SP",
+      "name": "Spring AI",
+      "FMC": 62.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "pattern",
+        "SCH": "first_class",
+        "COV": "pattern",
+        "CSR": "absent",
+        "HIT": "absent",
+        "DUR": "absent",
+        "IDE": "pattern",
+        "GRD": "pattern",
+        "STR": "first_class",
+        "TRC": "first_class",
+        "SBOX": "absent"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "ChatClient / WebClient timeouts",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/api/chatclient.html",
+          "note": "Spring WebClient/ChatClient deadline propagation"
+        },
+        "PTF": {
+          "coverage": "pattern",
+          "api": "RetryTemplate / advisor patterns",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "Spring Retry/advisors \u2014 app pattern"
+        },
+        "SCH": {
+          "coverage": "first_class",
+          "api": "BeanOutputConverter + validateSchema",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/api/structured-output.html",
+          "note": "Self-correcting structured output"
+        },
+        "COV": {
+          "coverage": "pattern",
+          "api": "advisor/message window patterns",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/api/chatclient.html",
+          "note": "Advisors for history; not compaction API"
+        },
+        "CSR": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "No graph-native concurrent state reducers"
+        },
+        "HIT": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "App-level approval only; no mid-agent interrupt API"
+        },
+        "DUR": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "Spring-managed beans \u2260 agent-thread checkpoints"
+        },
+        "IDE": {
+          "coverage": "pattern",
+          "api": "Spring Retry / IdempotentReceiver patterns",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "Enterprise Spring patterns, not agent-tool IDE"
+        },
+        "GRD": {
+          "coverage": "pattern",
+          "api": "Spring Security + advisors",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "App security patterns vs agent GRD API"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "ChatClient streaming / reactive",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/api/chatclient.html",
+          "note": "Reactive streaming ChatClient"
+        },
+        "TRC": {
+          "coverage": "first_class",
+          "api": "Micrometer observations / Actuator",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "JVM observability first-class"
+        },
+        "SBOX": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://docs.spring.io/spring-ai/reference/",
+          "note": "JVM process isolation \u2260 code-act SBOX"
+        }
+      },
+      "notes": "Strong SCH/TRC; HIT/DUR/CSR absent"
+    },
+    {
+      "id": "VS",
+      "name": "Vercel AI SDK",
+      "FMC": 52.0,
+      "cells": {
+        "TMO": "first_class",
+        "PTF": "pattern",
+        "SCH": "first_class",
+        "COV": "absent",
+        "CSR": "absent",
+        "HIT": "pattern",
+        "DUR": "pattern",
+        "IDE": "absent",
+        "GRD": "pattern",
+        "STR": "first_class",
+        "TRC": "pattern",
+        "SBOX": "absent"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "first_class",
+          "api": "abortSignal / maxRetries / stopWhen",
+          "evidence_url": "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+          "note": "ToolLoopAgent stopWhen + abort signals"
+        },
+        "PTF": {
+          "coverage": "pattern",
+          "api": "maxRetries on generateText; tool errors to model",
+          "evidence_url": "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+          "note": "Retries exist; isolation is loop-default, not policy API"
+        },
+        "SCH": {
+          "coverage": "first_class",
+          "api": "Output.object/array/choice/json/text",
+          "evidence_url": "https://ai-sdk.dev/docs/ai-sdk-core/generating-structured-data",
+          "note": "Best-in-set DX for structured generation"
+        },
+        "COV": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+          "note": "No first-class context compaction API"
+        },
+        "CSR": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+          "note": "Single-loop agent; no fan-out reducers"
+        },
+        "HIT": {
+          "coverage": "pattern",
+          "api": "toolApproval; durable via WorkflowAgent",
+          "evidence_url": "https://ai-sdk.dev/docs/agents/workflow-agent",
+          "note": "Core approval is soft; durable HITL needs @ai-sdk/workflow"
+        },
+        "DUR": {
+          "coverage": "pattern",
+          "api": "WorkflowAgent in @ai-sdk/workflow",
+          "evidence_url": "https://ai-sdk.dev/docs/agents/workflow-agent",
+          "note": "ToolLoopAgent in-memory; DUR is companion package"
+        },
+        "IDE": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://ai-sdk.dev/docs/agents/workflow-agent",
+          "note": "Workflow retries without tool idempotency API"
+        },
+        "GRD": {
+          "coverage": "pattern",
+          "api": "middleware / toolApproval as soft rails",
+          "evidence_url": "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+          "note": "No dedicated guardrails module"
+        },
+        "STR": {
+          "coverage": "first_class",
+          "api": "streamText / useChat / UIMessage parts",
+          "evidence_url": "https://ai-sdk.dev/",
+          "note": "Best-in-set UI streaming"
+        },
+        "TRC": {
+          "coverage": "pattern",
+          "api": "telemetry API + DevTools",
+          "evidence_url": "https://ai-sdk.dev/docs/ai-sdk-core/telemetry",
+          "note": "Telemetry present; replay thinner than LangSmith"
+        },
+        "SBOX": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://ai-sdk.dev/",
+          "note": "No code-execution sandbox in AI SDK"
+        }
+      },
+      "notes": "ToolLoopAgent in-memory; HIT/DUR pattern via WorkflowAgent"
+    },
+    {
+      "id": "SM",
+      "name": "smolagents",
+      "FMC": 45.0,
+      "cells": {
+        "TMO": "pattern",
+        "PTF": "pattern",
+        "SCH": "absent",
+        "COV": "absent",
+        "CSR": "absent",
+        "HIT": "absent",
+        "DUR": "absent",
+        "IDE": "absent",
+        "GRD": "absent",
+        "STR": "pattern",
+        "TRC": "absent",
+        "SBOX": "first_class"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "pattern",
+          "api": "max_steps on agents; external process timeouts",
+          "evidence_url": "https://huggingface.co/docs/smolagents/en/reference/agents",
+          "note": "Step caps exist; deadline propagation is DIY"
+        },
+        "PTF": {
+          "coverage": "pattern",
+          "api": "code-act exception \u2192 agent retry step",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "Informal retry via agent loop"
+        },
+        "SCH": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "Code-act returns over schema contracts"
+        },
+        "COV": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "No compaction surface"
+        },
+        "CSR": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/examples/multiagents",
+          "note": "Managed multi-agent examples without CSR API"
+        },
+        "HIT": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "No durable interrupt API"
+        },
+        "DUR": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "No crash-recovery API"
+        },
+        "IDE": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "Code-act side effects unmanaged"
+        },
+        "GRD": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "Sandbox \u2260 content guardrails"
+        },
+        "STR": {
+          "coverage": "pattern",
+          "api": "partial step streaming",
+          "evidence_url": "https://huggingface.co/docs/smolagents/en/reference/agents",
+          "note": "Step logs more than UI error stream"
+        },
+        "TRC": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://huggingface.co/docs/smolagents/index",
+          "note": "External AgentOps etc. only"
+        },
+        "SBOX": {
+          "coverage": "first_class",
+          "api": "E2B / Docker / Modal / local sandboxes",
+          "evidence_url": "https://huggingface.co/docs/smolagents/en/tutorials/secure_code_execution",
+          "note": "Sandbox backends are the product strength"
+        }
+      },
+      "notes": "SBOX first_class; almost everything else thin"
+    },
+    {
+      "id": "DS",
+      "name": "DSPy",
+      "FMC": 35.0,
+      "cells": {
+        "TMO": "pattern",
+        "PTF": "absent",
+        "SCH": "first_class",
+        "COV": "absent",
+        "CSR": "absent",
+        "HIT": "absent",
+        "DUR": "absent",
+        "IDE": "absent",
+        "GRD": "absent",
+        "STR": "absent",
+        "TRC": "pattern",
+        "SBOX": "absent"
+      },
+      "evidence": {
+        "TMO": {
+          "coverage": "pattern",
+          "api": "LM timeout kwargs / program-level caps",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Provider timeouts; no agent deadline API"
+        },
+        "PTF": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/current/getting-started/react-and-tools/",
+          "note": "ReAct demos; no production PTF policy API"
+        },
+        "SCH": {
+          "coverage": "first_class",
+          "api": "Signatures / typed predictors",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Compile-time contract core of DSPy"
+        },
+        "COV": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Optimizer concern, not serve compaction"
+        },
+        "CSR": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Module composition, not concurrent state OS"
+        },
+        "HIT": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "HITL-as-Tool demos are community patterns, not runtime"
+        },
+        "DUR": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Optimizer-first; no serve-path checkpoint OS"
+        },
+        "IDE": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "No serve-path IDE"
+        },
+        "GRD": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "No runtime guardrail API"
+        },
+        "STR": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Not a product UI streaming runtime"
+        },
+        "TRC": {
+          "coverage": "pattern",
+          "api": "logging/eval traces; not agent MTTR replay",
+          "evidence_url": "https://dspy.ai/",
+          "note": "Optimizer logs \u2260 failed-run replay OS"
+        },
+        "SBOX": {
+          "coverage": "absent",
+          "api": "\u2014",
+          "evidence_url": "https://dspy.ai/",
+          "note": "No code-act sandbox runtime"
+        }
+      },
+      "notes": "Signatures for SCH; optimizer-first, weak serve-path incident APIs"
+    }
+  ]
+}

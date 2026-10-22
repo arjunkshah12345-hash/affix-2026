@@ -1,0 +1,63 @@
+{
+  "id": "CR",
+  "framework": "CrewAI",
+  "primary_lang": "Python",
+  "category": "Role-based crews + flows",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "Role-based crews and Flows with approachable multi-agent DX.",
+  "best_for": "Fast role-based multi-agent demos and Flows",
+  "when_not_to_use": "Do not ship role-play crew demos as regulated production without Flows/checkpoints/guardrails hardening; concurrent state races are under-specified vs graphs.",
+  "versions": {
+    "pypi": "crewai==1.15.28",
+    "notes": "Docs versioned under /v1.15.x/"
+  },
+  "api_primitives": {
+    "hitl": "Human-in-the-loop workflows (task/flow interruption)",
+    "checkpoint": "CheckpointConfig; crew/flow/agent snapshots; resume/fork",
+    "stream": "Streaming task/crew outputs",
+    "structured": "Pydantic models on tasks/outputs (partial strictness)",
+    "obs": "Tracing docs (observability/tracing); AMP gravity",
+    "multiAgent": "Crew roles; Process.hierarchical; Flows",
+    "mcp": "MCP tool integration in recent docs"
+  },
+  "scores": {
+    "AF": 84.0,
+    "CS": 80.0,
+    "OB": 78.0,
+    "TC": 78.0,
+    "EG": 90.0,
+    "RE": 72.0,
+    "MF": 65.0,
+    "PH": 76.0,
+    "DX": 92.0,
+    "FP": 75.0
+  },
+  "affix_composite": 79.6,
+  "proprietary": {
+    "LIE": 38.0,
+    "CTI": 39.6,
+    "FMC": 70.0,
+    "GED": 65.0,
+    "RACS": 70.0,
+    "RHS": 28.4,
+    "PR": 78
+  },
+  "citations": [
+    "https://docs.crewai.com/",
+    "https://docs.crewai.com/v1.15.2/en/learn/human-in-the-loop",
+    "https://docs.crewai.com/v1.15.2/en/concepts/checkpointing",
+    "https://docs.crewai.com/v1.15.2/en/learn/hierarchical-process",
+    "https://docs.crewai.com/v1.15.28/en/concepts/flows",
+    "https://docs.crewai.com/edge/en/observability/tracing",
+    "https://github.com/crewAIInc/crewAI"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 90,
+    "MCP_server": 70,
+    "A2A_or_equiv": 65,
+    "OpenAPI_tool_bridge": 85,
+    "OTel_GenAI_portable": 80
+  },
+  "deep_notes_md": true
+}

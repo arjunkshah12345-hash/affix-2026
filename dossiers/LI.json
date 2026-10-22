@@ -1,0 +1,64 @@
+{
+  "id": "LI",
+  "framework": "LlamaIndex",
+  "primary_lang": "Python/TS",
+  "category": "RAG / data agents",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "RAG-native data agents and workflows with the strongest continuum score.",
+  "best_for": "Document RAG \u2192 workflow agents continuum",
+  "when_not_to_use": "Avoid if you need minimal lock-in and refuse LlamaCloud/Parse gravity; also a poor fit as a pure UI streaming layer (pair with VS) or as a low-CTI toy agent.",
+  "versions": {
+    "pypi": "llama-index==0.14.25",
+    "notes": "Workflows / LlamaAgents docs tree"
+  },
+  "api_primitives": {
+    "hitl": "InputRequiredEvent + HumanResponseEvent in Workflows",
+    "checkpoint": "Context serialization; durable workflows (DBOS optional)",
+    "stream": "Workflow/handler event streams",
+    "structured": "Structured outputs / Pydantic in workflows and LLMs",
+    "obs": "Observability integrations for workflows",
+    "multiAgent": "Multi-agent workflows; agent teams over documents",
+    "mcp": "MCP tool bridges (evolving; client-leaning)"
+  },
+  "scores": {
+    "AF": 88.0,
+    "CS": 80.0,
+    "OB": 75.0,
+    "TC": 82.0,
+    "EG": 80.0,
+    "RE": 78.0,
+    "MF": 60.0,
+    "PH": 78.0,
+    "DX": 78.0,
+    "FP": 80.0
+  },
+  "affix_composite": 78.61,
+  "proprietary": {
+    "LIE": 58.0,
+    "CTI": 70.0,
+    "FMC": 72.0,
+    "GED": 78.0,
+    "RACS": 92.0,
+    "RHS": 24.3,
+    "PR": 76
+  },
+  "citations": [
+    "https://developers.llamaindex.ai/python/llamaagents/workflows/",
+    "https://developers.llamaindex.ai/python/llamaagents/workflows/human_in_the_loop/",
+    "https://developers.llamaindex.ai/python/llamaagents/workflows/durable_workflows/",
+    "https://developers.llamaindex.ai/python/llamaagents/workflows/managing_state/",
+    "https://developers.llamaindex.ai/python/llamaagents/workflows/observability/",
+    "https://developers.llamaindex.ai/python/framework/understanding/rag/",
+    "https://pypi.org/project/llama-index/",
+    "https://www.llamaindex.ai/blog/llamaagents-build-serve-and-deploy-document-agents"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 80,
+    "MCP_server": 70,
+    "A2A_or_equiv": 65,
+    "OpenAPI_tool_bridge": 85,
+    "OTel_GenAI_portable": 85
+  },
+  "deep_notes_md": true
+}

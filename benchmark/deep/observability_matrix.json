@@ -1,0 +1,94 @@
+{
+  "study": "AFFIX-2026",
+  "artifact": "observability_matrix",
+  "as_of": "2026-10-21",
+  "scale": {
+    "OB": "0-100 higher_better",
+    "LIE_canonical": "0-100 lower_better",
+    "LIE_normalization": "Cluster agents sometimes used 0-10; LIE_100 ≈ LIE_10 * 10. Canonical source: benchmark/scores/affix_matrix.json"
+  },
+  "ob_subscore_weights_EST": {
+    "native_span_depth": 0.3,
+    "product_ux_day1": 0.2,
+    "portable_export": 0.25,
+    "cost_token_fidelity": 0.15,
+    "eval_replay_hooks": 0.1
+  },
+  "framework_ranking": [
+    {"rank": 1, "id": "PD", "framework": "PydanticAI", "OB": 92, "primary_path": "Logfire+OTel", "portability": "excellent", "primary_docs": ["https://pydantic.dev/docs/ai/integrations/logfire/"]},
+    {"rank": 2, "id": "AD", "framework": "Google ADK", "OB": 90, "primary_path": "OTel GenAI / Cloud Trace", "portability": "excellent", "primary_docs": ["https://adk.dev/observability/traces/"]},
+    {"rank": 2, "id": "LC", "framework": "LangChain", "OB": 90, "primary_path": "LangSmith", "portability": "dual", "primary_docs": ["https://docs.langchain.com/langsmith/observability"]},
+    {"rank": 4, "id": "OA", "framework": "OpenAI Agents SDK", "OB": 88, "primary_path": "OpenAI Traces", "portability": "custom_processors", "notes": "ZDR disables tracing", "primary_docs": ["https://openai.github.io/openai-agents-python/tracing/"]},
+    {"rank": 4, "id": "MA", "framework": "Mastra", "OB": 88, "primary_path": "Studio+sinks", "portability": "strong", "primary_docs": ["https://mastra.ai/integrations/observability/arize"]},
+    {"rank": 4, "id": "LG", "framework": "LangGraph", "OB": 88, "primary_path": "LangSmith+state", "portability": "dual", "primary_docs": ["https://docs.langchain.com/langsmith/observability"]},
+    {"rank": 7, "id": "MS", "framework": "Microsoft Agent Framework", "OB": 86, "primary_path": "Foundry/OTel", "portability": "good", "primary_docs": ["https://learn.microsoft.com/en-us/agent-framework/agents/observability"]},
+    {"rank": 8, "id": "SP", "framework": "Spring AI", "OB": 85, "primary_path": "Micrometer", "portability": "good", "primary_docs": ["https://docs.spring.io/spring-ai/reference/"]},
+    {"rank": 9, "id": "AG", "framework": "AutoGen/AG2", "OB": 82, "primary_path": "TelemetryMiddleware OTel", "portability": "excellent", "primary_docs": ["https://docs.ag2.ai/docs/user-guide/telemetry/"]},
+    {"rank": 10, "id": "HS", "framework": "Haystack", "OB": 80, "primary_path": "OTel/Langfuse/Datadog", "portability": "excellent", "primary_docs": ["https://docs.haystack.deepset.ai/docs/tracing"]},
+    {"rank": 11, "id": "CR", "framework": "CrewAI", "OB": 78, "primary_path": "AMP tracing", "portability": "dual", "primary_docs": ["https://docs.crewai.com/edge/en/observability/tracing"]},
+    {"rank": 12, "id": "LI", "framework": "LlamaIndex", "OB": 75, "primary_path": "OTel+Phoenix/Langfuse/Opik", "portability": "excellent", "primary_docs": ["https://developers.llamaindex.ai/python/framework/module_guides/observability/", "https://developers.llamaindex.ai/python/llamaagents/workflows/observability/"]},
+    {"rank": 13, "id": "SK", "framework": "Semantic Kernel", "OB": 72, "primary_path": "OTel+App Insights", "portability": "good", "primary_docs": ["https://devblogs.microsoft.com/agent-framework/observability-in-semantic-kernel/"]},
+    {"rank": 14, "id": "VS", "framework": "Vercel AI SDK", "OB": 70, "primary_path": "Telemetry+DevTools", "portability": "good", "primary_docs": ["https://ai-sdk.dev/docs/ai-sdk-core/telemetry", "https://arize.com/docs/phoenix/integrations/typescript/vercel/vercel-ai-sdk-tracing-js"]},
+    {"rank": 15, "id": "DS", "framework": "DSPy", "OB": 60, "primary_path": "MLflow/OpenInference/Langfuse", "portability": "good", "primary_docs": ["https://dspy.ai/", "https://langfuse.com/integrations/other/openinference"]},
+    {"rank": 16, "id": "SM", "framework": "smolagents", "OB": 50, "primary_path": "verbose logs BYO", "portability": "weak_first_class", "primary_docs": ["https://huggingface.co/docs/smolagents/index"]}
+  ],
+  "platforms": [
+    {
+      "id": "LangSmith",
+      "type": "vendor_product",
+      "frameworks": ["LC", "LG"],
+      "strengths": ["traces", "datasets_evals", "graph_state", "issue_detection"],
+      "lie_impact": "high",
+      "docs": ["https://docs.langchain.com/langsmith/observability"]
+    },
+    {
+      "id": "OpenAI_Traces",
+      "type": "vendor_product",
+      "frameworks": ["OA"],
+      "strengths": ["default_on", "handoff_guardrail_audio_spans", "flush_traces_workers"],
+      "constraints": ["ZDR_disables_tracing", "often_needs_OPENAI_API_KEY_for_dashboard"],
+      "lie_impact": "high",
+      "docs": ["https://openai.github.io/openai-agents-python/tracing/"]
+    },
+    {
+      "id": "CrewAI_AMP",
+      "type": "vendor_product",
+      "frameworks": ["CR"],
+      "strengths": ["crews_flows_day1"],
+      "lie_impact": "medium",
+      "docs": ["https://docs.crewai.com/edge/en/observability/tracing"]
+    },
+    {
+      "id": "Logfire",
+      "type": "vendor_product_optional",
+      "frameworks": ["PD"],
+      "strengths": ["agent_plus_app_obs", "otel_export", "evals_adjacency"],
+      "lie_impact": "low_optional",
+      "docs": ["https://pydantic.dev/docs/ai/integrations/logfire/"]
+    },
+    {
+      "id": "Phoenix_OpenInference",
+      "type": "oss_sink",
+      "frameworks": ["LI", "VS", "MA", "HS", "DS", "cross"],
+      "github_stars_live_2026_10_21": 11942,
+      "pypi_last_month_arize_phoenix": 626210,
+      "strengths": ["self_host", "openinference", "experiments"],
+      "lie_impact": "low",
+      "docs": ["https://arize.com/phoenix/", "https://github.com/Arize-ai/openinference", "https://arize-ai.github.io/openinference/"]
+    },
+    {
+      "id": "OTel_GenAI",
+      "type": "standard",
+      "frameworks": ["AD", "AG", "HS", "PD", "SK", "MS", "LI"],
+      "strengths": ["OTLP_backend_choice", "PR_rubric_term"],
+      "docs": ["https://opentelemetry.io/blog/2025/ai-agent-observability/", "https://adk.dev/observability/traces/", "https://docs.ag2.ai/docs/user-guide/telemetry/"]
+    }
+  ],
+  "findings": [
+    "Tribe A (vendor UI) wins day-1 OB; Tribe B (OTel-first) wins LIE.",
+    "PD leads OB with optional Logfire — rare high-OB low-LIE combo.",
+    "OA ZDR is a hard observability cliff unique in Tier A.",
+    "Phoenix/OpenInference is the portable Switzerland for VS/MA/LI/HS/DS."
+  ],
+  "sources_canonical_scores": "benchmark/scores/affix_matrix.json"
+}

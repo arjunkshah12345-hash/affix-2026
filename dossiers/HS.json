@@ -1,0 +1,63 @@
+{
+  "id": "HS",
+  "framework": "Haystack",
+  "primary_lang": "Python",
+  "category": "Pipelines / RAG",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "Composable pipelines and Agent-as-Component for enterprise RAG.",
+  "best_for": "Pipeline-first RAG/agent with lower lock-in than LlamaCloud",
+  "when_not_to_use": "Do not expect LangGraph-class crash-safe thread checkpoints; Haystack HITL is ConfirmationHook-centric. Poor fit for non-pipeline multi-actor topologies.",
+  "versions": {
+    "pypi": "haystack-ai==3.4.1",
+    "notes": "Haystack 3 Agent-as-Component"
+  },
+  "api_primitives": {
+    "hitl": "Human-in-the-loop ConfirmationHook on Agent tool calls",
+    "checkpoint": "Pipeline state; no LG-class thread checkpointer",
+    "stream": "Streaming generators on components",
+    "structured": "Output adapters / schema validation components",
+    "obs": "Tracing docs; OpenTelemetry support",
+    "multiAgent": "Agent component + PipelineTool composition",
+    "mcp": "MCPTool continuum in Haystack 3"
+  },
+  "scores": {
+    "AF": 85.0,
+    "CS": 78.0,
+    "OB": 80.0,
+    "TC": 80.0,
+    "EG": 70.0,
+    "RE": 82.0,
+    "MF": 75.0,
+    "PH": 72.0,
+    "DX": 82.0,
+    "FP": 80.0
+  },
+  "affix_composite": 78.6,
+  "proprietary": {
+    "LIE": 42.0,
+    "CTI": 55.0,
+    "FMC": 68.0,
+    "GED": 70.0,
+    "RACS": 85.0,
+    "RHS": 27.0,
+    "PR": 82
+  },
+  "citations": [
+    "https://haystack.deepset.ai/blog/haystack-3-release",
+    "https://docs.haystack.deepset.ai/docs/agent",
+    "https://docs.haystack.deepset.ai/docs/human-in-the-loop",
+    "https://docs.haystack.deepset.ai/docs/pipelines",
+    "https://docs.haystack.deepset.ai/docs/tracing",
+    "https://docs.haystack.deepset.ai/docs/migrating-from-langgraphlangchain-to-haystack",
+    "https://pypi.org/project/haystack-ai/"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 90,
+    "MCP_server": 75,
+    "A2A_or_equiv": 70,
+    "OpenAPI_tool_bridge": 85,
+    "OTel_GenAI_portable": 92
+  },
+  "deep_notes_md": true
+}

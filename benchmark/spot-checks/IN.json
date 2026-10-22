@@ -1,0 +1,36 @@
+{
+  "id": "IN",
+  "framework": "Inngest AgentKit / durable agent patterns",
+  "spot_check": true,
+  "cluster": "typed-dx",
+  "notes": "Two surfaces: (1) @inngest/agent-kit Networks/Agents/Routers/State for multi-agent TS orchestration; (2) Inngest durable execution where each model/tool call is step.run() with checkpoint/replay—agents as durable workflows without declaring a graph. HITL via step.waitForEvent, sub-agents via step.invoke, trajectories from step traces. Complements AI SDK/Mastra rather than replacing typed UX layer.",
+  "scores_light": {
+    "AF": 75,
+    "CS": 92,
+    "OB": 85,
+    "TC": 70,
+    "EG": 65,
+    "RE": 78,
+    "MF": 72,
+    "PH": 95,
+    "DX": 78,
+    "FP": 70
+  },
+  "affix_composite_EST": 78.8,
+  "proprietary_EST": {
+    "LIE": 40,
+    "CTI": 26,
+    "FMC": 85,
+    "GED": 55,
+    "RACS": 60
+  },
+  "cognitive_tax_note": "Low CTI for teams already on Inngest: durable loop is 'normal code + steps'. Higher if learning AgentKit Networks + Inngest platform together.",
+  "citations": [
+    "https://agentkit.inngest.com/",
+    "https://agentkit.inngest.com/concepts/networks",
+    "https://www.inngest.com/docs/durable-execution/durable-agents",
+    "https://www.inngest.com/blog/ai-orchestration-with-agentkit-step-ai",
+    "https://github.com/inngest/agent-kit"
+  ],
+  "evidence_date": "2026-10-21"
+}

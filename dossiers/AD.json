@@ -1,0 +1,64 @@
+{
+  "id": "AD",
+  "framework": "Google ADK (Agent Development Kit)",
+  "primary_lang": "Python / TypeScript / Go / Java / Kotlin",
+  "category": "Google agent kit / multi-agent workflows",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "Google's multi-language agent kit; protocol leader (MCP+A2A) with graph HITL nodes.",
+  "best_for": "Multi-agent graphs with MCP+A2A and Google deploy paths",
+  "when_not_to_use": "Avoid as primary if you are not willing to accept Google-ecosystem gravity (deploy/A2A/GCP adjacency) or if you need the simplest typed Python DX \u2014 AD's CTI and MF punish small teams.",
+  "versions": {
+    "pypi": "google-adk==2.12.0",
+    "notes": "Multi-lang: Python/TS/Go/Java/Kotlin; HITL graphs from v2.0.0"
+  },
+  "api_primitives": {
+    "hitl": "RequestInput graph nodes (deterministic HITL)",
+    "checkpoint": "Session/state + deploy runtimes; graph persistence patterns",
+    "stream": "Events stream; artifact updates",
+    "structured": "Typed tools / schema configs (lang-dependent)",
+    "obs": "OTel traces (observability/traces); logging",
+    "multiAgent": "Multi-agent trees; A2A remote agents",
+    "mcp": "MCP tools client; expose via A2A/MCP server patterns"
+  },
+  "scores": {
+    "AF": 90.0,
+    "CS": 88.0,
+    "OB": 90.0,
+    "TC": 75.0,
+    "EG": 80.0,
+    "RE": 82.0,
+    "MF": 52.0,
+    "PH": 88.0,
+    "DX": 80.0,
+    "FP": 92.0
+  },
+  "affix_composite": 82.5,
+  "proprietary": {
+    "LIE": 45.0,
+    "CTI": 61.6,
+    "FMC": 80.0,
+    "GED": 90.0,
+    "RACS": 72.0,
+    "RHS": 25.1,
+    "PR": 96
+  },
+  "citations": [
+    "https://adk.dev/",
+    "https://adk.dev/graphs/human-input/",
+    "https://adk.dev/agents/multi-agents/",
+    "https://adk.dev/a2a/",
+    "https://adk.dev/tools-custom/mcp-tools/",
+    "https://adk.dev/observability/traces/",
+    "https://adk.dev/agents/models/litellm/",
+    "https://github.com/google/adk-python"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 95,
+    "MCP_server": 90,
+    "A2A_or_equiv": 100,
+    "OpenAPI_tool_bridge": 95,
+    "OTel_GenAI_portable": 98
+  },
+  "deep_notes_md": true
+}

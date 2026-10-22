@@ -1,0 +1,1171 @@
+{
+  "study": "AFFIX-2026",
+  "as_of": "2026-10-22",
+  "methodology": {
+    "overview": "AFFIX-2026 scores production LLM/agent application frameworks on ten weighted dimensions (AFFIX composite) plus proprietary indices (LIE, CTI, FMC, GED, RACS, RHS, PR). Scores are EST from primary docs and named APIs as of the pin date \u2014 not marketing claims, not model quality.",
+    "dimensions": [
+      {
+        "code": "AF",
+        "name": "Abstraction Fit",
+        "weight": 0.14,
+        "rubric90": "Primitives match the job class with minimal glue; happy path and escape hatch documented; few 'use another product for the core loop' caveats.",
+        "rubric60": "Usable but misfit (chat-SDK as durable OS, optimizer as serve runtime); frequent DIY for core patterns; provider-specific leaks."
+      },
+      {
+        "code": "CS",
+        "name": "Control Surface",
+        "weight": 0.13,
+        "rubric90": "First-class mid-run interrupt + durable resume; explicit state; retries/timeouts as APIs; branch/join or equivalent.",
+        "rubric60": "Tool-loop only; HITL without persistence; pause does not survive process death."
+      },
+      {
+        "code": "OB",
+        "name": "Observability",
+        "weight": 0.11,
+        "rubric90": "Portable traces (OTel GenAI), token/cost hooks, eval/trajectory APIs, failed-run replay path.",
+        "rubric60": "Vendor-only UI or console logs; no span export; evals are blog posts not APIs."
+      },
+      {
+        "code": "TC",
+        "name": "Type & Contract Safety",
+        "weight": 0.1,
+        "rubric90": "Structured output + tool args validated end-to-end; static types catch wiring bugs; schema repair/retry on violation.",
+        "rubric60": "dict/any pipelines; structured mode optional and fragile; validation left to the model."
+      },
+      {
+        "code": "EG",
+        "name": "Ecosystem Gravity",
+        "weight": 0.1,
+        "rubric90": "Dense integrations, hiring market, example corpus; default stack in its language niche.",
+        "rubric60": "Niche or young; thin hiring/examples; gravity concentrated in one cloud."
+      },
+      {
+        "code": "RE",
+        "name": "Runtime Economics",
+        "weight": 0.09,
+        "rubric90": "Streaming first-class; low orchestration tax; clear concurrency; deploy fits thin services/serverless.",
+        "rubric60": "Heavy multi-agent chatter defaults; weak streaming; orchestration dominates token cost."
+      },
+      {
+        "code": "MF",
+        "name": "Migration Friction",
+        "weight": 0.08,
+        "rubric90": "Prompts/tools/graphs portable; open checkpoint or easy export; model string swap without rewrite.",
+        "rubric60": "Proprietary schemas; hosted ops required for core features; succession tax."
+      },
+      {
+        "code": "PH",
+        "name": "Production Hardening",
+        "weight": 0.1,
+        "rubric90": "Documented durable execution, timeouts, auth/secrets patterns, idempotency, crash recovery.",
+        "rubric60": "Demo-grade loop; durability DIY without first-party integration; weak timeout/idempotency story."
+      },
+      {
+        "code": "DX",
+        "name": "DX Velocity",
+        "weight": 0.09,
+        "rubric90": "Mid-level eng ships streamed tool-calling agent in hours; docs match reality.",
+        "rubric60": "Steep concept load; docs lag APIs; hello-agent requires platform setup."
+      },
+      {
+        "code": "FP",
+        "name": "Future-Proofing",
+        "weight": 0.06,
+        "rubric90": "First-class MCP (client\u00b1server), A2A/interop, model-agnostic core, OTel-portable.",
+        "rubric60": "Single-vendor protocol surface; weak MCP/A2A; telemetry locked to one UI."
+      }
+    ],
+    "indices": [
+      {
+        "code": "LIE",
+        "name": "Lock-in Entropy",
+        "direction": "lower_better",
+        "definition": "Bits of irreversible coupling (vendor ops, proprietary checkpoints, cloud-only runtimes, succession traps). Ops gravity dominates import counts."
+      },
+      {
+        "code": "CTI",
+        "name": "Cognitive Tax Index",
+        "direction": "lower_better",
+        "definition": "Concepts a mid-level engineer must learn before shipping a reliable tool-calling agent with eval + tracing."
+      },
+      {
+        "code": "FMC",
+        "name": "Failure-Mode Coverage",
+        "direction": "higher_better",
+        "definition": "Coverage of 12 canonical production failure modes with first-class APIs (see FAILURE_MODE_MATRIX)."
+      },
+      {
+        "code": "GED",
+        "name": "Graph Expressiveness Density",
+        "direction": "higher_better",
+        "definition": "Useful control-flow patterns (branch, join, map-reduce, interrupt, subgraph, checkpoint) per framework surface."
+      },
+      {
+        "code": "RACS",
+        "name": "RAG-to-Agent Continuum Score",
+        "direction": "higher_better",
+        "definition": "Smoothness of evolution from retrieval pipeline \u2192 tool agent \u2192 multi-agent/durable without primary rewrite."
+      },
+      {
+        "code": "RHS",
+        "name": "Rewrite Hazard Score",
+        "direction": "lower_better",
+        "definition": "EST P(outgrow primary orchestration within 12 months of production)\u00d7100 = clamp(0.28(100-RACS)+0.22(100-FMC)+0.18\u00b7CTI+0.17\u00b7max(0,DX-PH)+0.15(100-PH))."
+      },
+      {
+        "code": "PR",
+        "name": "Protocol Readiness",
+        "direction": "higher_better",
+        "definition": "0.30\u00b7MCP_client + 0.15\u00b7MCP_server + 0.25\u00b7A2A_or_equiv + 0.15\u00b7OpenAPI_tool_bridge + 0.15\u00b7OTel_GenAI_portable."
+      }
+    ]
+  },
+  "findings": [
+    {
+      "n": 1,
+      "title": "AFFIX leaders are not rewrite-safe",
+      "body": "Among frameworks with AFFIX \u2265 81, RHS does not fall monotonically with AFFIX. PydanticAI and Mastra are rewrite-safe; Vercel AI SDK ranks mid-AFFIX but high-hazard as a sole agent OS.",
+      "evidence": "affix_matrix.json; VS FMC 55 / PH 68 vs DX 94; PD durable execution + Logfire.",
+      "falsifier": "If VS production teams show \u226415% primary-stack rewrite at 12 months while PD \u226530%, claim fails."
+    },
+    {
+      "n": 2,
+      "title": "Highest Control Surface \u2260 lowest Rewrite Hazard",
+      "body": "LangGraph leads CS (95) yet RHS (28.7) trails Mastra, Spring AI, and OpenAI Agents SDK. Checkpoint power does not cancel RACS gap, CTI, or DX\u2013PH inversion.",
+      "evidence": "LG persistence + interrupts docs; dossier LIE 68, CTI 82, RACS 62.",
+      "falsifier": "If LG starters show lower 12-month rewrite than MA/PD at matched complexity, claim fails."
+    },
+    {
+      "n": 3,
+      "title": "Lock-in is ops gravity, not pip lines",
+      "body": "OpenAI Agents SDK advertises model portability but LIE=55: tracing, sessions, sandbox, and Responses defaults dominate coupling.",
+      "evidence": "OA models/tracing/sessions docs; multi-agent cluster insight.",
+      "falsifier": "Common production OA deploys with zero OpenAI-hosted ops and full feature parity \u2192 LIE overstated."
+    },
+    {
+      "n": 4,
+      "title": "DX surplus predicts production cliffs",
+      "body": "Frameworks with DX\u2212PH \u2265 15 map to elevated RHS (VS, smolagents, CrewAI). Shipping velocity without hardening APIs is the cliff.",
+      "evidence": "Score matrix; typed-dx cluster.",
+      "falsifier": "If DX\u2212PH is non-significant (p>0.1) against rewrite outcomes, drop term from RHS."
+    },
+    {
+      "n": 5,
+      "title": "Microsoft succession tax underprices SK greenfield risk",
+      "body": "SK AFFIX understates greenfield cost while Agent Framework is the marketed successor. MS is the correct greenfield score.",
+      "evidence": "SK orchestration docs; MS migration guide from Semantic Kernel.",
+      "falsifier": "If Microsoft freezes SK orchestration as LTS without MAF pressure for 24 months, claim fails."
+    },
+    {
+      "n": 6,
+      "title": "RACS champions are not AFFIX champions",
+      "body": "LlamaIndex best RACS (92) with mid AFFIX \u2014 continuum excellence does not cancel LIE/CTI tax.",
+      "evidence": "LI workflows + durable workflows docs.",
+      "falsifier": "If LI hiring CTI measured \u226440 on the same rubric, paradox dissolves."
+    },
+    {
+      "n": 7,
+      "title": "Protocol-ready \u2260 migration-easy",
+      "body": "ADK leads PR (96) via MCP+A2A+OTel while MF=52. DSPy inverts: lowest LIE, weakest PR.",
+      "evidence": "ADK A2A + traces; DSPy optimizer-first docs.",
+      "falsifier": "\u22653 public ADK graph exports to non-ADK runtimes without rewrite \u2192 MF too low."
+    },
+    {
+      "n": 8,
+      "title": "Topology false friends fail POCs",
+      "body": "OA handoff(), AG2 GroupChat, and CrewAI hierarchical process are distinct control primitives \u2014 not interchangeable for isolation/compliance.",
+      "evidence": "OA handoffs; CR hierarchical; AG Network docs.",
+      "falsifier": "Mechanical 1:1 mapping preserving HITL, history filters, and concurrency without adapters."
+    },
+    {
+      "n": 9,
+      "title": "Code-act security is bipolar",
+      "body": "First-class sandboxes concentrate in OA and smolagents; most frameworks push isolation to tool authors.",
+      "evidence": "SM docs; OA sandbox agents.",
+      "falsifier": "First-party sandbox primitives in LG/CR/AD comparable to E2B/Docker client APIs."
+    },
+    {
+      "n": 10,
+      "title": "Haystack 3 is the quiet RACS alternative",
+      "body": "HS RACS=85 with better LIE than LlamaIndex; Pipeline vs Agent clarity for EU/enterprise RAG shops.",
+      "evidence": "Haystack 3 release; Agent + HITL docs.",
+      "falsifier": "If HS Agent lacks PipelineTool/MCPTool continuum at audit date, RACS overstated."
+    },
+    {
+      "n": 11,
+      "title": "Spring AI CTI is conditional on org DNA",
+      "body": "SP CTI=28 assumes Spring Boot fluency; effective CTI for Next.js engineers is much higher.",
+      "evidence": "SP dossier; ChatClient docs.",
+      "falsifier": "Blind CTI survey: non-JVM eng completes SP tool-agent+trace path in \u2264 VS hours."
+    },
+    {
+      "n": 12,
+      "title": "DSPy inverts learning order",
+      "body": "Lowest LIE and highest RHS: optimizer-first curriculum leaves FMC/PH gaps; teams outgrow DSPy as runtime while keeping it as compiler.",
+      "evidence": "GEPA docs; arxiv:2507.19457.",
+      "falsifier": "\u226550% of production DSPy users run it as sole serve runtime at 12 months."
+    },
+    {
+      "n": 13,
+      "title": "LlamaIndex durable means DIY journal",
+      "body": "Official LI durable-workflow docs say there is no built-in checkpointer. Continuum excellence (RACS 92) can coexist with mid production hardening \u2014 adjudicated PH 72 / FMC 68 / RHS 27.1.",
+      "evidence": "https://developers.llamaindex.ai/python/llamaagents/workflows/durable_workflows/ \u2014 \u201cThere is no built-in checkpointer\u201d; contrast LangGraph PostgresSaver.",
+      "falsifier": "First-party LI checkpointer that persists/resumes without a custom loop or DBOS opt-in."
+    },
+    {
+      "n": 14,
+      "title": "OpenAI model portability is beta; ops are not",
+      "body": "LiteLLM in the Agents SDK is best-effort beta while Traces default to OpenAI\u2019s dashboard. Lock-in is an ops-default problem \u2014 LIE raised 55 \u2192 58 after primary-source audit.",
+      "evidence": "openai-agents-python models (LiteLLM beta) + tracing docs (set_trace_processors required to replace OpenAI export).",
+      "falsifier": "GA non-OpenAI adapter + OTel-native default export with OpenAI Traces opt-in only."
+    },
+    {
+      "n": 15,
+      "title": "AI SDK 7 documented the agent-OS gap",
+      "body": "Core ToolLoopAgent stays in-memory; durable loops live in @ai-sdk/workflow. Sole-stack VS PH 65 / FMC 52 \u2192 RHS 34.5 \u2014 still high-hazard for orchestration.",
+      "evidence": "ai-sdk.dev WorkflowAgent vs ToolLoopAgent table; telemetry via @ai-sdk/otel; AI SDK 7 changelog.",
+      "falsifier": "Durable agent loop + OTel ship in core ai with crash-safe defaults."
+    },
+    {
+      "n": 16,
+      "title": "SK orchestration is still prerelease",
+      "body": "Semantic Kernel Agent Orchestration installs with --prerelease while Microsoft Agent Framework is marketed as the direct successor. Greenfield SK AFFIX understates succession tax.",
+      "evidence": "learn.microsoft.com SK agent-orchestration (--prerelease) + Agent Framework overview (\u201cdirect successor\u201d) + migration guide.",
+      "falsifier": "SK orchestration GA without prerelease and successor language withdrawn for 24 months."
+    },
+    {
+      "n": 17,
+      "title": "Protocol leadership \u2260 rewrite safety",
+      "body": "ADK leads Protocol Readiness (PR 96) via A2A + MCP + OTel, but high PR does not compress rewrite hazard the way PydanticAI\u2019s durable typed stack does (RHS 17.3).",
+      "evidence": "adk.dev A2A, MCP tools/to_mcp_server, traces; pydantic.dev durable_execution.",
+      "falsifier": "\u22653 public case studies exporting ADK graph/session state to a non-ADK runtime without control-flow rewrite."
+    }
+  ],
+  "personas": [
+    {
+      "id": "startup_mvp",
+      "name": "Startup MVP chatbot",
+      "pick": "VS",
+      "alt": "CR or OA (Python)",
+      "avoid": "LG, AG, DS",
+      "note": "Fastest streamed chat UI. Schedule Mastra/Inngest hardening by month 3 (RHS 32.9)."
+    },
+    {
+      "id": "enterprise_rag",
+      "name": "Enterprise RAG",
+      "pick": "LI",
+      "alt": "HS (lower LIE) or SP (JVM)",
+      "avoid": "CR alone",
+      "note": "Best RACS continuum; Haystack wins when LlamaCloud gravity is unacceptable."
+    },
+    {
+      "id": "multi_agent_research",
+      "name": "Multi-agent research",
+      "pick": "AG",
+      "alt": "CR or AD",
+      "avoid": "Shipping research code as prod serve path",
+      "note": "Highest GED; plan OA/PD/AD serve-path before production (AG RHS 36)."
+    },
+    {
+      "id": "regulated_hitl",
+      "name": "Regulated HITL",
+      "pick": "LG",
+      "alt": "AD, OA, or PD+Temporal",
+      "avoid": "VS, SM, DS alone",
+      "note": "Best CS/FMC/PH; interrupt + checkpointer is the compliance default."
+    },
+    {
+      "id": "ts_product",
+      "name": "TypeScript product company",
+      "pick": "VS + MA",
+      "alt": "VS + Inngest",
+      "avoid": "LG JS alone for greenfield; SP",
+      "note": "Compose UI stream contracts with agent OS workflows/memory."
+    },
+    {
+      "id": "python_ml",
+      "name": "Python data / ML team",
+      "pick": "PD",
+      "alt": "DS compile \u2192 PD serve; LI/HS for RAG-heavy",
+      "avoid": "DS or SM as sole prod runtime",
+      "note": "AFFIX leader and lowest RHS for typed backend agents."
+    },
+    {
+      "id": "jvm_spring",
+      "name": "JVM / Spring shop",
+      "pick": "SP",
+      "alt": "MS for .NET estates",
+      "avoid": "Non-JVM frameworks as primary",
+      "note": "Stay in Boot; CTI assumes Spring fluency."
+    },
+    {
+      "id": "cost_sensitive",
+      "name": "Cost-sensitive high-volume",
+      "pick": "PD or SM\u2192PD",
+      "alt": "DS optimize + thin serve; LiteLLM gateway",
+      "avoid": "OA sandbox-heavy; unmanaged AG chats; full LC+LG+Smith without need",
+      "note": "Prefer RE\u226580 stacks; optimize prompts before infra spend."
+    }
+  ],
+  "frameworks": [
+    {
+      "id": "PD",
+      "name": "PydanticAI",
+      "oneLiner": "Typed Python agent SDK with first-party durable engines and OTel-native observability.",
+      "bestFor": "Typed Python production agents with durable execution and OTel",
+      "notFor": "Do not pick PydanticAI when the product is a React/Next streaming UI (use VS\u00b1MA), when the bottleneck is automatic prompt search (use DSPy as compiler), or when you need LangGraph-class arbitrary mid-graph interrupts without adopting a durable engine/Harness persistence.",
+      "versions": {
+        "pypi": "pydantic-ai==2.59.0",
+        "notes": "Companion: pydantic-ai-harness; Logfire optional"
+      },
+      "primitives": {
+        "hitl": "Deferred tool calls / approval via durable engines + Harness; AG-UI tool approval interrupts",
+        "checkpoint": "StepPersistence (Harness); TemporalDurability / DBOS / Prefect / Restate / Lambda / Airflow backends",
+        "stream": "agent.run stream / StreamedRunResult; AG-UI and Vercel AI UI bridges",
+        "structured": "Agent(..., output_type=Model); tool/native/prompted modes; Pydantic validation + retry",
+        "obs": "Instrumentation capability; logfire.instrument_pydantic_ai(); plain OTel; Pydantic Evals",
+        "multiAgent": "capabilities SubAgents / multi-agent guides; Pydantic Graph for typed control flow",
+        "mcp": "capabilities=[MCP(url)] client; MCP API module; Logfire MCP in Harness"
+      },
+      "scores": {
+        "AF": 90.0,
+        "CS": 88.0,
+        "OB": 92.0,
+        "TC": 96.0,
+        "EG": 78.0,
+        "RE": 80.0,
+        "MF": 82.0,
+        "PH": 90.0,
+        "DX": 88.0,
+        "FP": 90.0,
+        "AFFIX": 87.64,
+        "LIE": 22.0,
+        "CTI": 30.0,
+        "FMC": 78.0,
+        "GED": 72.0,
+        "RACS": 80.0,
+        "RHS": 17.3,
+        "PR": 91
+      },
+      "citations": [
+        "https://pydantic.dev/docs/ai/overview/",
+        "https://pydantic.dev/docs/ai/core-concepts/output/",
+        "https://pydantic.dev/docs/ai/core-concepts/agent/",
+        "https://pydantic.dev/docs/ai/capabilities/durable_execution/overview/",
+        "https://pydantic.dev/docs/ai/capabilities/mcp/",
+        "https://pydantic.dev/docs/ai/integrations/logfire/",
+        "https://pydantic.dev/docs/ai/evals/evals/",
+        "https://github.com/pydantic/pydantic-ai"
+      ]
+    },
+    {
+      "id": "OA",
+      "name": "OpenAI Agents SDK",
+      "oneLiner": "OpenAI's agent runtime: handoffs, guardrails, HITL RunState, MCP, sandbox agents.",
+      "bestFor": "OpenAI-standardized orgs needing handoffs, guardrails, sandbox code-act",
+      "notFor": "Do not use as the sole stack if you require vendor-neutral ops (Traces/Sandbox/session gravity is real), or if you need open graph checkpoint export across non-OpenAI runtimes without adapters.",
+      "versions": {
+        "pypi": "openai-agents==0.24.0",
+        "notes": "Also openai-agents JS SDK"
+      },
+      "primitives": {
+        "hitl": "Tool needs_approval \u2192 interruptions; RunState serialize/resume",
+        "checkpoint": "Sessions + RunState; Temporal/Restate integrations for durable runs",
+        "stream": "Runner streaming events; results stream APIs",
+        "structured": "Agent output types / structured outputs on agents",
+        "obs": "Built-in tracing; exportable spans; guardrail hooks",
+        "multiAgent": "handoffs(); Agent.as_tool(); nested agent runs",
+        "mcp": "MCP servers as tools (multiple transports)"
+      },
+      "scores": {
+        "AF": 86.0,
+        "CS": 90.0,
+        "OB": 88.0,
+        "TC": 85.0,
+        "EG": 82.0,
+        "RE": 85.0,
+        "MF": 48.0,
+        "PH": 88.0,
+        "DX": 90.0,
+        "FP": 70.0,
+        "AFFIX": 82.71,
+        "LIE": 58.0,
+        "CTI": 30.8,
+        "FMC": 82.0,
+        "GED": 55.0,
+        "RACS": 55.0,
+        "RHS": 24.2,
+        "PR": 81
+      },
+      "citations": [
+        "https://openai.github.io/openai-agents-python/",
+        "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+        "https://openai.github.io/openai-agents-python/handoffs/",
+        "https://openai.github.io/openai-agents-python/tracing/",
+        "https://openai.github.io/openai-agents-python/guardrails/",
+        "https://openai.github.io/openai-agents-python/mcp/",
+        "https://openai.github.io/openai-agents-python/sessions/",
+        "https://github.com/openai/openai-agents-python"
+      ]
+    },
+    {
+      "id": "AD",
+      "name": "Google ADK (Agent Development Kit)",
+      "oneLiner": "Google's multi-language agent kit; protocol leader (MCP+A2A) with graph HITL nodes.",
+      "bestFor": "Multi-agent graphs with MCP+A2A and Google deploy paths",
+      "notFor": "Avoid as primary if you are not willing to accept Google-ecosystem gravity (deploy/A2A/GCP adjacency) or if you need the simplest typed Python DX \u2014 AD's CTI and MF punish small teams.",
+      "versions": {
+        "pypi": "google-adk==2.12.0",
+        "notes": "Multi-lang: Python/TS/Go/Java/Kotlin; HITL graphs from v2.0.0"
+      },
+      "primitives": {
+        "hitl": "RequestInput graph nodes (deterministic HITL)",
+        "checkpoint": "Session/state + deploy runtimes; graph persistence patterns",
+        "stream": "Events stream; artifact updates",
+        "structured": "Typed tools / schema configs (lang-dependent)",
+        "obs": "OTel traces (observability/traces); logging",
+        "multiAgent": "Multi-agent trees; A2A remote agents",
+        "mcp": "MCP tools client; expose via A2A/MCP server patterns"
+      },
+      "scores": {
+        "AF": 90.0,
+        "CS": 88.0,
+        "OB": 90.0,
+        "TC": 75.0,
+        "EG": 80.0,
+        "RE": 82.0,
+        "MF": 52.0,
+        "PH": 88.0,
+        "DX": 80.0,
+        "FP": 92.0,
+        "AFFIX": 82.5,
+        "LIE": 45.0,
+        "CTI": 61.6,
+        "FMC": 80.0,
+        "GED": 90.0,
+        "RACS": 72.0,
+        "RHS": 25.1,
+        "PR": 96
+      },
+      "citations": [
+        "https://adk.dev/",
+        "https://adk.dev/graphs/human-input/",
+        "https://adk.dev/agents/multi-agents/",
+        "https://adk.dev/a2a/",
+        "https://adk.dev/tools-custom/mcp-tools/",
+        "https://adk.dev/observability/traces/",
+        "https://adk.dev/agents/models/litellm/",
+        "https://github.com/google/adk-python"
+      ]
+    },
+    {
+      "id": "MA",
+      "name": "Mastra",
+      "oneLiner": "TypeScript agents + workflows + memory; the TS continuum bet beside AI SDK.",
+      "bestFor": "TypeScript agent OS: workflows, memory, HITL beside AI SDK UI",
+      "notFor": "Do not use Mastra for JVM estates or when you only need a chat UI without workflows/memory \u2014 AI SDK alone is enough; also avoid if you refuse any TS agent-platform opinions.",
+      "versions": {
+        "npm": "@mastra/core@1.79.0",
+        "notes": "Mastra platform packages co-versioned"
+      },
+      "primitives": {
+        "hitl": "Tool approval / suspend execution on agents and workflows",
+        "checkpoint": "Workflow suspend/resume; memory + storage adapters",
+        "stream": "Agent and workflow fullStream / streaming responses",
+        "structured": "structured output with Zod/Valibot/JSON Schema",
+        "obs": "Logging, tracing, eval primitives on agents",
+        "multiAgent": "Subagents; workflow .then/.branch composition",
+        "mcp": "Tools invoke remote MCP servers; MCP-first agent surface"
+      },
+      "scores": {
+        "AF": 88.0,
+        "CS": 85.0,
+        "OB": 84.0,
+        "TC": 86.0,
+        "EG": 72.0,
+        "RE": 78.0,
+        "MF": 70.0,
+        "PH": 80.0,
+        "DX": 86.0,
+        "FP": 88.0,
+        "AFFIX": 82.05,
+        "LIE": 35.0,
+        "CTI": 34.0,
+        "FMC": 72.0,
+        "GED": 78.0,
+        "RACS": 84.0,
+        "RHS": 20.8,
+        "PR": 89
+      },
+      "citations": [
+        "https://mastra.ai/docs/agents/overview",
+        "https://mastra.ai/docs/agents/human-in-the-loop",
+        "https://mastra.ai/docs/agents/structured-output",
+        "https://mastra.ai/docs/agents/tools",
+        "https://mastra.ai/docs/workflows/overview",
+        "https://mastra.ai/docs/memory/overview",
+        "https://mastra.ai/",
+        "https://github.com/mastra-ai/mastra"
+      ]
+    },
+    {
+      "id": "LG",
+      "name": "LangGraph",
+      "oneLiner": "Low-level durable graph runtime; best control surface, highest cognitive tax.",
+      "bestFor": "Regulated HITL, durable graphs, time-travel debugging",
+      "notFor": "Do not start greenfield LangGraph for a simple tool loop or MVP chat \u2014 CTI and LIE are high; prefer create_agent/PD/VS until you need interrupts, time-travel, or fan-out joins.",
+      "versions": {
+        "pypi": "langgraph==1.2.16",
+        "npm": "@langchain/langgraph",
+        "notes": "Runtime under LangChain create_agent"
+      },
+      "primitives": {
+        "hitl": "interrupt(payload) in nodes; resume via Command",
+        "checkpoint": "BaseCheckpointSaver (PostgresSaver/SqliteSaver); Store for cross-thread",
+        "stream": "stream modes: values/messages/events; stream.interrupts",
+        "structured": "TypedDict/Pydantic state + LangChain structured tools",
+        "obs": "LangSmith deep integration; state-transition traces",
+        "multiAgent": "Subgraphs, supervisor patterns, Send map-reduce",
+        "mcp": "Via LangChain MCP adapters / tool nodes"
+      },
+      "scores": {
+        "AF": 92.0,
+        "CS": 95.0,
+        "OB": 88.0,
+        "TC": 75.0,
+        "EG": 85.0,
+        "RE": 72.0,
+        "MF": 50.0,
+        "PH": 93.0,
+        "DX": 65.0,
+        "FP": 85.0,
+        "AFFIX": 81.64,
+        "LIE": 68.0,
+        "CTI": 82.0,
+        "FMC": 90.0,
+        "GED": 92.0,
+        "RACS": 62.0,
+        "RHS": 28.7,
+        "PR": 84
+      },
+      "citations": [
+        "https://docs.langchain.com/oss/python/langgraph/overview",
+        "https://docs.langchain.com/oss/python/langgraph/interrupts",
+        "https://docs.langchain.com/oss/python/langgraph/persistence",
+        "https://docs.langchain.com/oss/python/langgraph/streaming",
+        "https://docs.langchain.com/oss/python/langgraph/workflows-agents",
+        "https://www.langchain.com/blog/deep-agents-vs-langchain-vs-langgraph",
+        "https://pypi.org/project/langgraph/",
+        "https://github.com/langchain-ai/langgraph"
+      ]
+    },
+    {
+      "id": "VS",
+      "name": "Vercel AI SDK",
+      "oneLiner": "Default TypeScript app-layer AI toolkit for streamed UIs and typed tools.",
+      "bestFor": "Product UI streaming chat/tools on Next.js/React",
+      "notFor": "Do not run AI SDK alone as a durable/compliance agent OS. ToolLoopAgent is in-memory; WorkflowAgent requires @ai-sdk/workflow. Weak native RAG platform and concurrent state control.",
+      "versions": {
+        "npm": "ai@7.0.148",
+        "notes": "AI SDK 7; WorkflowAgent via @ai-sdk/workflow + workflow@5"
+      },
+      "primitives": {
+        "hitl": "toolApproval on generateText/streamText/ToolLoopAgent; WorkflowAgent durable approval",
+        "checkpoint": "WorkflowAgent (@ai-sdk/workflow) persists steps; ToolLoopAgent is in-memory",
+        "stream": "streamText, useChat, UIMessage parts, createAgentUIStreamResponse",
+        "structured": "Output.object/array/choice/json/text with Zod/Valibot/JSON Schema",
+        "obs": "telemetry API (AI SDK 7); DevTools; OTel-oriented exporters",
+        "multiAgent": "ToolLoopAgent loops; handoffs via tools; not a graph OS",
+        "mcp": "createMCPClient from @ai-sdk/mcp (HTTP/SSE transports)"
+      },
+      "scores": {
+        "AF": 82.0,
+        "CS": 72.0,
+        "OB": 70.0,
+        "TC": 92.0,
+        "EG": 95.0,
+        "RE": 88.0,
+        "MF": 75.0,
+        "PH": 65.0,
+        "DX": 94.0,
+        "FP": 85.0,
+        "AFFIX": 81.22,
+        "LIE": 35.0,
+        "CTI": 22.0,
+        "FMC": 52.0,
+        "GED": 42.0,
+        "RACS": 65.0,
+        "RHS": 34.5,
+        "PR": 87
+      },
+      "citations": [
+        "https://ai-sdk.dev/",
+        "https://ai-sdk.dev/docs/ai-sdk-core/generating-structured-data",
+        "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+        "https://ai-sdk.dev/docs/agents/workflow-agent",
+        "https://ai-sdk.dev/docs/ai-sdk-core/mcp-tools",
+        "https://ai-sdk.dev/docs/ai-sdk-core/telemetry",
+        "https://vercel.com/changelog/ai-sdk-7",
+        "https://github.com/vercel/ai"
+      ]
+    },
+    {
+      "id": "MS",
+      "name": "Microsoft Agent Framework",
+      "oneLiner": "Microsoft's enterprise agent/workflow successor to Semantic Kernel orchestration.",
+      "bestFor": "Greenfield Microsoft/.NET enterprise agents",
+      "notFor": "Do not choose MS if you are outside Microsoft/.NET/Azure estates without a migration plan; brownfield SK apps should budget succession, not pretend SK orchestration is LTS.",
+      "versions": {
+        "pypi": "agent-framework==1.22.0",
+        "notes": "Microsoft Agent Framework; SK succession path"
+      },
+      "primitives": {
+        "hitl": "Workflow request/response to external/human operators",
+        "checkpoint": "Workflow persistence / executor state",
+        "stream": "Streaming chat/agent responses in .NET/Python APIs",
+        "structured": "Strong typed contracts on .NET; schema validation",
+        "obs": "Azure Monitor / OTel integrations",
+        "multiAgent": "Workflows composing multiple agents/executors",
+        "mcp": "MCP tool bridges in Agent Framework docs"
+      },
+      "scores": {
+        "AF": 86.0,
+        "CS": 88.0,
+        "OB": 86.0,
+        "TC": 90.0,
+        "EG": 80.0,
+        "RE": 75.0,
+        "MF": 48.0,
+        "PH": 88.0,
+        "DX": 70.0,
+        "FP": 88.0,
+        "AFFIX": 80.91,
+        "LIE": 52,
+        "CTI": 36,
+        "FMC": 80,
+        "GED": 86,
+        "RACS": 76,
+        "RHS": 19.4,
+        "PR": 88
+      },
+      "citations": [
+        "https://learn.microsoft.com/en-us/agent-framework/overview/",
+        "https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop",
+        "https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel",
+        "https://github.com/microsoft/agent-framework",
+        "https://pypi.org/project/agent-framework/",
+        "https://langfuse.com/blog/2025-03-19-ai-agent-comparison"
+      ]
+    },
+    {
+      "id": "CR",
+      "name": "CrewAI",
+      "oneLiner": "Role-based crews and Flows with approachable multi-agent DX.",
+      "bestFor": "Fast role-based multi-agent demos and Flows",
+      "notFor": "Do not ship role-play crew demos as regulated production without Flows/checkpoints/guardrails hardening; concurrent state races are under-specified vs graphs.",
+      "versions": {
+        "pypi": "crewai==1.15.28",
+        "notes": "Docs versioned under /v1.15.x/"
+      },
+      "primitives": {
+        "hitl": "Human-in-the-loop workflows (task/flow interruption)",
+        "checkpoint": "CheckpointConfig; crew/flow/agent snapshots; resume/fork",
+        "stream": "Streaming task/crew outputs",
+        "structured": "Pydantic models on tasks/outputs (partial strictness)",
+        "obs": "Tracing docs (observability/tracing); AMP gravity",
+        "multiAgent": "Crew roles; Process.hierarchical; Flows",
+        "mcp": "MCP tool integration in recent docs"
+      },
+      "scores": {
+        "AF": 84.0,
+        "CS": 80.0,
+        "OB": 78.0,
+        "TC": 78.0,
+        "EG": 90.0,
+        "RE": 72.0,
+        "MF": 65.0,
+        "PH": 76.0,
+        "DX": 92.0,
+        "FP": 75.0,
+        "AFFIX": 79.6,
+        "LIE": 38.0,
+        "CTI": 39.6,
+        "FMC": 70.0,
+        "GED": 65.0,
+        "RACS": 70.0,
+        "RHS": 28.4,
+        "PR": 78
+      },
+      "citations": [
+        "https://docs.crewai.com/",
+        "https://docs.crewai.com/v1.15.2/en/learn/human-in-the-loop",
+        "https://docs.crewai.com/v1.15.2/en/concepts/checkpointing",
+        "https://docs.crewai.com/v1.15.2/en/learn/hierarchical-process",
+        "https://docs.crewai.com/v1.15.28/en/concepts/flows",
+        "https://docs.crewai.com/edge/en/observability/tracing",
+        "https://github.com/crewAIInc/crewAI"
+      ]
+    },
+    {
+      "id": "LI",
+      "name": "LlamaIndex",
+      "oneLiner": "RAG-native data agents and workflows with the strongest continuum score.",
+      "bestFor": "Document RAG \u2192 workflow agents continuum",
+      "notFor": "Avoid if you need minimal lock-in and refuse LlamaCloud/Parse gravity; also a poor fit as a pure UI streaming layer (pair with VS) or as a low-CTI toy agent.",
+      "versions": {
+        "pypi": "llama-index==0.14.25",
+        "notes": "Workflows / LlamaAgents docs tree"
+      },
+      "primitives": {
+        "hitl": "InputRequiredEvent + HumanResponseEvent in Workflows",
+        "checkpoint": "Context serialization; durable workflows (DBOS optional)",
+        "stream": "Workflow/handler event streams",
+        "structured": "Structured outputs / Pydantic in workflows and LLMs",
+        "obs": "Observability integrations for workflows",
+        "multiAgent": "Multi-agent workflows; agent teams over documents",
+        "mcp": "MCP tool bridges (evolving; client-leaning)"
+      },
+      "scores": {
+        "AF": 88.0,
+        "CS": 80.0,
+        "OB": 75.0,
+        "TC": 82.0,
+        "EG": 80.0,
+        "RE": 78.0,
+        "MF": 60.0,
+        "PH": 72.0,
+        "DX": 78.0,
+        "FP": 80.0,
+        "AFFIX": 78.01,
+        "LIE": 58.0,
+        "CTI": 70.0,
+        "FMC": 68.0,
+        "GED": 78.0,
+        "RACS": 92.0,
+        "RHS": 27.1,
+        "PR": 76
+      },
+      "citations": [
+        "https://developers.llamaindex.ai/python/llamaagents/workflows/",
+        "https://developers.llamaindex.ai/python/llamaagents/workflows/human_in_the_loop/",
+        "https://developers.llamaindex.ai/python/llamaagents/workflows/durable_workflows/",
+        "https://developers.llamaindex.ai/python/llamaagents/workflows/managing_state/",
+        "https://developers.llamaindex.ai/python/llamaagents/workflows/observability/",
+        "https://developers.llamaindex.ai/python/framework/understanding/rag/",
+        "https://pypi.org/project/llama-index/",
+        "https://www.llamaindex.ai/blog/llamaagents-build-serve-and-deploy-document-agents"
+      ]
+    },
+    {
+      "id": "HS",
+      "name": "Haystack",
+      "oneLiner": "Composable pipelines and Agent-as-Component for enterprise RAG.",
+      "bestFor": "Pipeline-first RAG/agent with lower lock-in than LlamaCloud",
+      "notFor": "Do not expect LangGraph-class crash-safe thread checkpoints; Haystack HITL is ConfirmationHook-centric. Poor fit for non-pipeline multi-actor topologies.",
+      "versions": {
+        "pypi": "haystack-ai==3.4.1",
+        "notes": "Haystack 3 Agent-as-Component"
+      },
+      "primitives": {
+        "hitl": "Human-in-the-loop ConfirmationHook on Agent tool calls",
+        "checkpoint": "Pipeline state; no LG-class thread checkpointer",
+        "stream": "Streaming generators on components",
+        "structured": "Output adapters / schema validation components",
+        "obs": "Tracing docs; OpenTelemetry support",
+        "multiAgent": "Agent component + PipelineTool composition",
+        "mcp": "MCPTool continuum in Haystack 3"
+      },
+      "scores": {
+        "AF": 85.0,
+        "CS": 78.0,
+        "OB": 80.0,
+        "TC": 80.0,
+        "EG": 70.0,
+        "RE": 82.0,
+        "MF": 75.0,
+        "PH": 72.0,
+        "DX": 82.0,
+        "FP": 80.0,
+        "AFFIX": 78.6,
+        "LIE": 42.0,
+        "CTI": 55.0,
+        "FMC": 68.0,
+        "GED": 70.0,
+        "RACS": 85.0,
+        "RHS": 27.0,
+        "PR": 82
+      },
+      "citations": [
+        "https://haystack.deepset.ai/blog/haystack-3-release",
+        "https://docs.haystack.deepset.ai/docs/agent",
+        "https://docs.haystack.deepset.ai/docs/human-in-the-loop",
+        "https://docs.haystack.deepset.ai/docs/pipelines",
+        "https://docs.haystack.deepset.ai/docs/tracing",
+        "https://docs.haystack.deepset.ai/docs/migrating-from-langgraphlangchain-to-haystack",
+        "https://pypi.org/project/haystack-ai/"
+      ]
+    },
+    {
+      "id": "SP",
+      "name": "Spring AI",
+      "oneLiner": "Spring-native AI: ChatClient, Advisors, Micrometer, MCP starters.",
+      "bestFor": "JVM/Spring Boot estates needing ChatClient+MCP",
+      "notFor": "Do not recommend Spring AI to Next.js/Python shops \u2014 CTI explodes without Spring Boot DNA. Not a durable graph agent runtime.",
+      "versions": {
+        "maven": "spring-ai-bom 2.1.0-M1",
+        "notes": "Milestone BOM as of pin; confirm GA before prod pin"
+      },
+      "primitives": {
+        "hitl": "No first-class mid-graph interrupt; app-level approval patterns",
+        "checkpoint": "Spring-managed state; not agent-thread checkpointers",
+        "stream": "ChatClient streaming; reactive options",
+        "structured": "BeanOutputConverter / validateSchema structured output",
+        "obs": "Micrometer observations; Actuator",
+        "multiAgent": "Advisors + tools; limited native multi-agent graph DSL",
+        "mcp": "spring-ai-mcp starters (client + server)"
+      },
+      "scores": {
+        "AF": 80.0,
+        "CS": 70.0,
+        "OB": 85.0,
+        "TC": 88.0,
+        "EG": 75.0,
+        "RE": 72.0,
+        "MF": 70.0,
+        "PH": 88.0,
+        "DX": 70.0,
+        "FP": 85.0,
+        "AFFIX": 78.23,
+        "LIE": 42.0,
+        "CTI": 28.0,
+        "FMC": 62.0,
+        "GED": 45.0,
+        "RACS": 72.0,
+        "RHS": 23.0,
+        "PR": 88
+      },
+      "citations": [
+        "https://spring.io/projects/spring-ai",
+        "https://docs.spring.io/spring-ai/reference/api/chatclient.html",
+        "https://docs.spring.io/spring-ai/reference/api/structured-output.html",
+        "https://docs.spring.io/spring-ai/reference/api/structured-output/validation.html",
+        "https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html",
+        "https://docs.spring.io/spring-ai/reference/"
+      ]
+    },
+    {
+      "id": "LC",
+      "name": "LangChain",
+      "oneLiner": "High-gravity orchestration layer; v1 agents compile onto LangGraph.",
+      "bestFor": "Ecosystem gravity, LangSmith, and LC\u2192LG funnel shops",
+      "notFor": "Do not assume 'LangChain only' avoids LangGraph lock-in once HITL/memory ship \u2014 create_agent funnels into LG persistence. High LIE for portable graphs.",
+      "versions": {
+        "pypi": "langchain==1.4.7",
+        "notes": "v1 create_agent compiles onto LangGraph"
+      },
+      "primitives": {
+        "hitl": "HumanInTheLoopMiddleware \u2192 LangGraph interrupt + checkpointer",
+        "checkpoint": "Short-term memory / threads via LangGraph persistence",
+        "stream": "Agent/graph streaming; frontend HITL stream helpers",
+        "structured": "with_structured_output / tool schemas",
+        "obs": "LangSmith observability first-class",
+        "multiAgent": "create_agent + handoffs/tools; Deep Agents layer",
+        "mcp": "MCP tool adapters in LangChain ecosystem"
+      },
+      "scores": {
+        "AF": 78.0,
+        "CS": 72.0,
+        "OB": 90.0,
+        "TC": 70.0,
+        "EG": 95.0,
+        "RE": 68.0,
+        "MF": 55.0,
+        "PH": 75.0,
+        "DX": 80.0,
+        "FP": 82.0,
+        "AFFIX": 76.82,
+        "LIE": 72.0,
+        "CTI": 78.0,
+        "FMC": 74.0,
+        "GED": 55.0,
+        "RACS": 70.0,
+        "RHS": 32.8,
+        "PR": 86
+      },
+      "citations": [
+        "https://docs.langchain.com/oss/python/releases/langchain-v1",
+        "https://docs.langchain.com/oss/python/langchain/overview",
+        "https://docs.langchain.com/oss/python/langchain/human-in-the-loop",
+        "https://docs.langchain.com/oss/python/langchain/short-term-memory",
+        "https://docs.langchain.com/langsmith/observability",
+        "https://www.langchain.com/blog/deep-agents-vs-langchain-vs-langgraph",
+        "https://pypi.org/project/langchain/",
+        "https://docs.langchain.com/oss/javascript/langchain/agents"
+      ]
+    },
+    {
+      "id": "AG",
+      "name": "AutoGen / AG2",
+      "oneLiner": "Multi-agent research topologies (GroupChat/Network) with high expressiveness.",
+      "bestFor": "Research multi-agent topologies and debates",
+      "notFor": "Do not productize research GroupChat topologies without a serve-path rewrite plan (RHS high). Classic\u2192v1 is non-drop-in.",
+      "versions": {
+        "pypi": "ag2==1.2.1",
+        "notes": "Classic stack separately maintained (ag2-classic)"
+      },
+      "primitives": {
+        "hitl": "Human proxy agents / input requests in chat patterns",
+        "checkpoint": "Partial; session/state helpers, not LG-class default",
+        "stream": "Streaming tokens/messages in group chats",
+        "structured": "Partial typed messages; weaker than PD/VS",
+        "obs": "Telemetry user guide (OTel middleware)",
+        "multiAgent": "GroupChat, Network, channel protocols \u2014 highest GED",
+        "mcp": "MCP integrations present; less polished than AD/PD"
+      },
+      "scores": {
+        "AF": 88.0,
+        "CS": 85.0,
+        "OB": 82.0,
+        "TC": 72.0,
+        "EG": 78.0,
+        "RE": 70.0,
+        "MF": 55.0,
+        "PH": 72.0,
+        "DX": 68.0,
+        "FP": 85.0,
+        "AFFIX": 76.51,
+        "LIE": 42.0,
+        "CTI": 83.6,
+        "FMC": 72.0,
+        "GED": 95.0,
+        "RACS": 62.0,
+        "RHS": 36.0,
+        "PR": 76
+      },
+      "citations": [
+        "https://docs.ag2.ai/",
+        "https://docs.ag2.ai/docs/user-guide/telemetry/",
+        "https://www.ag2.ai/",
+        "https://github.com/ag2ai/ag2",
+        "https://github.com/ag2ai/ag2-classic",
+        "https://arxiv.org/abs/2308.08155",
+        "https://pypi.org/project/ag2/"
+      ]
+    },
+    {
+      "id": "SK",
+      "name": "Microsoft Semantic Kernel",
+      "oneLiner": "Enterprise plugins/.NET agents under active succession to Agent Framework.",
+      "bestFor": "Brownfield SK estates only (migrate to MS)",
+      "notFor": "Do not greenfield Semantic Kernel orchestration in 2026 \u2014 Microsoft Agent Framework is the successor; SK carries succession tax.",
+      "versions": {
+        "pypi": "semantic-kernel==1.45.0",
+        "notes": "Greenfield \u2192 prefer MS Agent Framework"
+      },
+      "primitives": {
+        "hitl": "Partial / experimental on SK agent orchestration",
+        "checkpoint": "Partial; prefer MS Agent Framework workflows for durable HITL",
+        "stream": "Streaming content in kernel/agents",
+        "structured": "Strong .NET typing; JSON schemas on functions",
+        "obs": "Azure-centric filters; portable OTel uneven",
+        "multiAgent": "Agent orchestration (experimental) \u2192 migrate to MS",
+        "mcp": "MCP plugins / Agent Framework MCP path"
+      },
+      "scores": {
+        "AF": 80.0,
+        "CS": 75.0,
+        "OB": 72.0,
+        "TC": 88.0,
+        "EG": 85.0,
+        "RE": 70.0,
+        "MF": 50.0,
+        "PH": 80.0,
+        "DX": 62.0,
+        "FP": 78.0,
+        "AFFIX": 74.73,
+        "LIE": 48.0,
+        "CTI": 70.4,
+        "FMC": 68.0,
+        "GED": 80.0,
+        "RACS": 78.0,
+        "RHS": 28.9,
+        "PR": 81
+      },
+      "citations": [
+        "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/",
+        "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-orchestration/",
+        "https://learn.microsoft.com/en-us/agent-framework/overview/",
+        "https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel",
+        "https://github.com/microsoft/semantic-kernel",
+        "https://github.com/microsoft/agent-framework",
+        "https://pypi.org/project/semantic-kernel/"
+      ]
+    },
+    {
+      "id": "SM",
+      "name": "Hugging Face smolagents",
+      "oneLiner": "Tiny code-act agents with first-class sandbox backends.",
+      "bestFor": "Minimal code-act prototypes with real sandboxes",
+      "notFor": "Do not use smolagents as a sole production runtime for HITL/compliance; it is a code-act prototype vehicle with sandbox strengths and FMC gaps.",
+      "versions": {
+        "pypi": "smolagents==1.26.0",
+        "notes": "HF docs pin v1.26.0"
+      },
+      "primitives": {
+        "hitl": "No first-class durable interrupt API",
+        "checkpoint": "None first-class",
+        "stream": "Partial streaming of agent steps",
+        "structured": "Weak; code-act returns over schema contracts",
+        "obs": "Minimal; external AgentOps etc.",
+        "multiAgent": "Managed multi-agent examples (multiagents docs)",
+        "mcp": "MCP tool support in smolagents"
+      },
+      "scores": {
+        "AF": 78.0,
+        "CS": 55.0,
+        "OB": 50.0,
+        "TC": 60.0,
+        "EG": 75.0,
+        "RE": 80.0,
+        "MF": 85.0,
+        "PH": 68.0,
+        "DX": 95.0,
+        "FP": 80.0,
+        "AFFIX": 71.22,
+        "LIE": 18.0,
+        "CTI": 22.0,
+        "FMC": 45.0,
+        "GED": 35.0,
+        "RACS": 48.0,
+        "RHS": 40.0,
+        "PR": 78
+      },
+      "citations": [
+        "https://huggingface.co/docs/smolagents/index",
+        "https://huggingface.co/docs/smolagents/examples/multiagents",
+        "https://huggingface.co/blog/smolagents",
+        "https://github.com/huggingface/smolagents",
+        "https://pypi.org/project/smolagents/",
+        "https://huggingface.co/docs/smolagents/en/reference/agents"
+      ]
+    },
+    {
+      "id": "DS",
+      "name": "DSPy",
+      "oneLiner": "Programmatic LM programs and optimizers \u2014 compile, don't serve.",
+      "bestFor": "Compile-time prompt/metric optimization (GEPA/MIPRO)",
+      "notFor": "Do not serve DSPy as your production agent OS. Use it to optimize prompts/metrics, then serve via PD/OA/VS/LG.",
+      "versions": {
+        "pypi": "dspy==3.4.1",
+        "notes": "GEPA optimizer path; not a serve OS"
+      },
+      "primitives": {
+        "hitl": "Not a durable HITL runtime",
+        "checkpoint": "None as serve OS",
+        "stream": "Limited; not product UI streaming",
+        "structured": "Signatures / typed predictors \u2014 strong compile-time contracts",
+        "obs": "Partial logging; not OTel-first agent traces",
+        "multiAgent": "Programs composing modules; not crew/graph OS",
+        "mcp": "Weak / DIY \u2014 lowest PR in-set"
+      },
+      "scores": {
+        "AF": 78.0,
+        "CS": 55.0,
+        "OB": 60.0,
+        "TC": 85.0,
+        "EG": 82.0,
+        "RE": 70.0,
+        "MF": 88.0,
+        "PH": 55.0,
+        "DX": 72.0,
+        "FP": 75.0,
+        "AFFIX": 71.19,
+        "LIE": 15.0,
+        "CTI": 48.0,
+        "FMC": 35.0,
+        "GED": 50.0,
+        "RACS": 58.0,
+        "RHS": 44.3,
+        "PR": 49
+      },
+      "citations": [
+        "https://dspy.ai/",
+        "https://dspy.ai/current/getting-started/react-and-tools/",
+        "https://dspy.ai/current/getting-started/gepa-optimization/",
+        "https://dspy.ai/current/api/optimizers/GEPA/overview/",
+        "https://arxiv.org/abs/2507.19457",
+        "https://github.com/stanfordnlp/dspy",
+        "https://pypi.org/project/dspy/"
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "title": "PydanticAI vs LangGraph",
+      "leftId": "PD",
+      "rightId": "LG",
+      "verdict": "PD for typed Python production defaults; LG when compliance demands arbitrary mid-graph interrupts and time-travel.",
+      "bullets": [
+        "PD wins RHS (17.3 vs 28.7) and TC; LG wins CS/FMC/PH absolute control.",
+        "LG CTI 82 is the tax; PD CTI 30 with durable engines optional.",
+        "Compose: PD agents inside durable engines \u2248 LG control without LG checkpoint lock-in \u2014 EST, validate for your HITL shape."
+      ]
+    },
+    {
+      "title": "Vercel AI SDK vs Mastra",
+      "leftId": "VS",
+      "rightId": "MA",
+      "verdict": "Compose both: VS for UI streams, Mastra for workflows/memory/HITL \u2014 do not treat them as substitutes.",
+      "bullets": [
+        "VS EG/DX leadership; MA RACS/FMC/RHS leadership for agent OS.",
+        "VS alone RHS 32.9; MA RHS 20.8.",
+        "AI SDK 7 WorkflowAgent narrows the gap only if you adopt @ai-sdk/workflow."
+      ]
+    },
+    {
+      "title": "LlamaIndex vs Haystack",
+      "leftId": "LI",
+      "rightId": "HS",
+      "verdict": "LI for maximum continuum; HS when lower lock-in and Pipeline clarity matter more than LlamaCloud gravity.",
+      "bullets": [
+        "Near-equal AFFIX (~78.6); LI RACS 92 vs HS 85; HS LIE 42 vs LI 58.",
+        "HS DUR weaker (ConfirmationHook vs thread checkpointer).",
+        "JVM shops should consider Spring AI instead of either."
+      ]
+    },
+    {
+      "title": "OpenAI Agents SDK vs Google ADK",
+      "leftId": "OA",
+      "rightId": "AD",
+      "verdict": "OA for OpenAI-standardized product orgs; AD when MCP+A2A protocol surface and multi-cloud graphs dominate.",
+      "bullets": [
+        "AD PR 96 vs OA 81; OA better SBOX and guardrails DX.",
+        "Both carry ops/cloud gravity (OA LIE 55, AD MF 52).",
+        "Handoffs (OA) \u2260 AD multi-agent trees \u2014 topology false friends apply."
+      ]
+    },
+    {
+      "title": "CrewAI vs AutoGen/AG2",
+      "leftId": "CR",
+      "rightId": "AG",
+      "verdict": "CR for productized roles/Flows; AG for research topologies \u2014 neither is a free production serve path.",
+      "bullets": [
+        "AG GED 95 with RHS 36; CR lower CTI, still needs hardening.",
+        "Hierarchical process \u2260 GroupChat.",
+        "Plan PD/OA/AD serve-path before scaling either."
+      ]
+    },
+    {
+      "title": "Semantic Kernel vs Microsoft Agent Framework",
+      "leftId": "SK",
+      "rightId": "MS",
+      "verdict": "Greenfield \u2192 MS; SK only for brownfield with an explicit migration budget.",
+      "bullets": [
+        "MS AFFIX 80.9 / RHS 19.4 vs SK 74.7 / 28.9.",
+        "SK orchestration marked experimental/succession path in Microsoft docs.",
+        "Succession tax is unique to the Microsoft line in this study."
+      ]
+    }
+  ],
+  "matrix_refresh": "Primary-source adjudication: OA LIE\u2191, MA OB/LIE, VS PH/FMC\u2193, LI PH/FMC\u2193; RHS recomputed"
+}

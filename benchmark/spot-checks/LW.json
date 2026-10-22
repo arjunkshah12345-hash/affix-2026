@@ -1,0 +1,22 @@
+{
+  "id": "LW",
+  "framework": "LiteLLM (gateway / proxy context)",
+  "spot_check": true,
+  "cluster": "typed-dx",
+  "scope": "Score only EG/RE/MF/FP lightly — not a full agent framework",
+  "notes": "OpenAI-compatible gateway in front of 100+ providers; virtual keys, budgets, fallbacks, guardrails, MCP tools + A2A agents through same control plane. Complements typed frameworks (route VS/PD/DS/MA/SP traffic). Not an agent DX layer; Cognitive Tax for app teams is low (base_url swap) but ops tax for self-hosting is real.",
+  "scores_light": {
+    "EG": 90,
+    "RE": 88,
+    "MF": 92,
+    "FP": 86
+  },
+  "other_dimensions": "N/A (gateway reference)",
+  "cognitive_tax_note": "Does not lower agent CTI; lowers provider/routing tax for any framework in this cluster.",
+  "citations": [
+    "https://docs.litellm.ai/docs/simple_proxy",
+    "https://www.litellm.ai/",
+    "https://github.com/BerriAI/litellm"
+  ],
+  "evidence_date": "2026-10-21"
+}

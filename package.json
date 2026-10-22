@@ -1,0 +1,16 @@
+{
+  "name": "affix-2026",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AFFIX-2026 — Agent Framework Fitness Index eXtended. Comparative study of production LLM / agent application frameworks.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "npm run dev --prefix site",
+    "build": "npm run build --prefix site",
+    "start": "npm run start --prefix site",
+    "video": "npm run start --prefix video"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

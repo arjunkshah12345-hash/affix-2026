@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AFFIX-2026 · AI Framework Benchmark</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0c0e12;
+    --ink-2: #141820;
+    --ink-3: #1c222c;
+    --ink-4: #252c38;
+    --line: #2e3644;
+    --line-soft: #222933;
+    --text: #e8e4db;
+    --text-dim: #9a9488;
+    --text-mute: #6b655c;
+    --copper: #c4783a;
+    --amber: #e8a84a;
+    --amber-soft: rgba(232, 168, 74, 0.15);
+    --copper-glow: rgba(196, 120, 58, 0.35);
+    --good: #7aad6a;
+    --warn: #d4a04a;
+    --bad: #c46a5a;
+    --mono: "IBM Plex Mono", "SF Mono", "Menlo", "Consolas", monospace;
+    --serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    --display: "Syne", "Arial Narrow", "Helvetica Neue", sans-serif;
+    --max: 1180px;
+    --radius: 2px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background:
+      radial-gradient(ellipse 80% 50% at 10% -10%, rgba(196, 120, 58, 0.08), transparent 50%),
+      radial-gradient(ellipse 60% 40% at 90% 0%, rgba(232, 168, 74, 0.04), transparent 45%),
+      var(--ink);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.55;
+    min-height: 100vh;
+  }
+
+  /* Offline font fallbacks already in stacks; hide FOIT flash */
+  .font-ready body, body { font-display: swap; }
+
+  a { color: var(--amber); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+  a:hover { border-bottom-color: var(--copper); }
+
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+
+  /* ——— NAV ——— */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(12, 14, 18, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .topbar-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 52px; max-width: var(--max); margin: 0 auto; padding: 0 28px;
+  }
+  .brand {
+    font-family: var(--mono); font-size: 12px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber);
+  }
+  .brand span { color: var(--text-mute); font-weight: 400; }
+  .nav-links { display: flex; gap: 22px; flex-wrap: wrap; }
+  .nav-links a {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text-dim); border: none;
+  }
+  .nav-links a:hover { color: var(--amber); }
+
+  /* ——— HERO ——— */
+  .hero {
+    padding: 72px 0 56px;
+    border-bottom: 1px solid var(--line-soft);
+    position: relative;
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.35;
+    mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
+    pointer-events: none;
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--copper); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::after {
+    content: ""; flex: 1; max-width: 120px; height: 1px;
+    background: linear-gradient(90deg, var(--copper), transparent);
+  }
+  .hero h1 {
+    font-family: var(--display); font-weight: 800; font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+    line-height: 1.05; letter-spacing: -0.03em; color: var(--text);
+    max-width: 16ch; margin-bottom: 22px;
+  }
+  .hero h1 em {
+    font-style: normal; color: var(--amber);
+  }
+  .hero-lede {
+    font-size: 1.15rem; color: var(--text-dim); max-width: 52ch;
+    margin-bottom: 36px; font-weight: 400;
+  }
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: 28px;
+  }
+  .meta-cell {
+    border-left: 2px solid var(--copper); padding-left: 14px;
+  }
+  .meta-cell .k {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-mute); margin-bottom: 4px;
+  }
+  .meta-cell .v {
+    font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--text);
+  }
+
+  /* ——— METHODOLOGY STRIP ——— */
+  .meth-strip {
+    padding: 36px 0;
+    border-bottom: 1px solid var(--line-soft);
+    background: var(--ink-2);
+  }
+  .meth-strip h2 { margin-bottom: 18px; }
+  .weight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+    gap: 8px;
+  }
+  .weight-chip {
+    background: var(--ink-3); border: 1px solid var(--line);
+    padding: 10px 8px; text-align: center;
+  }
+  .weight-chip .code {
+    font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--amber);
+  }
+  .weight-chip .w {
+    font-family: var(--mono); font-size: 11px; color: var(--text-mute); margin-top: 2px;
+  }
+  .weight-chip .label {
+    font-size: 10px; color: var(--text-dim); margin-top: 6px; line-height: 1.3;
+  }
+  .meth-note {
+    margin-top: 20px; font-size: 0.92rem; color: var(--text-dim);
+    max-width: 70ch;
+  }
+  .meth-note strong { color: var(--text); font-weight: 600; }
+
+  /* ——— SECTIONS ——— */
+  section { padding: 56px 0; border-bottom: 1px solid var(--line-soft); }
+  h2 {
+    font-family: var(--display); font-weight: 700; font-size: 1.65rem;
+    letter-spacing: -0.02em; margin-bottom: 8px;
+  }
+  .sec-sub {
+    font-size: 0.95rem; color: var(--text-dim); margin-bottom: 28px; max-width: 62ch;
+  }
+  .sec-label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--copper); margin-bottom: 10px;
+  }
+
+  /* ——— CONTROLS ——— */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+    margin-bottom: 20px;
+  }
+  .controls label {
+    font-family: var(--mono); font-size: 11px; color: var(--text-mute);
+    letter-spacing: 0.06em; text-transform: uppercase; margin-right: 4px;
+  }
+  select, .btn {
+    font-family: var(--mono); font-size: 12px;
+    background: var(--ink-3); color: var(--text);
+    border: 1px solid var(--line); padding: 8px 12px;
+    border-radius: var(--radius); cursor: pointer;
+  }
+  select:hover, .btn:hover { border-color: var(--copper); color: var(--amber); }
+  .btn.active { background: var(--amber-soft); border-color: var(--copper); color: var(--amber); }
+
+  /* ——— TABLE ——— */
+  .table-scroll {
+    overflow-x: auto; border: 1px solid var(--line);
+    background: var(--ink-2);
+  }
+  table.lb {
+    width: 100%; border-collapse: collapse;
+    font-family: var(--mono); font-size: 12px;
+  }
+  table.lb th {
+    position: sticky; top: 0;
+    background: var(--ink-3); color: var(--text-mute);
+    font-weight: 500; letter-spacing: 0.04em;
+    text-align: right; padding: 12px 10px;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer; user-select: none; white-space:nowrap;
+  }
+  table.lb th:first-child, table.lb th:nth-child(2),
+  table.lb th:nth-child(3), table.lb th:nth-child(4) { text-align: left; }
+  table.lb th:hover { color: var(--amber); }
+  table.lb th.sorted { color: var(--amber); }
+  table.lb th .arrow { opacity: 0.5; margin-left: 3px; font-size: 10px; }
+  table.lb td {
+    padding: 11px 10px; border-bottom: 1px solid var(--line-soft);
+    text-align: right; color: var(--text);
+    white-space: nowrap;
+  }
+  table.lb td:first-child, table.lb td:nth-child(2),
+  table.lb td:nth-child(3), table.lb td:nth-child(4) { text-align: left; }
+  table.lb tr:hover td { background: rgba(232, 168, 74, 0.04); }
+  table.lb .rank { color: var(--text-mute); width: 28px; }
+  table.lb .fw { font-weight: 500; color: var(--text); }
+  table.lb .id-badge {
+    display: inline-block; padding: 2px 6px;
+    background: var(--ink-4); border: 1px solid var(--line);
+    color: var(--amber); font-size: 11px; font-weight: 600;
+  }
+  table.lb .affix-cell { color: var(--amber); font-weight: 600; }
+  table.lb .rhs-low { color: var(--good); }
+  table.lb .rhs-mid { color: var(--warn); }
+  table.lb .rhs-high { color: var(--bad); }
+  .cat-tag {
+    font-size: 10px; color: var(--text-mute); max-width: 140px;
+    overflow: hidden; text-overflow: ellipsis; display: inline-block;
+  }
+
+  /* ——— CHARTS ——— */
+  .chart-row {
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px;
+  }
+  @media (max-width: 900px) {
+    .chart-row { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+  .panel {
+    background: var(--ink-2); border: 1px solid var(--line);
+    padding: 20px;
+  }
+  .panel-title {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-mute); margin-bottom: 16px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .panel-title span { color: var(--copper); }
+  canvas { display: block; width: 100%; max-width: 100%; }
+  .chart-hint {
+    font-family: var(--mono); font-size: 10px; color: var(--text-mute);
+    margin-top: 10px; line-height: 1.4;
+  }
+
+  /* ——— INDICES ——— */
+  .idx-grid {
+    display: grid; grid-template-columns: 280px 1fr; gap: 24px;
+  }
+  @media (max-width: 900px) { .idx-grid { grid-template-columns: 1fr; } }
+  .idx-picker {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .idx-picker button {
+    font-family: var(--mono); font-size: 12px; text-align: left;
+    background: var(--ink-3); border: 1px solid var(--line);
+    color: var(--text-dim); padding: 10px 12px; cursor: pointer;
+  }
+  .idx-picker button:hover { border-color: var(--copper); color: var(--text); }
+  .idx-picker button.on {
+    background: var(--amber-soft); border-color: var(--copper); color: var(--amber);
+  }
+  .idx-picker button .dir {
+    float: right; font-size: 10px; color: var(--text-mute);
+  }
+  .bar-chart { display: flex; flex-direction: column; gap: 7px; }
+  .bar-row {
+    display: grid; grid-template-columns: 36px 1fr 42px; gap: 10px;
+    align-items: center; font-family: var(--mono); font-size: 11px;
+  }
+  .bar-row .bid { color: var(--amber); font-weight: 600; }
+  .bar-track {
+    height: 14px; background: var(--ink-4); border: 1px solid var(--line-soft);
+    position: relative; overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%; background: linear-gradient(90deg, var(--copper), var(--amber));
+    transition: width .35s ease;
+  }
+  .bar-fill.inv {
+    background: linear-gradient(90deg, #8a4a3a, #c46a5a);
+  }
+  .bar-row .val { text-align: right; color: var(--text); }
+  .radar-wrap { position: relative; }
+  #radarCanvas { margin: 0 auto; }
+
+  /* ——— FINDINGS ——— */
+  .findings-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+  .finding-card {
+    background: var(--ink-2); border: 1px solid var(--line);
+    padding: 22px 22px 20px; position: relative;
+    transition: border-color .2s, transform .2s;
+  }
+  .finding-card:hover {
+    border-color: var(--copper); transform: translateY(-2px);
+  }
+  .finding-card .num {
+    font-family: var(--mono); font-size: 11px; color: var(--copper);
+    letter-spacing: 0.1em; margin-bottom: 8px;
+  }
+  .finding-card h3 {
+    font-family: var(--display); font-size: 1.05rem; font-weight: 700;
+    letter-spacing: -0.01em; line-height: 1.3; margin-bottom: 10px;
+  }
+  .finding-card p {
+    font-size: 0.88rem; color: var(--text-dim); line-height: 1.5;
+  }
+  .finding-card .claim-tag {
+    display: inline-block; margin-top: 12px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text-mute);
+    border-top: 1px solid var(--line-soft); padding-top: 10px; width: 100%;
+  }
+
+  /* ——— PERSONAS ——— */
+  .persona-tabs {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px;
+  }
+  .persona-tabs button {
+    font-family: var(--mono); font-size: 11px;
+    background: transparent; border: 1px solid var(--line);
+    color: var(--text-dim); padding: 8px 14px; cursor: pointer;
+  }
+  .persona-tabs button:hover { border-color: var(--copper); color: var(--text); }
+  .persona-tabs button.on {
+    background: var(--amber-soft); border-color: var(--copper); color: var(--amber);
+  }
+  .persona-panel {
+    background: var(--ink-2); border: 1px solid var(--line);
+    padding: 28px; display: none;
+  }
+  .persona-panel.on { display: block; }
+  .persona-panel h3 {
+    font-family: var(--display); font-size: 1.35rem; margin-bottom: 6px;
+  }
+  .persona-picks {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px; margin: 20px 0;
+  }
+  .pick {
+    border-left: 3px solid var(--copper); padding: 10px 14px;
+    background: var(--ink-3);
+  }
+  .pick .role {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--copper); margin-bottom: 4px;
+  }
+  .pick .name { font-weight: 600; font-size: 1rem; margin-bottom: 4px; }
+  .pick .why { font-size: 0.85rem; color: var(--text-dim); }
+  .persona-watch {
+    font-family: var(--mono); font-size: 12px; color: var(--warn);
+    background: rgba(212, 160, 74, 0.08); border: 1px solid rgba(212, 160, 74, 0.25);
+    padding: 12px 14px; margin-top: 16px;
+  }
+  .persona-avoid {
+    font-size: 0.9rem; color: var(--text-dim); margin-top: 12px;
+  }
+  .persona-avoid strong { color: var(--bad); }
+
+  /* ——— HEATMAP ——— */
+  .heatmap-wrap { overflow-x: auto; border: 1px solid var(--line); }
+  table.hm {
+    width: 100%; border-collapse: collapse;
+    font-family: var(--mono); font-size: 11px;
+  }
+  table.hm th {
+    background: var(--ink-3); color: var(--text-mute); font-weight: 500;
+    padding: 10px 8px; border-bottom: 1px solid var(--line);
+    text-align: center; position: sticky; top: 0;
+  }
+  table.hm th:first-child { text-align: left; padding-left: 14px; }
+  table.hm td {
+    padding: 8px; text-align: center; border-bottom: 1px solid var(--line-soft);
+    color: var(--ink); font-weight: 500; min-width: 44px;
+  }
+  table.hm td:first-child {
+    text-align: left; padding-left: 14px; background: var(--ink-2) !important;
+    color: var(--amber); font-weight: 600; position: sticky; left: 0;
+  }
+  table.hm tr:hover td:first-child { background: var(--ink-3) !important; }
+
+  /* ——— FOOTNOTES ——— */
+  .footnotes {
+    padding: 48px 0 80px;
+    background: var(--ink-2);
+  }
+  .footnotes h2 { margin-bottom: 16px; }
+  .footnotes ol {
+    font-size: 0.88rem; color: var(--text-dim);
+    padding-left: 1.4em; max-width: 72ch;
+  }
+  .footnotes li { margin-bottom: 10px; }
+  .footnotes code {
+    font-family: var(--mono); font-size: 0.85em;
+    background: var(--ink-4); padding: 1px 5px; color: var(--amber);
+  }
+  .est-badge {
+    display: inline-block; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.08em; padding: 2px 6px;
+    background: rgba(196, 120, 58, 0.2); color: var(--amber);
+    border: 1px solid var(--copper); vertical-align: middle;
+  }
+
+  /* ——— TOOLTIP ——— */
+  #tooltip {
+    position: fixed; z-index: 200; pointer-events: none;
+    background: var(--ink-3); border: 1px solid var(--copper);
+    padding: 10px 12px; font-family: var(--mono); font-size: 11px;
+    color: var(--text); max-width: 260px; line-height: 1.45;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    opacity: 0; transition: opacity .12s; display: none;
+  }
+  #tooltip.show { opacity: 1; display: block; }
+  #tooltip .tt-title { color: var(--amber); font-weight: 600; margin-bottom: 4px; }
+
+  .legend-row {
+    display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px;
+    font-family: var(--mono); font-size: 10px; color: var(--text-mute);
+  }
+  .legend-row i {
+    display: inline-block; width: 10px; height: 10px; margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  footer {
+    padding: 28px 0; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11px; color: var(--text-mute);
+    text-align: center;
+  }
+</style>
+
+<style id="t3-thread-overrides">
+  html, body { background: transparent !important; margin: 0 !important; }
+  body { color: var(--foreground); font-family: var(--font-sans), system-ui, sans-serif; }
+  :root {
+    --ink: var(--foreground);
+    --ink-muted: var(--muted-foreground);
+    --paper: transparent;
+    --panel: var(--card);
+    --line: var(--border);
+    --copper: var(--accent);
+    --copper-dim: var(--accent-surface);
+    --amber: var(--warning);
+    --good: var(--success);
+    --bad: var(--destructive);
+  }
+  .hero, .banner, header.hero { background: transparent !important; border: none !important; box-shadow: none !important; padding-left: 0 !important; padding-right: 0 !important; }
+  .wrap, .container, main { max-width: none !important; width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; }
+  .card, .panel, table, .heatmap, canvas, .radar-wrap {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+    border-radius: var(--radius) !important;
+  }
+  table th { background: var(--secondary) !important; color: var(--secondary-foreground) !important; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">AFFIX-2026 <span>// research report</span></div>
+    <div class="nav-links">
+      <a href="#methodology">Method</a>
+      <a href="#leaderboard">Leaderboard</a>
+      <a href="#scatter">Scatter</a>
+      <a href="#indices">Indices</a>
+      <a href="#findings">Findings</a>
+      <a href="#personas">Personas</a>
+      <a href="#heatmap">Heatmap</a>
+      <a href="#footnotes">Notes</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap" style="position:relative">
+    <div class="eyebrow">Agent Framework Fitness Index eXtended</div>
+    <h1>AFFIX<em>-2026</em><br/>AI Framework Benchmark</h1>
+    <p class="hero-lede">
+      A production-focused comparative study of 16 Tier-A LLM agent frameworks —
+      scored across ten fitness dimensions and five proprietary indices that predict
+      rewrite risk, lock-in, and protocol readiness.
+    </p>
+    <div class="hero-meta">
+      <div class="meta-cell">
+        <div class="k">Study date</div>
+        <div class="v">2026-10-21</div>
+      </div>
+      <div class="meta-cell">
+        <div class="k">Frameworks</div>
+        <div class="v">16 Tier-A</div>
+      </div>
+      <div class="meta-cell">
+        <div class="k">Composite</div>
+        <div class="v">AFFIX = Σ w<sub>d</sub>·s<sub>d</sub></div>
+      </div>
+      <div class="meta-cell">
+        <div class="k">Notation</div>
+        <div class="v"><span class="est-badge">EST</span> unless API-cited</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="meth-strip" id="methodology">
+  <div class="wrap">
+    <div class="sec-label">01 — Methodology</div>
+    <h2>Scoring model</h2>
+    <p class="sec-sub" style="margin-bottom:18px">
+      Each dimension scored 0–100. Weights sum to 1.0. Prefer primary docs, GitHub, and release notes (2025–2026).
+      Marketing claims are separated from API reality. Estimates are marked <span class="est-badge">EST</span>.
+    </p>
+    <div class="weight-grid" id="weightGrid"></div>
+    <p class="meth-note">
+      <strong>Proprietary indices:</strong>
+      LIE (lock-in entropy ↓), CTI (cognitive tax ↓), FMC (failure-mode coverage ↑),
+      GED (graph expressiveness ↑), RACS (RAG→agent continuum ↑), plus
+      <strong>RHS</strong> (rewrite hazard ↓) and <strong>PR</strong> (protocol readiness ↑).
+      RHS estimates P(outgrow primary orchestration within 12 months of production)×100.
+    </p>
+  </div>
+</section>
+
+<section id="leaderboard">
+  <div class="wrap">
+    <div class="sec-label">02 — Leaderboard</div>
+    <h2>AFFIX composite ranking</h2>
+    <p class="sec-sub">Click column headers to sort. Filter by language family or category. Hover cells for dimension context.</p>
+    <div class="controls">
+      <label>Language</label>
+      <select id="filterLang">
+        <option value="all">All languages</option>
+      </select>
+      <label>Category</label>
+      <select id="filterCat">
+        <option value="all">All categories</option>
+      </select>
+      <button class="btn" id="resetFilters" type="button">Reset</button>
+    </div>
+    <div class="table-scroll">
+      <table class="lb" id="lbTable">
+        <thead>
+          <tr>
+            <th data-key="rank">#</th>
+            <th data-key="id">ID</th>
+            <th data-key="framework">Framework</th>
+            <th data-key="primary_lang">Lang</th>
+            <th data-key="AFFIX" class="sorted">AFFIX <span class="arrow">▼</span></th>
+            <th data-key="RHS">RHS↓</th>
+            <th data-key="LIE">LIE↓</th>
+            <th data-key="CTI">CTI↓</th>
+            <th data-key="FMC">FMC↑</th>
+            <th data-key="RACS">RACS↑</th>
+            <th data-key="PR">PR↑</th>
+            <th data-key="PH">PH</th>
+            <th data-key="DX">DX</th>
+          </tr>
+        </thead>
+        <tbody id="lbBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="scatter">
+  <div class="wrap">
+    <div class="sec-label">03 — Position map</div>
+    <h2>AFFIX vs Rewrite Hazard</h2>
+    <p class="sec-sub">
+      Ideal quadrant: high AFFIX, low RHS (upper-left on inverted Y). Leaders that are not rewrite-safe sit high on RHS despite strong composites.
+    </p>
+    <div class="chart-row">
+      <div class="panel">
+        <div class="panel-title">Scatter · AFFIX × RHS <span>hover for detail</span></div>
+        <canvas id="scatterCanvas" width="640" height="480"></canvas>
+        <p class="chart-hint">Y-axis inverted: lower RHS (safer) appears higher. Dashed lines = median AFFIX / median RHS.</p>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Quadrant read <span>proprietary</span></div>
+        <div id="quadLegend" style="font-size:0.92rem;color:var(--text-dim);line-height:1.65">
+          <p style="margin-bottom:14px"><strong style="color:var(--good)">Rewrite-safe leaders</strong> — PD, MS, MA: AFFIX ≥ 80 and RHS ≤ 21.</p>
+          <p style="margin-bottom:14px"><strong style="color:var(--warn)">High fitness, high hazard</strong> — VS (81.5 / 32.9): DX surplus without OS continuum.</p>
+          <p style="margin-bottom:14px"><strong style="color:var(--amber)">Control max, tax max</strong> — LG: best CS/FMC/PH yet RHS 28.7 from CTI + LIE.</p>
+          <p><strong style="color:var(--bad)">Portable but fragile</strong> — DS: lowest LIE (15), worst RHS (44.3). Optimize, don’t serve.</p>
+        </div>
+        <div class="legend-row">
+          <span><i style="background:var(--amber)"></i> Python-primary</span>
+          <span><i style="background:var(--copper)"></i> TypeScript</span>
+          <span><i style="background:#7a9ab8"></i> Multi / JVM / .NET</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="indices">
+  <div class="wrap">
+    <div class="sec-label">04 — Proprietary indices</div>
+    <h2>LIE · CTI · FMC · RACS · PR · RHS</h2>
+    <p class="sec-sub">Select an index to re-rank the bar chart. Radar compares up to three frameworks across all proprietary axes (normalized so “good” is outward).</p>
+    <div class="idx-grid">
+      <div>
+        <div class="idx-picker" id="idxPicker"></div>
+        <div style="margin-top:20px">
+          <div class="panel-title" style="margin-bottom:8px">Radar compare</div>
+          <select id="radarA"></select>
+          <select id="radarB" style="margin-top:6px"></select>
+          <select id="radarC" style="margin-top:6px"></select>
+        </div>
+      </div>
+      <div>
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-title" id="barTitle">Index bars</div>
+          <div class="bar-chart" id="barChart"></div>
+        </div>
+        <div class="panel radar-wrap">
+          <div class="panel-title">Normalized radar <span>outward = better</span></div>
+          <canvas id="radarCanvas" width="420" height="360"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="findings">
+  <div class="wrap">
+    <div class="sec-label">05 — Proprietary findings</div>
+    <h2>Twelve falsifiable claims</h2>
+    <p class="sec-sub">Each finding states a claim, evidence path, and falsifier. Scores are EST unless cited as measured API facts.</p>
+    <div class="findings-grid" id="findingsGrid"></div>
+  </div>
+</section>
+
+<section id="personas">
+  <div class="wrap">
+    <div class="sec-label">06 — Persona playbooks</div>
+    <h2>Who should use what</h2>
+    <p class="sec-sub">Map personas → primary framework + companions using AFFIX, RHS, LIE, FMC, RACS, PR — not popularity. Prefer RHS ≤ 28 where feasible.</p>
+    <div class="persona-tabs" id="personaTabs"></div>
+    <div id="personaPanels"></div>
+  </div>
+</section>
+
+<section id="heatmap">
+  <div class="wrap">
+    <div class="sec-label">07 — Dimension heatmap</div>
+    <h2>Ten-axis AFFIX profile</h2>
+    <p class="sec-sub">Cell color encodes score (amber = high). Hover for exact value. Rows sorted by current AFFIX rank.</p>
+    <div class="heatmap-wrap">
+      <table class="hm" id="heatTable">
+        <thead>
+          <tr id="heatHead"></tr>
+        </thead>
+        <tbody id="heatBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="footnotes" id="footnotes">
+  <div class="wrap">
+    <div class="sec-label">08 — Footnotes</div>
+    <h2>EST scores &amp; evidence rules</h2>
+    <ol>
+      <li>All composite and proprietary scores are <span class="est-badge">EST</span> expert estimates calibrated against primary documentation (2025–2026), not automated benchmark harnesses. They are reproducible under the stated rubrics within typical inter-rater bands (±5–8 points on PR; see falsifiers).</li>
+      <li><strong>AFFIX</strong> = Σ (score<sub>d</sub> × weight<sub>d</sub>) with AF 0.14, CS 0.13, OB 0.11, TC 0.10, EG 0.10, RE 0.09, MF 0.08, PH 0.10, DX 0.09, FP 0.06.</li>
+      <li><strong>RHS</strong> (lower better) = clamp<sub>0</sub><sup>100</sup>( 0.28(100−RACS) + 0.22(100−FMC) + 0.18·CTI + 0.17·max(0, DX−PH) + 0.15(100−PH) ). Interpreted as EST P(outgrow primary orchestration within 12 months)×100. Verified programmatically against the matrix.</li>
+      <li><strong>PR</strong> (higher better) = 0.30·MCP_client + 0.15·MCP_server + 0.25·A2A_or_equiv + 0.15·OpenAPI_tool_bridge + 0.15·OTel_GenAI_portable. Component scores are EST checklist audits.</li>
+      <li><strong>LIE</strong> uses a 0–100 canonical scale (lower better). Draft 0–10 cluster tables must be ×10 before comparison. Coupling is dominated by ops gravity (traces, checkpoints, cloud runtimes), not import counts.</li>
+      <li><strong>CTI</strong> for Spring AI (28) assumes Spring Boot fluency; effective CTI for a Next.js engineer is EST 45–55. Persona playbooks condition SP on JVM estate.</li>
+      <li>Microsoft Semantic Kernel AFFIX understates greenfield cost due to succession toward Microsoft Agent Framework; MS (AFFIX 80.91, RHS 19.4) is the greenfield reference.</li>
+      <li>Contextual frameworks (LiteLLM, Inngest AgentKit, ElizaOS) appear in methodology / playbooks but are not Tier-A AFFIX-scored in this matrix.</li>
+      <li>Sources: <code>benchmark/scores/affix_matrix.json</code>, <code>benchmark/findings/PROPRIETARY_FINDINGS.md</code>, <code>benchmark/findings/persona_playbooks.md</code>, <code>benchmark/METHODOLOGY.md</code>, <code>benchmark/deep/*</code>.</li>
+      <li>This HTML report embeds the score matrix inline. Charts require no network fetch; Google Fonts load when available and fall back to system editorial stacks offline.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    AFFIX-2026 · Self-contained research deliverable · Data as of 2026-10-21 · Not affiliated with scored vendors
+  </div>
+</footer>
+
+<div id="tooltip"></div>
+
+<script id="affix-data" type="application/json">
+{
+  "study": "AFFIX-2026",
+  "as_of": "2026-10-21",
+  "weights": {"AF":0.14,"CS":0.13,"OB":0.11,"TC":0.1,"EG":0.1,"RE":0.09,"MF":0.08,"PH":0.1,"DX":0.09,"FP":0.06},
+  "weight_labels": {
+    "AF":"Abstraction Fit","CS":"Control Surface","OB":"Observability","TC":"Type & Contract","EG":"Ecosystem Gravity",
+    "RE":"Runtime Economics","MF":"Migration Friction","PH":"Production Hardening","DX":"DX Velocity","FP":"Future-Proofing"
+  },
+  "dims": ["AF","CS","OB","TC","EG","RE","MF","PH","DX","FP"],
+  "indices": [
+    {"key":"RHS","label":"Rewrite Hazard (RHS)","dir":"lower","desc":"EST P(outgrow primary orchestration in 12 mo)×100"},
+    {"key":"LIE","label":"Lock-in Entropy (LIE)","dir":"lower","desc":"Bits of irreversible coupling"},
+    {"key":"CTI","label":"Cognitive Tax (CTI)","dir":"lower","desc":"Concepts to ship tool agent + eval + tracing"},
+    {"key":"FMC","label":"Failure-Mode Coverage","dir":"higher","desc":"% prod failure modes with first-class API"},
+    {"key":"RACS","label":"RAG→Agent Continuum","dir":"higher","desc":"Retrieval → tool agent → multi-agent without rewrite"},
+    {"key":"PR","label":"Protocol Readiness","dir":"higher","desc":"MCP / A2A / OpenAPI / OTel readiness"},
+    {"key":"GED","label":"Graph Expressiveness","dir":"higher","desc":"Useful control-flow density"},
+    {"key":"AFFIX","label":"AFFIX Composite","dir":"higher","desc":"Weighted ten-dimension fitness"}
+  ],
+  "frameworks": [
+    {"id":"PD","framework":"PydanticAI","primary_lang":"Python","category":"Typed agents / Python AI SDK","AF":90,"CS":88,"OB":92,"TC":96,"EG":78,"RE":80,"MF":82,"PH":90,"DX":88,"FP":90,"AFFIX":87.64,"LIE":22,"CTI":30,"FMC":78,"GED":72,"RACS":80,"PR":91,"RHS":17.3},
+    {"id":"OA","framework":"OpenAI Agents SDK","primary_lang":"Python (also JS SDK)","category":"Agent runtime","AF":86,"CS":90,"OB":88,"TC":85,"EG":82,"RE":85,"MF":48,"PH":88,"DX":90,"FP":70,"AFFIX":82.71,"LIE":55,"CTI":30.8,"FMC":82,"GED":55,"RACS":55,"PR":81,"RHS":24.2},
+    {"id":"AD","framework":"Google ADK","primary_lang":"Python / TypeScript / Go / Java / Kotlin","category":"Google agent kit / multi-agent workflows","AF":90,"CS":88,"OB":90,"TC":75,"EG":80,"RE":82,"MF":52,"PH":88,"DX":80,"FP":92,"AFFIX":82.5,"LIE":45,"CTI":61.6,"FMC":80,"GED":90,"RACS":72,"PR":96,"RHS":25.1},
+    {"id":"MA","framework":"Mastra","primary_lang":"TypeScript","category":"TS agent platform (agents + workflows + memory)","AF":88,"CS":85,"OB":88,"TC":86,"EG":72,"RE":78,"MF":70,"PH":80,"DX":86,"FP":88,"AFFIX":82.49,"LIE":32,"CTI":34,"FMC":72,"GED":78,"RACS":84,"PR":89,"RHS":20.8},
+    {"id":"LG","framework":"LangGraph","primary_lang":"Python/TS","category":"Stateful graphs / agents","AF":92,"CS":95,"OB":88,"TC":75,"EG":85,"RE":72,"MF":50,"PH":93,"DX":65,"FP":85,"AFFIX":81.64,"LIE":68,"CTI":82,"FMC":90,"GED":92,"RACS":62,"PR":84,"RHS":28.7},
+    {"id":"VS","framework":"Vercel AI SDK","primary_lang":"TypeScript","category":"App-layer AI / agent toolkit","AF":82,"CS":72,"OB":70,"TC":92,"EG":95,"RE":88,"MF":75,"PH":68,"DX":94,"FP":85,"AFFIX":81.52,"LIE":35,"CTI":22,"FMC":55,"GED":42,"RACS":65,"PR":87,"RHS":32.9},
+    {"id":"MS","framework":"Microsoft Agent Framework","primary_lang":"Python/.NET","category":"Enterprise agents (AutoGen/SK successor)","AF":86,"CS":88,"OB":86,"TC":90,"EG":80,"RE":75,"MF":48,"PH":88,"DX":70,"FP":88,"AFFIX":80.91,"LIE":52,"CTI":36,"FMC":80,"GED":86,"RACS":76,"PR":88,"RHS":19.4},
+    {"id":"CR","framework":"CrewAI","primary_lang":"Python","category":"Role-based crews + flows","AF":84,"CS":80,"OB":78,"TC":78,"EG":90,"RE":72,"MF":65,"PH":76,"DX":92,"FP":75,"AFFIX":79.6,"LIE":38,"CTI":39.6,"FMC":70,"GED":65,"RACS":70,"PR":78,"RHS":28.4},
+    {"id":"LI","framework":"LlamaIndex","primary_lang":"Python/TS","category":"RAG / data agents","AF":88,"CS":80,"OB":75,"TC":82,"EG":80,"RE":78,"MF":60,"PH":78,"DX":78,"FP":80,"AFFIX":78.61,"LIE":58,"CTI":70,"FMC":72,"GED":78,"RACS":92,"PR":76,"RHS":24.3},
+    {"id":"HS","framework":"Haystack","primary_lang":"Python","category":"Pipelines / RAG","AF":85,"CS":78,"OB":80,"TC":80,"EG":70,"RE":82,"MF":75,"PH":72,"DX":82,"FP":80,"AFFIX":78.6,"LIE":42,"CTI":55,"FMC":68,"GED":70,"RACS":85,"PR":82,"RHS":27.0},
+    {"id":"SP","framework":"Spring AI","primary_lang":"Java","category":"JVM enterprise AI (Spring ecosystem)","AF":80,"CS":70,"OB":85,"TC":88,"EG":75,"RE":72,"MF":70,"PH":88,"DX":70,"FP":85,"AFFIX":78.23,"LIE":42,"CTI":28,"FMC":62,"GED":45,"RACS":72,"PR":88,"RHS":23.0},
+    {"id":"LC","framework":"LangChain","primary_lang":"Python/TS","category":"Orchestration + tools","AF":78,"CS":72,"OB":90,"TC":70,"EG":95,"RE":68,"MF":55,"PH":75,"DX":80,"FP":82,"AFFIX":76.82,"LIE":72,"CTI":78,"FMC":74,"GED":55,"RACS":70,"PR":86,"RHS":32.8},
+    {"id":"AG","framework":"AutoGen / AG2","primary_lang":"Python","category":"Multi-agent / AgentOS","AF":88,"CS":85,"OB":82,"TC":72,"EG":78,"RE":70,"MF":55,"PH":72,"DX":68,"FP":85,"AFFIX":76.51,"LIE":42,"CTI":83.6,"FMC":72,"GED":95,"RACS":62,"PR":76,"RHS":36.0},
+    {"id":"SK","framework":"Microsoft Semantic Kernel","primary_lang":"C# / Python / Java","category":"Enterprise agents + plugins","AF":80,"CS":75,"OB":72,"TC":88,"EG":85,"RE":70,"MF":50,"PH":80,"DX":62,"FP":78,"AFFIX":74.73,"LIE":48,"CTI":70.4,"FMC":68,"GED":80,"RACS":78,"PR":81,"RHS":28.9},
+    {"id":"SM","framework":"Hugging Face smolagents","primary_lang":"Python","category":"Code-act agents","AF":78,"CS":55,"OB":50,"TC":60,"EG":75,"RE":80,"MF":85,"PH":68,"DX":95,"FP":80,"AFFIX":71.22,"LIE":18,"CTI":22,"FMC":45,"GED":35,"RACS":48,"PR":78,"RHS":40.0},
+    {"id":"DS","framework":"DSPy","primary_lang":"Python","category":"Programmatic prompting / optimizable LM programs","AF":78,"CS":55,"OB":60,"TC":85,"EG":82,"RE":70,"MF":88,"PH":55,"DX":72,"FP":75,"AFFIX":71.19,"LIE":15,"CTI":48,"FMC":35,"GED":50,"RACS":58,"PR":49,"RHS":44.3}
+  ],
+  "findings": [
+    {"n":1,"title":"AFFIX leaders are not rewrite-safe","body":"Among AFFIX ≥ 81, RHS does not fall with AFFIX. PD (87.64 / 17.3) and MA (82.49 / 20.8) are rewrite-safe; VS (81.52 / 32.9) sits in the high-hazard band with LC/SM."},
+    {"n":2,"title":"Highest Control Surface ≠ lowest RHS","body":"LangGraph CS=95 (best) yet RHS=28.7 — worse than Mastra, Spring AI, and OpenAI Agents SDK. Checkpoint power does not cancel RACS gap, CTI, and DX–PH inversion."},
+    {"n":3,"title":"Lock-in is ops gravity, not pip lines","body":"OA advertises LiteLLM portability but LIE=55. Measured coupling is tracing + sessions + sandbox + Responses defaults — not import statements."},
+    {"n":4,"title":"DX surplus is the strongest rewrite predictor","body":"DX−PH ≥ 15 maps to RHS ≥ 32: VS (26), SM (27), CR (16). Frameworks with DX ≤ PH map to RHS ≤ 29 except AG (CTI-driven)."},
+    {"n":5,"title":"Microsoft succession tax is unique","body":"SK AFFIX 74.73 underprices greenfield risk while Agent Framework is the marketed successor. MS (80.91 / RHS 19.4) is the correct greenfield score."},
+    {"n":6,"title":"LlamaIndex RACS paradox","body":"LI has best RACS (92) but mid AFFIX (78.61). Continuum excellence does not compensate for LIE 58 and CTI 70 — RAG evolution with hiring/lock-in tax elsewhere."},
+    {"n":7,"title":"Protocol-ready ≠ migration-easy","body":"AD leads PR (96) via MCP + A2A + OTel while MF=52. DS has lowest LIE (15) but weakest PR — portable prompts, weak protocol surface."},
+    {"n":8,"title":"Topology false friends fail POCs","body":"OA handoff(), AG2 GroupChat, and CrewAI hierarchical process are distinct control primitives — not interchangeable for isolation/compliance reviews."},
+    {"n":9,"title":"Code-act security is bipolar","body":"Among Tier-A, first-class sandboxes exist primarily in OA and SM. AG/CR/SK/AD/LG push isolation to tool authors — FMC understates security failure modes."},
+    {"n":10,"title":"Haystack is the quiet RACS alternative","body":"HS RACS=85 with LIE=42 (better than LI’s 58). For EU/enterprise RAG shops avoiding LlamaCloud gravity, HS dominates on LIE×RACS despite equal AFFIX."},
+    {"n":11,"title":"Spring AI CTI is conditional on org DNA","body":"SP CTI=28 assumes Spring Boot fluency. For a Next.js mid-level eng, effective CTI ≈ 45–55 EST. Condition SP on JVM estate — not AFFIX alone."},
+    {"n":12,"title":"DSPy: lowest LIE, highest RHS","body":"DS LIE=15 but RHS=44.3. Optimizer-first curriculum leaves FMC=35 and PH=55; teams outgrow DSPy as runtime even when keeping it as compile-time optimizer."}
+  ],
+  "personas": [
+    {
+      "id":"mvp","name":"Startup MVP chatbot",
+      "picks":[
+        {"role":"Primary","name":"Vercel AI SDK (VS)","why":"Fastest streamed chat UI. EG=95, DX=94, CTI=22."},
+        {"role":"Alt (Python)","name":"CrewAI or OpenAI Agents SDK","why":"CR for role demos; OA if already on OpenAI."},
+        {"role":"Companion","name":"LiteLLM gateway","why":"Model switching; defer Mastra until workflows/HITL."}
+      ],
+      "avoid":"LangGraph, AG2, DSPy — CTI/RHS tax kills MVP velocity.",
+      "watch":"VS RHS=32.9 — harden timeouts/durable jobs by month 3 or compose Inngest/Mastra."
+    },
+    {
+      "id":"rag","name":"Enterprise RAG",
+      "picks":[
+        {"role":"Primary","name":"LlamaIndex (LI)","why":"Best RACS (92); Documents→Workflows→HITL continuum."},
+        {"role":"Alt (lower lock-in)","name":"Haystack (HS)","why":"RACS=85, LIE=42 vs LI LIE=58; Pipeline vs Agent clarity."},
+        {"role":"JVM estate","name":"Spring AI (SP)","why":"QuestionAnswerAdvisor → tools → MCP inside Spring."}
+      ],
+      "avoid":"Rewriting retrieval in LangChain if LI/HS already fit.",
+      "watch":"Pair with LangSmith/Phoenix/Langfuse for evals."
+    },
+    {
+      "id":"research","name":"Multi-agent research",
+      "picks":[
+        {"role":"Primary","name":"AutoGen / AG2 (AG)","why":"Highest GED (95); GroupChat/Network/channel protocols."},
+        {"role":"Alt (productized)","name":"CrewAI (CR)","why":"Hierarchical process + Flows; lower CTI."},
+        {"role":"Alt (GCP)","name":"Google ADK (AD)","why":"GED=90, PR=96, deterministic HITL nodes."}
+      ],
+      "avoid":"Shipping research topologies straight to product without a serve path.",
+      "watch":"AG RHS=36 — plan serve-path (OA/PD/AD) before productionizing."
+    },
+    {
+      "id":"hitl","name":"Regulated HITL",
+      "picks":[
+        {"role":"Primary","name":"LangGraph (LG)","why":"Best CS (95), FMC (90), PH (93); interrupt + checkpointers."},
+        {"role":"Alt","name":"Google ADK (AD)","why":"RequestInput pauses; OTel + deploy story."},
+        {"role":"Alt","name":"OA or PydanticAI+Temporal","why":"OA guardrails; PD RHS best-in-set if durable engines adopted."}
+      ],
+      "avoid":"VS, SM, DS as sole runtime — weak durable interrupt semantics.",
+      "watch":"Compliance needs mid-graph pause with crash-safe resume."
+    },
+    {
+      "id":"ts","name":"TypeScript product company",
+      "picks":[
+        {"role":"UI layer","name":"Vercel AI SDK (VS)","why":"Streaming UX + schema contracts."},
+        {"role":"Agent OS","name":"Mastra (MA)","why":"Workflows + memory + HITL; RACS=84, RHS=20.8."},
+        {"role":"Durable jobs","name":"Inngest AgentKit","why":"PH≈95 when multi-minute/HITL."}
+      ],
+      "avoid":"LangGraph JS alone for greenfield; Spring AI (wrong runtime).",
+      "watch":"Composing VS+MA beats picking either alone."
+    },
+    {
+      "id":"py","name":"Python data / ML team",
+      "picks":[
+        {"role":"Primary","name":"PydanticAI (PD)","why":"AFFIX leader 87.64, TC=96, RHS=17.3; FastAPI-like DX."},
+        {"role":"Quality compiler","name":"DSPy (DS)","why":"Optimize Signatures/metrics offline; serve via PD."},
+        {"role":"RAG-heavy","name":"LlamaIndex or Haystack","why":"Continuum over PD alone."}
+      ],
+      "avoid":"DSPy or smolagents as sole production runtime (FMC/PH).",
+      "watch":"If hiring pool is LangChain-fluent, LC→LG may beat PD on calendar time."
+    },
+    {
+      "id":"jvm","name":"JVM / Spring shop",
+      "picks":[
+        {"role":"Primary","name":"Spring AI (SP)","why":"ChatClient, Advisors, Micrometer, MCP starters; stays in Boot."},
+        {"role":"Alt (.NET)","name":"Microsoft Agent Framework","why":"Use when estate is C#; SK only for brownfield."},
+        {"role":"Sidecar","name":"ADK Java/Kotlin or PD","why":"When graph agents exceed ChatClient."}
+      ],
+      "avoid":"Non-JVM frameworks as primary in a Spring estate.",
+      "watch":"SP Agent graph FMC does not yet match LG on durable HITL (EST)."
+    },
+    {
+      "id":"cost","name":"Cost-sensitive high-volume",
+      "picks":[
+        {"role":"Gateway","name":"LiteLLM","why":"Provider routing, caching, budget — MF/FP without agent CTI."},
+        {"role":"Runtime","name":"PD or SM→PD","why":"SM for cheap prototypes; PD for production."},
+        {"role":"Optimize","name":"DSPy","why":"Model downsizing via GEPA/MIPRO before infra spend."}
+      ],
+      "avoid":"OA sandbox/realtime-heavy paths; unmanaged AG chats; full LC+LG+LangSmith without need.",
+      "watch":"Prefer VS/PD/SM (RE ≥ 80); batch via DSPy compile then thin serve."
+    }
+  ]
+}
+</script>
+
+<script>
+(function () {
+  "use strict";
+
+  const DATA = JSON.parse(document.getElementById("affix-data").textContent);
+  const FWs = DATA.frameworks.slice().sort((a, b) => b.AFFIX - a.AFFIX);
+  const DIMS = DATA.dims;
+  const WLABELS = DATA.weight_labels;
+
+  /* ——— helpers ——— */
+  const $ = (sel, el) => (el || document).querySelector(sel);
+  const $$ = (sel, el) => Array.from((el || document).querySelectorAll(sel));
+  const fmt = (n, d) => (typeof n === "number" ? n.toFixed(d != null ? d : (Number.isInteger(n) ? 0 : 1)) : n);
+
+  function langFamily(lang) {
+    const L = (lang || "").toLowerCase();
+    if (L.includes("typescript") && !L.includes("python")) return "TypeScript";
+    if (L.startsWith("java") && !L.includes("javascript")) return "Java";
+    if (L.includes("c#") || L.includes(".net")) return "C# / .NET";
+    if (L.includes("python") && L.includes("ts")) return "Python/TS";
+    if (L.includes("python")) return "Python";
+    return "Multi";
+  }
+
+  function rhsClass(r) {
+    if (r <= 22) return "rhs-low";
+    if (r <= 30) return "rhs-mid";
+    return "rhs-high";
+  }
+
+  function heatColor(v) {
+    // map 35–96 → deep ink amber scale
+    const t = Math.max(0, Math.min(1, (v - 40) / 55));
+    const r = Math.round(40 + t * 180);
+    const g = Math.round(36 + t * 120);
+    const b = Math.round(32 + t * 20);
+    const alpha = 0.35 + t * 0.65;
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
+  function textOnHeat(v) {
+    return v >= 72 ? "#0c0e12" : "#e8e4db";
+  }
+
+  /* ——— tooltip ——— */
+  const tip = $("#tooltip");
+  function showTip(html, x, y) {
+    tip.innerHTML = html;
+    tip.style.display = "block";
+    tip.classList.add("show");
+    const pad = 14;
+    let left = x + pad, top = y + pad;
+    if (left + 260 > window.innerWidth - 8) left = x - 260 - pad;
+    if (top + 100 > window.innerHeight - 8) top = y - 100 - pad;
+    tip.style.left = Math.max(8, left) + "px";
+    tip.style.top = Math.max(8, top) + "px";
+  }
+  function hideTip() {
+    tip.classList.remove("show");
+    tip.style.display = "none";
+  }
+
+  /* ——— methodology chips ——— */
+  const wg = $("#weightGrid");
+  Object.keys(DATA.weights).forEach((k) => {
+    const d = document.createElement("div");
+    d.className = "weight-chip";
+    d.innerHTML = `<div class="code">${k}</div><div class="w">${(DATA.weights[k] * 100).toFixed(0)}%</div><div class="label">${WLABELS[k]}</div>`;
+    d.addEventListener("mouseenter", (e) => showTip(`<div class="tt-title">${k} · ${WLABELS[k]}</div>Weight ${(DATA.weights[k]).toFixed(2)} in AFFIX composite`, e.clientX, e.clientY));
+    d.addEventListener("mouseleave", hideTip);
+    wg.appendChild(d);
+  });
+
+  /* ——— filters ——— */
+  const langs = [...new Set(FWs.map((f) => langFamily(f.primary_lang)))].sort();
+  const cats = [...new Set(FWs.map((f) => f.category))].sort();
+  const fl = $("#filterLang");
+  const fc = $("#filterCat");
+  langs.forEach((l) => { const o = document.createElement("option"); o.value = l; o.textContent = l; fl.appendChild(o); });
+  cats.forEach((c) => { const o = document.createElement("option"); o.value = c; o.textContent = c.length > 42 ? c.slice(0, 40) + "…" : c; fc.appendChild(o); });
+
+  let sortKey = "AFFIX";
+  let sortDir = -1; // desc
+
+  function filtered() {
+    return FWs.filter((f) => {
+      if (fl.value !== "all" && langFamily(f.primary_lang) !== fl.value) return false;
+      if (fc.value !== "all" && f.category !== fc.value) return false;
+      return true;
+    });
+  }
+
+  function sortedRows() {
+    const rows = filtered().slice();
+    rows.sort((a, b) => {
+      let av = a[sortKey], bv = b[sortKey];
+      if (sortKey === "rank") { av = FWs.indexOf(a); bv = FWs.indexOf(b); }
+      if (sortKey === "framework" || sortKey === "id" || sortKey === "primary_lang") {
+        return String(av).localeCompare(String(bv)) * sortDir;
+      }
+      return (av - bv) * sortDir;
+    });
+    return rows;
+  }
+
+  function renderTable() {
+    const body = $("#lbBody");
+    body.innerHTML = "";
+    const rows = sortedRows();
+    rows.forEach((f, i) => {
+      const tr = document.createElement("tr");
+      const globalRank = FWs.indexOf(f) + 1;
+      tr.innerHTML = `
+        <td class="rank">${globalRank}</td>
+        <td><span class="id-badge">${f.id}</span></td>
+        <td class="fw" title="${f.category}">${f.framework}</td>
+        <td><span class="cat-tag">${f.primary_lang}</span></td>
+        <td class="affix-cell">${fmt(f.AFFIX, 2)}</td>
+        <td class="${rhsClass(f.RHS)}">${fmt(f.RHS, 1)}</td>
+        <td>${fmt(f.LIE)}</td>
+        <td>${fmt(f.CTI, 1)}</td>
+        <td>${fmt(f.FMC)}</td>
+        <td>${fmt(f.RACS)}</td>
+        <td>${fmt(f.PR)}</td>
+        <td>${fmt(f.PH)}</td>
+        <td>${fmt(f.DX)}</td>`;
+      tr.addEventListener("mouseenter", (e) => {
+        showTip(
+          `<div class="tt-title">${f.framework} (${f.id})</div>
+           AFFIX ${fmt(f.AFFIX, 2)} · RHS ${fmt(f.RHS, 1)} · PR ${f.PR}<br/>
+           LIE ${f.LIE} · CTI ${fmt(f.CTI,1)} · FMC ${f.FMC} · RACS ${f.RACS}<br/>
+           <span style="color:var(--text-mute)">${f.category}</span>`,
+          e.clientX, e.clientY
+        );
+      });
+      tr.addEventListener("mouseleave", hideTip);
+      body.appendChild(tr);
+    });
+  }
+
+  $$("#lbTable th").forEach((th) => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.key;
+      if (!key) return;
+      if (sortKey === key) sortDir *= -1;
+      else { sortKey = key; sortDir = (key === "framework" || key === "id" || key === "primary_lang") ? 1 : -1; }
+      $$("#lbTable th").forEach((h) => {
+        h.classList.remove("sorted");
+        const ar = h.querySelector(".arrow");
+        if (ar) ar.remove();
+      });
+      th.classList.add("sorted");
+      const arrow = document.createElement("span");
+      arrow.className = "arrow";
+      arrow.textContent = sortDir < 0 ? "▼" : "▲";
+      th.appendChild(arrow);
+      renderTable();
+    });
+  });
+
+  fl.addEventListener("change", renderTable);
+  fc.addEventListener("change", renderTable);
+  $("#resetFilters").addEventListener("click", () => { fl.value = "all"; fc.value = "all"; renderTable(); });
+  renderTable();
+
+  /* ——— scatter ——— */
+  function drawScatter() {
+    const canvas = $("#scatterCanvas");
+    const ctx = canvas.getContext("2d");
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth || 640;
+    const cssH = 480;
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const pad = { l: 52, r: 24, t: 24, b: 44 };
+    const W = cssW - pad.l - pad.r;
+    const H = cssH - pad.t - pad.b;
+
+    const xs = FWs.map((f) => f.AFFIX);
+    const ys = FWs.map((f) => f.RHS);
+    const xMin = Math.min(...xs) - 2, xMax = Math.max(...xs) + 2;
+    const yMin = Math.min(...ys) - 2, yMax = Math.max(...ys) + 2;
+    const xMed = xs.slice().sort((a,b)=>a-b)[Math.floor(xs.length/2)];
+    const yMed = ys.slice().sort((a,b)=>a-b)[Math.floor(ys.length/2)];
+
+    const xS = (v) => pad.l + ((v - xMin) / (xMax - xMin)) * W;
+    // invert Y: low RHS at top
+    const yS = (v) => pad.t + ((v - yMin) / (yMax - yMin)) * H;
+
+    ctx.clearRect(0, 0, cssW, cssH);
+    ctx.fillStyle = "#141820";
+    ctx.fillRect(0, 0, cssW, cssH);
+
+    // grid
+    ctx.strokeStyle = "#252c38";
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+      const yy = pad.t + (H / 4) * i;
+      const xx = pad.l + (W / 4) * i;
+      ctx.beginPath(); ctx.moveTo(pad.l, yy); ctx.lineTo(pad.l + W, yy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(xx, pad.t); ctx.lineTo(xx, pad.t + H); ctx.stroke();
+    }
+
+    // median guides
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = "rgba(196,120,58,0.45)";
+    ctx.beginPath(); ctx.moveTo(xS(xMed), pad.t); ctx.lineTo(xS(xMed), pad.t + H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.l, yS(yMed)); ctx.lineTo(pad.l + W, yS(yMed)); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // axes labels
+    ctx.fillStyle = "#6b655c";
+    ctx.font = "11px IBM Plex Mono, monospace";
+    ctx.textAlign = "center";
+    ctx.fillText("AFFIX →", pad.l + W / 2, cssH - 12);
+    ctx.save();
+    ctx.translate(14, pad.t + H / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText("← RHS (lower better ↑)", 0, 0);
+    ctx.restore();
+
+    // ticks
+    ctx.textAlign = "right";
+    ctx.fillText(fmt(yMin, 0), pad.l - 8, pad.t + H + 3);
+    ctx.fillText(fmt(yMax, 0), pad.l - 8, pad.t + 3);
+    ctx.textAlign = "center";
+    ctx.fillText(fmt(xMin, 0), pad.l, pad.t + H + 18);
+    ctx.fillText(fmt(xMax, 0), pad.l + W, pad.t + H + 18);
+
+    const points = [];
+    FWs.forEach((f) => {
+      const x = xS(f.AFFIX);
+      const y = yS(f.RHS);
+      const fam = langFamily(f.primary_lang);
+      let color = "#e8a84a";
+      if (fam === "TypeScript") color = "#c4783a";
+      else if (fam === "Java" || fam === "C# / .NET" || fam === "Multi" || fam === "Python/TS") color = "#7a9ab8";
+      if (fam === "Python") color = "#e8a84a";
+
+      ctx.beginPath();
+      ctx.arc(x, y, 7, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.globalAlpha = 0.9;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = "#0c0e12";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = "#e8e4db";
+      ctx.font = "600 10px IBM Plex Mono, monospace";
+      ctx.textAlign = "left";
+      ctx.fillText(f.id, x + 10, y + 3);
+
+      points.push({ f, x, y, r: 10 });
+    });
+
+    canvas.onmousemove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const hit = points.find((p) => (mx - p.x) ** 2 + (my - p.y) ** 2 < p.r ** 2);
+      if (hit) {
+        canvas.style.cursor = "pointer";
+        showTip(
+          `<div class="tt-title">${hit.f.framework}</div>
+           AFFIX ${fmt(hit.f.AFFIX, 2)} · RHS ${fmt(hit.f.RHS, 1)}<br/>
+           DX−PH = ${fmt(hit.f.DX - hit.f.PH, 0)} · LIE ${hit.f.LIE}`,
+          e.clientX, e.clientY
+        );
+      } else {
+        canvas.style.cursor = "default";
+        hideTip();
+      }
+    };
+    canvas.onmouseleave = hideTip;
+  }
+
+  /* ——— index bars + radar ——— */
+  let activeIdx = "RHS";
+
+  function renderIdxPicker() {
+    const box = $("#idxPicker");
+    box.innerHTML = "";
+    DATA.indices.forEach((idx) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = idx.key === activeIdx ? "on" : "";
+      b.innerHTML = `${idx.label} <span class="dir">${idx.dir === "lower" ? "↓ better" : "↑ better"}</span>`;
+      b.addEventListener("click", () => { activeIdx = idx.key; renderIdxPicker(); renderBars(); });
+      box.appendChild(b);
+    });
+  }
+
+  function renderBars() {
+    const idx = DATA.indices.find((i) => i.key === activeIdx);
+    $("#barTitle").innerHTML = `${idx.label} <span>${idx.dir === "lower" ? "lower better" : "higher better"}</span>`;
+    const sorted = FWs.slice().sort((a, b) => {
+      return idx.dir === "lower" ? a[activeIdx] - b[activeIdx] : b[activeIdx] - a[activeIdx];
+    });
+    const maxV = Math.max(...sorted.map((f) => f[activeIdx]));
+    const box = $("#barChart");
+    box.innerHTML = "";
+    sorted.forEach((f) => {
+      const row = document.createElement("div");
+      row.className = "bar-row";
+      const pct = (f[activeIdx] / (maxV || 1)) * 100;
+      const inv = idx.dir === "lower" && f[activeIdx] > 30;
+      row.innerHTML = `
+        <span class="bid">${f.id}</span>
+        <div class="bar-track"><div class="bar-fill ${inv ? "inv" : ""}" style="width:${pct}%"></div></div>
+        <span class="val">${fmt(f[activeIdx], activeIdx === "AFFIX" || activeIdx === "RHS" || activeIdx === "CTI" ? 1 : 0)}</span>`;
+      row.addEventListener("mouseenter", (e) => showTip(`<div class="tt-title">${f.framework}</div>${idx.desc}<br/><strong>${activeIdx}: ${fmt(f[activeIdx], 1)}</strong>`, e.clientX, e.clientY));
+      row.addEventListener("mouseleave", hideTip);
+      box.appendChild(row);
+    });
+  }
+
+  // radar selects
+  const radarKeys = ["LIE", "CTI", "FMC", "RACS", "PR", "RHS", "GED"];
+  // normalize: for lower-better, use 100-v
+  function normAxis(key, v) {
+    const lower = ["LIE", "CTI", "RHS"];
+    return lower.includes(key) ? (100 - v) / 100 : v / 100;
+  }
+
+  ["radarA", "radarB", "radarC"].forEach((id, i) => {
+    const sel = $("#" + id);
+    const defaults = ["PD", "VS", "LG"];
+    FWs.forEach((f) => {
+      const o = document.createElement("option");
+      o.value = f.id;
+      o.textContent = `${f.id} — ${f.framework}`;
+      if (f.id === defaults[i]) o.selected = true;
+      sel.appendChild(o);
+    });
+    if (id === "radarC") {
+      const o = document.createElement("option");
+      o.value = "";
+      o.textContent = "— none —";
+      sel.insertBefore(o, sel.firstChild);
+    }
+    sel.addEventListener("change", drawRadar);
+  });
+
+  function drawRadar() {
+    const canvas = $("#radarCanvas");
+    const ctx = canvas.getContext("2d");
+    const dpr = window.devicePixelRatio || 1;
+    const size = Math.min(canvas.clientWidth || 420, 420);
+    canvas.width = size * dpr;
+    canvas.height = size * 0.86 * dpr;
+    const cssW = size, cssH = size * 0.86;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    ctx.fillStyle = "#141820";
+    ctx.fillRect(0, 0, cssW, cssH);
+
+    const cx = cssW / 2, cy = cssH / 2 + 6;
+    const R = Math.min(cx, cy) - 48;
+    const n = radarKeys.length;
+    const angle = (i) => -Math.PI / 2 + (i * 2 * Math.PI) / n;
+
+    // rings
+    ctx.strokeStyle = "#2e3644";
+    ctx.lineWidth = 1;
+    for (let ring = 1; ring <= 4; ring++) {
+      ctx.beginPath();
+      for (let i = 0; i <= n; i++) {
+        const a = angle(i % n);
+        const r = (R * ring) / 4;
+        const x = cx + Math.cos(a) * r;
+        const y = cy + Math.sin(a) * r;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+    // spokes + labels
+    ctx.font = "10px IBM Plex Mono, monospace";
+    ctx.fillStyle = "#9a9488";
+    radarKeys.forEach((k, i) => {
+      const a = angle(i);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+      ctx.strokeStyle = "#252c38";
+      ctx.stroke();
+      const lx = cx + Math.cos(a) * (R + 18);
+      const ly = cy + Math.sin(a) * (R + 18);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#c4783a";
+      ctx.fillText(k, lx, ly);
+    });
+
+    const colors = ["rgba(232,168,74,0.75)", "rgba(196,120,58,0.7)", "rgba(122,154,184,0.7)"];
+    const fillC = ["rgba(232,168,74,0.12)", "rgba(196,120,58,0.1)", "rgba(122,154,184,0.1)"];
+    const ids = [$("#radarA").value, $("#radarB").value, $("#radarC").value].filter(Boolean);
+
+    ids.forEach((id, fi) => {
+      const f = FWs.find((x) => x.id === id);
+      if (!f) return;
+      ctx.beginPath();
+      radarKeys.forEach((k, i) => {
+        const v = normAxis(k, f[k]);
+        const a = angle(i);
+        const x = cx + Math.cos(a) * R * v;
+        const y = cy + Math.sin(a) * R * v;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.closePath();
+      ctx.fillStyle = fillC[fi];
+      ctx.fill();
+      ctx.strokeStyle = colors[fi];
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+
+    // legend
+    ctx.font = "11px IBM Plex Mono, monospace";
+    ids.forEach((id, fi) => {
+      ctx.fillStyle = colors[fi];
+      ctx.fillRect(12, 12 + fi * 18, 10, 10);
+      ctx.fillStyle = "#e8e4db";
+      ctx.textAlign = "left";
+      ctx.fillText(id, 28, 21 + fi * 18);
+    });
+  }
+
+  renderIdxPicker();
+  renderBars();
+
+  /* ——— findings ——— */
+  const fg = $("#findingsGrid");
+  DATA.findings.forEach((f) => {
+    const card = document.createElement("article");
+    card.className = "finding-card";
+    card.innerHTML = `
+      <div class="num">FINDING ${String(f.n).padStart(2, "0")}</div>
+      <h3>${f.title}</h3>
+      <p>${f.body}</p>
+      <div class="claim-tag">Falsifiable · EST · see PROPRIETARY_FINDINGS.md</div>`;
+    fg.appendChild(card);
+  });
+
+  /* ——— personas ——— */
+  const tabs = $("#personaTabs");
+  const panels = $("#personaPanels");
+  DATA.personas.forEach((p, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = p.name;
+    btn.className = i === 0 ? "on" : "";
+    btn.addEventListener("click", () => {
+      $$(".persona-tabs button").forEach((b) => b.classList.remove("on"));
+      $$(".persona-panel").forEach((b) => b.classList.remove("on"));
+      btn.classList.add("on");
+      $("#pp-" + p.id).classList.add("on");
+    });
+    tabs.appendChild(btn);
+
+    const panel = document.createElement("div");
+    panel.className = "persona-panel" + (i === 0 ? " on" : "");
+    panel.id = "pp-" + p.id;
+    panel.innerHTML = `
+      <h3>${p.name}</h3>
+      <div class="persona-picks">
+        ${p.picks.map((pk) => `
+          <div class="pick">
+            <div class="role">${pk.role}</div>
+            <div class="name">${pk.name}</div>
+            <div class="why">${pk.why}</div>
+          </div>`).join("")}
+      </div>
+      <p class="persona-avoid"><strong>Avoid:</strong> ${p.avoid}</p>
+      ${p.watch ? `<div class="persona-watch">WATCH · ${p.watch}</div>` : ""}`;
+    panels.appendChild(panel);
+  });
+
+  /* ——— heatmap ——— */
+  function renderHeat() {
+    const head = $("#heatHead");
+    head.innerHTML = "<th>ID</th>" + DIMS.map((d) => `<th title="${WLABELS[d]}">${d}</th>`).join("") + "<th>AFFIX</th>";
+    const body = $("#heatBody");
+    body.innerHTML = "";
+    FWs.forEach((f) => {
+      const tr = document.createElement("tr");
+      let cells = `<td>${f.id}</td>`;
+      DIMS.forEach((d) => {
+        const v = f[d];
+        cells += `<td style="background:${heatColor(v)};color:${textOnHeat(v)}" data-v="${v}" data-d="${d}" data-fw="${f.framework}">${v}</td>`;
+      });
+      cells += `<td style="background:${heatColor(f.AFFIX)};color:${textOnHeat(f.AFFIX)};font-weight:600">${fmt(f.AFFIX, 1)}</td>`;
+      tr.innerHTML = cells;
+      $$("td[data-v]", tr).forEach((td) => {
+        td.addEventListener("mouseenter", (e) => {
+          showTip(
+            `<div class="tt-title">${td.dataset.fw}</div>${td.dataset.d}: ${td.dataset.v}<br/>${WLABELS[td.dataset.d] || ""} · w=${DATA.weights[td.dataset.d]}`,
+            e.clientX,
+            e.clientY
+          );
+        });
+        td.addEventListener("mouseleave", hideTip);
+      });
+      body.appendChild(tr);
+    });
+  }
+  renderHeat();
+
+  /* ——— init charts + resize ——— */
+  function paint() {
+    drawScatter();
+    drawRadar();
+  }
+  paint();
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(paint, 120);
+  });
+})();
+</script>
+</body>
+</html>

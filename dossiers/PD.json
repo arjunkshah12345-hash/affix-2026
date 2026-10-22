@@ -1,0 +1,63 @@
+{
+  "id": "PD",
+  "framework": "PydanticAI",
+  "primary_lang": "Python",
+  "category": "Typed agents / Python AI SDK",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "Typed Python agent SDK with first-party durable engines and OTel-native observability.",
+  "best_for": "Typed Python production agents with durable execution and OTel",
+  "when_not_to_use": "Do not pick PydanticAI when the product is a React/Next streaming UI (use VS\u00b1MA), when the bottleneck is automatic prompt search (use DSPy as compiler), or when you need LangGraph-class arbitrary mid-graph interrupts without adopting a durable engine/Harness persistence.",
+  "versions": {
+    "pypi": "pydantic-ai==2.59.0",
+    "notes": "Companion: pydantic-ai-harness; Logfire optional"
+  },
+  "api_primitives": {
+    "hitl": "Deferred tool calls / approval via durable engines + Harness; AG-UI tool approval interrupts",
+    "checkpoint": "StepPersistence (Harness); TemporalDurability / DBOS / Prefect / Restate / Lambda / Airflow backends",
+    "stream": "agent.run stream / StreamedRunResult; AG-UI and Vercel AI UI bridges",
+    "structured": "Agent(..., output_type=Model); tool/native/prompted modes; Pydantic validation + retry",
+    "obs": "Instrumentation capability; logfire.instrument_pydantic_ai(); plain OTel; Pydantic Evals",
+    "multiAgent": "capabilities SubAgents / multi-agent guides; Pydantic Graph for typed control flow",
+    "mcp": "capabilities=[MCP(url)] client; MCP API module; Logfire MCP in Harness"
+  },
+  "scores": {
+    "AF": 90.0,
+    "CS": 88.0,
+    "OB": 92.0,
+    "TC": 96.0,
+    "EG": 78.0,
+    "RE": 80.0,
+    "MF": 82.0,
+    "PH": 90.0,
+    "DX": 88.0,
+    "FP": 90.0
+  },
+  "affix_composite": 87.64,
+  "proprietary": {
+    "LIE": 22.0,
+    "CTI": 30.0,
+    "FMC": 78.0,
+    "GED": 72.0,
+    "RACS": 80.0,
+    "RHS": 17.3,
+    "PR": 91
+  },
+  "citations": [
+    "https://pydantic.dev/docs/ai/overview/",
+    "https://pydantic.dev/docs/ai/core-concepts/output/",
+    "https://pydantic.dev/docs/ai/core-concepts/agent/",
+    "https://pydantic.dev/docs/ai/capabilities/durable_execution/overview/",
+    "https://pydantic.dev/docs/ai/capabilities/mcp/",
+    "https://pydantic.dev/docs/ai/integrations/logfire/",
+    "https://pydantic.dev/docs/ai/evals/evals/",
+    "https://github.com/pydantic/pydantic-ai"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 95,
+    "MCP_server": 85,
+    "A2A_or_equiv": 85,
+    "OpenAPI_tool_bridge": 90,
+    "OTel_GenAI_portable": 98
+  }
+}

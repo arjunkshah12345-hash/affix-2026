@@ -1,0 +1,85 @@
+{
+  "cluster": "typed-dx",
+  "study": "AFFIX-2026",
+  "date": "2026-10-21",
+  "main": {
+    "PD": {
+      "framework": "PydanticAI",
+      "affix": 87.6,
+      "scores": {"AF": 90, "CS": 88, "OB": 92, "TC": 96, "EG": 78, "RE": 80, "MF": 82, "PH": 90, "DX": 88, "FP": 90},
+      "CTI": 30,
+      "LIE": 22,
+      "FMC": 78,
+      "GED": 72,
+      "RACS": 80
+    },
+    "MA": {
+      "framework": "Mastra",
+      "affix": 82.5,
+      "scores": {"AF": 88, "CS": 85, "OB": 88, "TC": 86, "EG": 72, "RE": 78, "MF": 70, "PH": 80, "DX": 86, "FP": 88},
+      "CTI": 34,
+      "LIE": 32,
+      "FMC": 72,
+      "GED": 78,
+      "RACS": 84
+    },
+    "VS": {
+      "framework": "Vercel AI SDK",
+      "affix": 81.5,
+      "scores": {"AF": 82, "CS": 72, "OB": 70, "TC": 92, "EG": 95, "RE": 88, "MF": 75, "PH": 68, "DX": 94, "FP": 85},
+      "CTI": 22,
+      "LIE": 35,
+      "FMC": 55,
+      "GED": 42,
+      "RACS": 65
+    },
+    "SP": {
+      "framework": "Spring AI",
+      "affix": 78.2,
+      "scores": {"AF": 80, "CS": 70, "OB": 85, "TC": 88, "EG": 75, "RE": 72, "MF": 70, "PH": 88, "DX": 70, "FP": 85},
+      "CTI": 28,
+      "LIE": 42,
+      "FMC": 62,
+      "GED": 45,
+      "RACS": 72
+    },
+    "DS": {
+      "framework": "DSPy",
+      "affix": 71.2,
+      "scores": {"AF": 78, "CS": 55, "OB": 60, "TC": 85, "EG": 82, "RE": 70, "MF": 88, "PH": 55, "DX": 72, "FP": 75},
+      "CTI": 48,
+      "LIE": 15,
+      "FMC": 35,
+      "GED": 50,
+      "RACS": 58
+    }
+  },
+  "spot": {
+    "IN": {
+      "framework": "Inngest AgentKit / durable agents",
+      "affix_EST": 78.8,
+      "CTI_EST": 26,
+      "PH_EST": 95,
+      "CS_EST": 92,
+      "scores_light": {"AF": 75, "CS": 92, "OB": 85, "TC": 70, "EG": 65, "RE": 78, "MF": 72, "PH": 95, "DX": 78, "FP": 70}
+    },
+    "LW": {
+      "framework": "LiteLLM gateway",
+      "scope": "EG/RE/MF/FP only",
+      "EG": 90,
+      "RE": 88,
+      "MF": 92,
+      "FP": 86
+    }
+  },
+  "cti_ranking_lower_better": ["VS", "IN", "SP", "PD", "MA", "DS"],
+  "affix_ranking_higher_better": ["PD", "MA", "VS", "SP", "DS"],
+  "cognitive_tax_findings": [
+    "TC and CTI diverge: PD has highest TC (96) but not lowest CTI; VS has lowest CTI (22) with TC 92.",
+    "DSPy highest CTI (48) due to inverted learning order: metric→compile→productionize.",
+    "Batteries (MA/PD) raise CTI but raise FMC; thin layers (VS) invert that tradeoff.",
+    "Spring CTI is conditional on JVM/Spring fluency.",
+    "LiteLLM lowers provider tax, not agent CTI.",
+    "Durability (IN / PD+Temporal) is an orthogonal tax axis."
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "id": "DS",
+  "framework": "DSPy",
+  "primary_lang": "Python",
+  "category": "Programmatic prompting / optimizable LM programs",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "Programmatic LM programs and optimizers \u2014 compile, don't serve.",
+  "best_for": "Compile-time prompt/metric optimization (GEPA/MIPRO)",
+  "when_not_to_use": "Do not serve DSPy as your production agent OS. Use it to optimize prompts/metrics, then serve via PD/OA/VS/LG.",
+  "versions": {
+    "pypi": "dspy==3.4.1",
+    "notes": "GEPA optimizer path; not a serve OS"
+  },
+  "api_primitives": {
+    "hitl": "Not a durable HITL runtime",
+    "checkpoint": "None as serve OS",
+    "stream": "Limited; not product UI streaming",
+    "structured": "Signatures / typed predictors \u2014 strong compile-time contracts",
+    "obs": "Partial logging; not OTel-first agent traces",
+    "multiAgent": "Programs composing modules; not crew/graph OS",
+    "mcp": "Weak / DIY \u2014 lowest PR in-set"
+  },
+  "scores": {
+    "AF": 78.0,
+    "CS": 55.0,
+    "OB": 60.0,
+    "TC": 85.0,
+    "EG": 82.0,
+    "RE": 70.0,
+    "MF": 88.0,
+    "PH": 55.0,
+    "DX": 72.0,
+    "FP": 75.0
+  },
+  "affix_composite": 71.19,
+  "proprietary": {
+    "LIE": 15.0,
+    "CTI": 48.0,
+    "FMC": 35.0,
+    "GED": 50.0,
+    "RACS": 58.0,
+    "RHS": 44.3,
+    "PR": 49
+  },
+  "citations": [
+    "https://dspy.ai/",
+    "https://dspy.ai/current/getting-started/react-and-tools/",
+    "https://dspy.ai/current/getting-started/gepa-optimization/",
+    "https://dspy.ai/current/api/optimizers/GEPA/overview/",
+    "https://arxiv.org/abs/2507.19457",
+    "https://github.com/stanfordnlp/dspy",
+    "https://pypi.org/project/dspy/"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 45,
+    "MCP_server": 30,
+    "A2A_or_equiv": 40,
+    "OpenAPI_tool_bridge": 70,
+    "OTel_GenAI_portable": 70
+  },
+  "deep_notes_md": true
+}

@@ -1,0 +1,62 @@
+{
+  "id": "SM",
+  "framework": "Hugging Face smolagents",
+  "primary_lang": "Python",
+  "category": "Code-act agents",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "Tiny code-act agents with first-class sandbox backends.",
+  "best_for": "Minimal code-act prototypes with real sandboxes",
+  "when_not_to_use": "Do not use smolagents as a sole production runtime for HITL/compliance; it is a code-act prototype vehicle with sandbox strengths and FMC gaps.",
+  "versions": {
+    "pypi": "smolagents==1.26.0",
+    "notes": "HF docs pin v1.26.0"
+  },
+  "api_primitives": {
+    "hitl": "No first-class durable interrupt API",
+    "checkpoint": "None first-class",
+    "stream": "Partial streaming of agent steps",
+    "structured": "Weak; code-act returns over schema contracts",
+    "obs": "Minimal; external AgentOps etc.",
+    "multiAgent": "Managed multi-agent examples (multiagents docs)",
+    "mcp": "MCP tool support in smolagents"
+  },
+  "scores": {
+    "AF": 78.0,
+    "CS": 55.0,
+    "OB": 50.0,
+    "TC": 60.0,
+    "EG": 75.0,
+    "RE": 80.0,
+    "MF": 85.0,
+    "PH": 68.0,
+    "DX": 95.0,
+    "FP": 80.0
+  },
+  "affix_composite": 71.22,
+  "proprietary": {
+    "LIE": 18.0,
+    "CTI": 22.0,
+    "FMC": 45.0,
+    "GED": 35.0,
+    "RACS": 48.0,
+    "RHS": 40.0,
+    "PR": 78
+  },
+  "citations": [
+    "https://huggingface.co/docs/smolagents/index",
+    "https://huggingface.co/docs/smolagents/examples/multiagents",
+    "https://huggingface.co/blog/smolagents",
+    "https://github.com/huggingface/smolagents",
+    "https://pypi.org/project/smolagents/",
+    "https://huggingface.co/docs/smolagents/en/reference/agents"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 90,
+    "MCP_server": 70,
+    "A2A_or_equiv": 70,
+    "OpenAPI_tool_bridge": 80,
+    "OTel_GenAI_portable": 70
+  },
+  "deep_notes_md": true
+}

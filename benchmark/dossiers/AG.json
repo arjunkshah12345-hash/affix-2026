@@ -1,0 +1,63 @@
+{
+  "id": "AG",
+  "framework": "AutoGen / AG2",
+  "primary_lang": "Python",
+  "category": "Multi-agent / AgentOS",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "Multi-agent research topologies (GroupChat/Network) with high expressiveness.",
+  "best_for": "Research multi-agent topologies and debates",
+  "when_not_to_use": "Do not productize research GroupChat topologies without a serve-path rewrite plan (RHS high). Classic\u2192v1 is non-drop-in.",
+  "versions": {
+    "pypi": "ag2==1.2.1",
+    "notes": "Classic stack separately maintained (ag2-classic)"
+  },
+  "api_primitives": {
+    "hitl": "Human proxy agents / input requests in chat patterns",
+    "checkpoint": "Partial; session/state helpers, not LG-class default",
+    "stream": "Streaming tokens/messages in group chats",
+    "structured": "Partial typed messages; weaker than PD/VS",
+    "obs": "Telemetry user guide (OTel middleware)",
+    "multiAgent": "GroupChat, Network, channel protocols \u2014 highest GED",
+    "mcp": "MCP integrations present; less polished than AD/PD"
+  },
+  "scores": {
+    "AF": 88.0,
+    "CS": 85.0,
+    "OB": 82.0,
+    "TC": 72.0,
+    "EG": 78.0,
+    "RE": 70.0,
+    "MF": 55.0,
+    "PH": 72.0,
+    "DX": 68.0,
+    "FP": 85.0
+  },
+  "affix_composite": 76.51,
+  "proprietary": {
+    "LIE": 42.0,
+    "CTI": 83.6,
+    "FMC": 72.0,
+    "GED": 95.0,
+    "RACS": 62.0,
+    "RHS": 36.0,
+    "PR": 76
+  },
+  "citations": [
+    "https://docs.ag2.ai/",
+    "https://docs.ag2.ai/docs/user-guide/telemetry/",
+    "https://www.ag2.ai/",
+    "https://github.com/ag2ai/ag2",
+    "https://github.com/ag2ai/ag2-classic",
+    "https://arxiv.org/abs/2308.08155",
+    "https://pypi.org/project/ag2/"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 80,
+    "MCP_server": 65,
+    "A2A_or_equiv": 70,
+    "OpenAPI_tool_bridge": 75,
+    "OTel_GenAI_portable": 90
+  },
+  "deep_notes_md": true
+}

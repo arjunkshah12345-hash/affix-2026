@@ -1,0 +1,64 @@
+{
+  "id": "OA",
+  "framework": "OpenAI Agents SDK",
+  "primary_lang": "Python (also JS SDK)",
+  "category": "Agent runtime",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "OpenAI's agent runtime: handoffs, guardrails, HITL RunState, MCP, sandbox agents.",
+  "best_for": "OpenAI-standardized orgs needing handoffs, guardrails, sandbox code-act",
+  "when_not_to_use": "Do not use as the sole stack if you require vendor-neutral ops (Traces/Sandbox/session gravity is real), or if you need open graph checkpoint export across non-OpenAI runtimes without adapters.",
+  "versions": {
+    "pypi": "openai-agents==0.24.0",
+    "notes": "Also openai-agents JS SDK"
+  },
+  "api_primitives": {
+    "hitl": "Tool needs_approval \u2192 interruptions; RunState serialize/resume",
+    "checkpoint": "Sessions + RunState; Temporal/Restate integrations for durable runs",
+    "stream": "Runner streaming events; results stream APIs",
+    "structured": "Agent output types / structured outputs on agents",
+    "obs": "Built-in tracing; exportable spans; guardrail hooks",
+    "multiAgent": "handoffs(); Agent.as_tool(); nested agent runs",
+    "mcp": "MCP servers as tools (multiple transports)"
+  },
+  "scores": {
+    "AF": 86.0,
+    "CS": 90.0,
+    "OB": 88.0,
+    "TC": 85.0,
+    "EG": 82.0,
+    "RE": 85.0,
+    "MF": 48.0,
+    "PH": 88.0,
+    "DX": 90.0,
+    "FP": 70.0
+  },
+  "affix_composite": 82.71,
+  "proprietary": {
+    "LIE": 55.0,
+    "CTI": 30.8,
+    "FMC": 82.0,
+    "GED": 55.0,
+    "RACS": 55.0,
+    "RHS": 24.2,
+    "PR": 81
+  },
+  "citations": [
+    "https://openai.github.io/openai-agents-python/",
+    "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+    "https://openai.github.io/openai-agents-python/handoffs/",
+    "https://openai.github.io/openai-agents-python/tracing/",
+    "https://openai.github.io/openai-agents-python/guardrails/",
+    "https://openai.github.io/openai-agents-python/mcp/",
+    "https://openai.github.io/openai-agents-python/sessions/",
+    "https://github.com/openai/openai-agents-python"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 90,
+    "MCP_server": 70,
+    "A2A_or_equiv": 70,
+    "OpenAPI_tool_bridge": 85,
+    "OTel_GenAI_portable": 88
+  },
+  "deep_notes_md": true
+}

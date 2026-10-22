@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use AFFIX-2026, please cite it as below."
+title: "AFFIX-2026: Agent Framework Fitness Index eXtended"
+type: dataset
+authors:
+  - family-names: Shah
+    given-names: Arjun
+date-released: "2026-10-22"
+version: "1.0.0"
+license: MIT
+abstract: >-
+  AFFIX-2026 is a comparative evaluation of production-relevant LLM and agent
+  application frameworks. Frameworks are scored on a weighted composite
+  (AFFIX) across ten dimensions and seven proprietary indices, including
+  Rewrite Hazard Score (RHS). Scores are estimates (EST) adjudicated from
+  primary documentation and API reality, not marketing claims.
+keywords:
+  - agent frameworks
+  - LLM tooling
+  - software engineering
+  - lock-in
+  - rewrite hazard
+  - benchmark
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Shah
+      given-names: Arjun
+  title: "AFFIX-2026: Agent Framework Fitness Index eXtended"
+  year: 2026
+  month: 10

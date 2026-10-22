@@ -1,0 +1,529 @@
+{
+  "study": "AFFIX-2026",
+  "artifact": "rewrite_hazard",
+  "as_of": "2026-10-21",
+  "direction": "lower_better",
+  "definition": "EST P(outgrow primary orchestration within 12 months of production) × 100",
+  "formula": "RHS = clamp(0, 100, 0.28*(100-RACS) + 0.22*(100-FMC) + 0.18*CTI + 0.17*max(0, DX-PH) + 0.15*(100-PH))",
+  "weights": {
+    "continuum_gap": 0.28,
+    "fmc_gap": 0.22,
+    "cti": 0.18,
+    "dx_surplus": 0.17,
+    "ph_gap": 0.15
+  },
+  "bands": {
+    "rewrite_safe": {"max_inclusive": 22},
+    "elevated": {"min": 23, "max_inclusive": 30},
+    "high": {"min": 31}
+  },
+  "falsifier": "Longitudinal cohort N≥30 per framework; Spearman ρ(RHS rank, primary orchestration replaced ≤12mo) > 0.4. Drop DX-PH term if regression p>0.1.",
+  "companions": {
+    "continuum_memo": "benchmark/deep/rag_agent_continuum.md",
+    "hazard_memo": "benchmark/deep/rewrite_hazard.md",
+    "matrix": "benchmark/scores/affix_matrix.json",
+    "findings": "benchmark/findings/PROPRIETARY_FINDINGS.md"
+  },
+  "frameworks": [
+    {
+      "id": "PD",
+      "framework": "PydanticAI",
+      "inputs": {"RACS": 80.0, "FMC": 78.0, "CTI": 30.0, "DX": 88.0, "PH": 90.0},
+      "derived": {
+        "dx_minus_ph": -2.0,
+        "dx_surplus": 0.0,
+        "continuum_gap_raw": 20.0,
+        "fmc_gap_raw": 22.0,
+        "ph_gap_raw": 10.0
+      },
+      "components": {
+        "continuum_gap": 5.6,
+        "fmc_gap": 4.84,
+        "cti": 5.4,
+        "dx_surplus": 0.0,
+        "ph_gap": 1.5
+      },
+      "dominant_driver": "balanced_low",
+      "RHS": 17.3,
+      "RHS_unrounded": 17.34,
+      "band": "rewrite_safe",
+      "AFFIX": 87.64,
+      "notes": "Best RHS in study; durable engines + types; compose LI/HS if RAG OS needed"
+    },
+    {
+      "id": "MS",
+      "framework": "Microsoft Agent Framework",
+      "inputs": {"RACS": 76.0, "FMC": 80.0, "CTI": 36.0, "DX": 70.0, "PH": 88.0},
+      "derived": {
+        "dx_minus_ph": -18.0,
+        "dx_surplus": 0.0,
+        "continuum_gap_raw": 24.0,
+        "fmc_gap_raw": 20.0,
+        "ph_gap_raw": 12.0
+      },
+      "components": {
+        "continuum_gap": 6.72,
+        "fmc_gap": 4.4,
+        "cti": 6.48,
+        "dx_surplus": 0.0,
+        "ph_gap": 1.8
+      },
+      "dominant_driver": "cti_continuum",
+      "RHS": 19.4,
+      "RHS_unrounded": 19.4,
+      "band": "rewrite_safe",
+      "AFFIX": 80.91,
+      "notes": "Greenfield Microsoft path; SK succession tax not in MS row"
+    },
+    {
+      "id": "MA",
+      "framework": "Mastra",
+      "inputs": {"RACS": 84.0, "FMC": 72.0, "CTI": 34.0, "DX": 86.0, "PH": 80.0},
+      "derived": {
+        "dx_minus_ph": 6.0,
+        "dx_surplus": 6.0,
+        "continuum_gap_raw": 16.0,
+        "fmc_gap_raw": 28.0,
+        "ph_gap_raw": 20.0
+      },
+      "components": {
+        "continuum_gap": 4.48,
+        "fmc_gap": 6.16,
+        "cti": 6.12,
+        "dx_surplus": 1.02,
+        "ph_gap": 3.0
+      },
+      "dominant_driver": "fmc_cti",
+      "RHS": 20.8,
+      "RHS_unrounded": 20.78,
+      "band": "rewrite_safe",
+      "AFFIX": 82.49,
+      "notes": "TS continuum bet; pair with VS for UI"
+    },
+    {
+      "id": "SP",
+      "framework": "Spring AI",
+      "inputs": {"RACS": 72.0, "FMC": 62.0, "CTI": 28.0, "DX": 70.0, "PH": 88.0},
+      "derived": {
+        "dx_minus_ph": -18.0,
+        "dx_surplus": 0.0,
+        "continuum_gap_raw": 28.0,
+        "fmc_gap_raw": 38.0,
+        "ph_gap_raw": 12.0
+      },
+      "components": {
+        "continuum_gap": 7.84,
+        "fmc_gap": 8.36,
+        "cti": 5.04,
+        "dx_surplus": 0.0,
+        "ph_gap": 1.8
+      },
+      "dominant_driver": "fmc_continuum",
+      "RHS": 23.0,
+      "RHS_unrounded": 23.04,
+      "band": "elevated",
+      "AFFIX": 78.23,
+      "notes": "CTI conditional on Spring Boot fluency"
+    },
+    {
+      "id": "OA",
+      "framework": "OpenAI Agents SDK",
+      "inputs": {"RACS": 55.0, "FMC": 82.0, "CTI": 30.8, "DX": 90.0, "PH": 88.0},
+      "derived": {
+        "dx_minus_ph": 2.0,
+        "dx_surplus": 2.0,
+        "continuum_gap_raw": 45.0,
+        "fmc_gap_raw": 18.0,
+        "ph_gap_raw": 12.0
+      },
+      "components": {
+        "continuum_gap": 12.6,
+        "fmc_gap": 3.96,
+        "cti": 5.544,
+        "dx_surplus": 0.34,
+        "ph_gap": 1.8
+      },
+      "dominant_driver": "continuum_gap",
+      "RHS": 24.2,
+      "RHS_unrounded": 24.244,
+      "band": "elevated",
+      "AFFIX": 82.71,
+      "notes": "Weak RAG→multi-agent continuum; strong FMC/PH; LIE via traces/sandbox"
+    },
+    {
+      "id": "LI",
+      "framework": "LlamaIndex",
+      "inputs": {"RACS": 92.0, "FMC": 72.0, "CTI": 70.0, "DX": 78.0, "PH": 78.0},
+      "derived": {
+        "dx_minus_ph": 0.0,
+        "dx_surplus": 0.0,
+        "continuum_gap_raw": 8.0,
+        "fmc_gap_raw": 28.0,
+        "ph_gap_raw": 22.0
+      },
+      "components": {
+        "continuum_gap": 2.24,
+        "fmc_gap": 6.16,
+        "cti": 12.6,
+        "dx_surplus": 0.0,
+        "ph_gap": 3.3
+      },
+      "dominant_driver": "cti",
+      "RHS": 24.3,
+      "RHS_unrounded": 24.3,
+      "band": "elevated",
+      "AFFIX": 78.61,
+      "notes": "Best RACS; CTI + LIE Cloud/Parse dominate residual hazard; durable DIY/DBOS"
+    },
+    {
+      "id": "AD",
+      "framework": "Google ADK",
+      "inputs": {"RACS": 72.0, "FMC": 80.0, "CTI": 61.6, "DX": 80.0, "PH": 88.0},
+      "derived": {
+        "dx_minus_ph": -8.0,
+        "dx_surplus": 0.0,
+        "continuum_gap_raw": 28.0,
+        "fmc_gap_raw": 20.0,
+        "ph_gap_raw": 12.0
+      },
+      "components": {
+        "continuum_gap": 7.84,
+        "fmc_gap": 4.4,
+        "cti": 11.088,
+        "dx_surplus": 0.0,
+        "ph_gap": 1.8
+      },
+      "dominant_driver": "cti",
+      "RHS": 25.1,
+      "RHS_unrounded": 25.128,
+      "band": "elevated",
+      "AFFIX": 82.5,
+      "notes": "Protocol-ready ≠ migration-easy (MF 52)"
+    },
+    {
+      "id": "HS",
+      "framework": "Haystack",
+      "inputs": {"RACS": 85.0, "FMC": 68.0, "CTI": 55.0, "DX": 82.0, "PH": 72.0},
+      "derived": {
+        "dx_minus_ph": 10.0,
+        "dx_surplus": 10.0,
+        "continuum_gap_raw": 15.0,
+        "fmc_gap_raw": 32.0,
+        "ph_gap_raw": 28.0
+      },
+      "components": {
+        "continuum_gap": 4.2,
+        "fmc_gap": 7.04,
+        "cti": 9.9,
+        "dx_surplus": 1.7,
+        "ph_gap": 4.2
+      },
+      "dominant_driver": "cti_fmc",
+      "RHS": 27.0,
+      "RHS_unrounded": 27.04,
+      "band": "elevated",
+      "AFFIX": 78.6,
+      "notes": "Strong RACS×LIE; S4 durable threads BYO vs LG"
+    },
+    {
+      "id": "CR",
+      "framework": "CrewAI",
+      "inputs": {"RACS": 70.0, "FMC": 70.0, "CTI": 39.6, "DX": 92.0, "PH": 76.0},
+      "derived": {
+        "dx_minus_ph": 16.0,
+        "dx_surplus": 16.0,
+        "continuum_gap_raw": 30.0,
+        "fmc_gap_raw": 30.0,
+        "ph_gap_raw": 24.0
+      },
+      "components": {
+        "continuum_gap": 8.4,
+        "fmc_gap": 6.6,
+        "cti": 7.128,
+        "dx_surplus": 2.72,
+        "ph_gap": 3.6
+      },
+      "dominant_driver": "continuum_dx_surplus",
+      "RHS": 28.4,
+      "RHS_unrounded": 28.448,
+      "band": "elevated",
+      "AFFIX": 79.6,
+      "notes": "DX−PH +16 fires; AMP/embedding gravity"
+    },
+    {
+      "id": "LG",
+      "framework": "LangGraph",
+      "inputs": {"RACS": 62.0, "FMC": 90.0, "CTI": 82.0, "DX": 65.0, "PH": 93.0},
+      "derived": {
+        "dx_minus_ph": -28.0,
+        "dx_surplus": 0.0,
+        "continuum_gap_raw": 38.0,
+        "fmc_gap_raw": 10.0,
+        "ph_gap_raw": 7.0
+      },
+      "components": {
+        "continuum_gap": 10.64,
+        "fmc_gap": 2.2,
+        "cti": 14.76,
+        "dx_surplus": 0.0,
+        "ph_gap": 1.05
+      },
+      "dominant_driver": "cti",
+      "RHS": 28.7,
+      "RHS_unrounded": 28.65,
+      "band": "elevated",
+      "AFFIX": 81.64,
+      "notes": "Highest CS/FMC/PH; CTI + weak RACS drive RHS above MA/OA/PD"
+    },
+    {
+      "id": "SK",
+      "framework": "Microsoft Semantic Kernel",
+      "inputs": {"RACS": 78.0, "FMC": 68.0, "CTI": 70.4, "DX": 62.0, "PH": 80.0},
+      "derived": {
+        "dx_minus_ph": -18.0,
+        "dx_surplus": 0.0,
+        "continuum_gap_raw": 22.0,
+        "fmc_gap_raw": 32.0,
+        "ph_gap_raw": 20.0
+      },
+      "components": {
+        "continuum_gap": 6.16,
+        "fmc_gap": 7.04,
+        "cti": 12.672,
+        "dx_surplus": 0.0,
+        "ph_gap": 3.0
+      },
+      "dominant_driver": "cti",
+      "RHS": 28.9,
+      "RHS_unrounded": 28.872,
+      "band": "elevated",
+      "AFFIX": 74.73,
+      "notes": "Effective greenfield hazard higher due to MAF succession (not fully in formula)"
+    },
+    {
+      "id": "LC",
+      "framework": "LangChain",
+      "inputs": {"RACS": 70.0, "FMC": 74.0, "CTI": 78.0, "DX": 80.0, "PH": 75.0},
+      "derived": {
+        "dx_minus_ph": 5.0,
+        "dx_surplus": 5.0,
+        "continuum_gap_raw": 30.0,
+        "fmc_gap_raw": 26.0,
+        "ph_gap_raw": 25.0
+      },
+      "components": {
+        "continuum_gap": 8.4,
+        "fmc_gap": 5.72,
+        "cti": 14.04,
+        "dx_surplus": 0.85,
+        "ph_gap": 3.75
+      },
+      "dominant_driver": "cti",
+      "RHS": 32.8,
+      "RHS_unrounded": 32.76,
+      "band": "high",
+      "AFFIX": 76.82,
+      "notes": "create_agent funnel into LG lock-in; LIE 72"
+    },
+    {
+      "id": "VS",
+      "framework": "Vercel AI SDK",
+      "inputs": {"RACS": 65.0, "FMC": 55.0, "CTI": 22.0, "DX": 94.0, "PH": 68.0},
+      "derived": {
+        "dx_minus_ph": 26.0,
+        "dx_surplus": 26.0,
+        "continuum_gap_raw": 35.0,
+        "fmc_gap_raw": 45.0,
+        "ph_gap_raw": 32.0
+      },
+      "components": {
+        "continuum_gap": 9.8,
+        "fmc_gap": 9.9,
+        "cti": 3.96,
+        "dx_surplus": 4.42,
+        "ph_gap": 4.8
+      },
+      "dominant_driver": "dx_surplus_fmc",
+      "RHS": 32.9,
+      "RHS_unrounded": 32.88,
+      "band": "high",
+      "AFFIX": 81.52,
+      "notes": "AFFIX leader not rewrite-safe; compose MA/Inngest"
+    },
+    {
+      "id": "AG",
+      "framework": "AutoGen / AG2",
+      "inputs": {"RACS": 62.0, "FMC": 72.0, "CTI": 83.6, "DX": 68.0, "PH": 72.0},
+      "derived": {
+        "dx_minus_ph": -4.0,
+        "dx_surplus": 0.0,
+        "continuum_gap_raw": 38.0,
+        "fmc_gap_raw": 28.0,
+        "ph_gap_raw": 28.0
+      },
+      "components": {
+        "continuum_gap": 10.64,
+        "fmc_gap": 6.16,
+        "cti": 15.048,
+        "dx_surplus": 0.0,
+        "ph_gap": 4.2
+      },
+      "dominant_driver": "cti",
+      "RHS": 36.0,
+      "RHS_unrounded": 36.048,
+      "band": "high",
+      "AFFIX": 76.51,
+      "notes": "Classic→v1 already a forced rewrite; GED trap"
+    },
+    {
+      "id": "SM",
+      "framework": "Hugging Face smolagents",
+      "inputs": {"RACS": 48.0, "FMC": 45.0, "CTI": 22.0, "DX": 95.0, "PH": 68.0},
+      "derived": {
+        "dx_minus_ph": 27.0,
+        "dx_surplus": 27.0,
+        "continuum_gap_raw": 52.0,
+        "fmc_gap_raw": 55.0,
+        "ph_gap_raw": 32.0
+      },
+      "components": {
+        "continuum_gap": 14.56,
+        "fmc_gap": 12.1,
+        "cti": 3.96,
+        "dx_surplus": 4.59,
+        "ph_gap": 4.8
+      },
+      "dominant_driver": "continuum_fmc_dx_surplus",
+      "RHS": 40.0,
+      "RHS_unrounded": 40.01,
+      "band": "high",
+      "AFFIX": 71.22,
+      "notes": "Code-act prototype; low LIE high RHS"
+    },
+    {
+      "id": "DS",
+      "framework": "DSPy",
+      "inputs": {"RACS": 58.0, "FMC": 35.0, "CTI": 48.0, "DX": 72.0, "PH": 55.0},
+      "derived": {
+        "dx_minus_ph": 17.0,
+        "dx_surplus": 17.0,
+        "continuum_gap_raw": 42.0,
+        "fmc_gap_raw": 65.0,
+        "ph_gap_raw": 45.0
+      },
+      "components": {
+        "continuum_gap": 11.76,
+        "fmc_gap": 14.3,
+        "cti": 8.64,
+        "dx_surplus": 2.89,
+        "ph_gap": 6.75
+      },
+      "dominant_driver": "fmc_continuum",
+      "RHS": 44.3,
+      "RHS_unrounded": 44.34,
+      "band": "high",
+      "AFFIX": 71.19,
+      "notes": "Lowest LIE, highest RHS — optimize, don't serve"
+    }
+  ],
+  "war_stories": [
+    {
+      "id": "A",
+      "title": "LangChain create_agent funnel into LangGraph",
+      "from": "LC",
+      "to": "LG",
+      "dominant_rhs_ids": ["LC"],
+      "api_pain_points": [
+        "create_agent already compiles onto LangGraph runtime",
+        "HumanInTheLoopMiddleware is tool-scoped; arbitrary interrupt() requires LG",
+        "middleware vs custom state_schema mutual exclusion (langchain#33217)",
+        "PostgresSaver checkpoint schemas sticky on exit"
+      ],
+      "citations": [
+        "https://www.langchain.com/blog/deep-agents-vs-langchain-vs-langgraph",
+        "https://docs.langchain.com/oss/python/releases/langchain-v1",
+        "https://docs.langchain.com/oss/python/langgraph/interrupts",
+        "https://docs.langchain.com/oss/python/langgraph/persistence",
+        "https://github.com/langchain-ai/langchain/issues/33217"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Vercel AI SDK DX surplus cliff to Mastra/Inngest",
+      "from": "VS",
+      "to": "MA or IN",
+      "dominant_rhs_ids": ["VS"],
+      "api_pain_points": [
+        "Core ai package is app toolkit not durable workflow OS",
+        "needsApproval/stopWhen ≠ thread checkpointer",
+        "DurableAgent/Workflow DevKit or Inngest is a second control plane",
+        "RAG platform still BYO"
+      ],
+      "citations": [
+        "https://vercel.com/blog/ai-sdk-6",
+        "https://ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent",
+        "https://mastra.ai/docs/workflows/overview",
+        "https://ai-sdk.dev/docs/ai-sdk-core/telemetry"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "AutoGen Classic to AG2 v1 non-drop-in",
+      "from": "AG Classic",
+      "to": "AG2 v1 or OA/PD/AD serve path",
+      "dominant_rhs_ids": ["AG"],
+      "api_pain_points": [
+        "Classic vs v1 packages/imports non-drop-in",
+        "GED leadership without low CTI/PH predicts product rewrite",
+        "GroupChat topology not interchangeable with OA handoff or Crew hierarchical"
+      ],
+      "citations": [
+        "https://github.com/ag2ai/ag2",
+        "https://github.com/ag2ai/ag2-classic",
+        "https://docs.ag2.ai/",
+        "https://openai.github.io/openai-agents-python/handoffs/"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Semantic Kernel succession to Microsoft Agent Framework",
+      "from": "SK",
+      "to": "MS",
+      "dominant_rhs_ids": ["SK", "MS"],
+      "api_pain_points": [
+        "Official migration guide implies orchestration surface rewrite",
+        "SK agent orchestration experimental while MAF marketed successor",
+        "Greenfield SK AFFIX underprices succession tax"
+      ],
+      "citations": [
+        "https://learn.microsoft.com/en-us/agent-framework/overview/",
+        "https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel",
+        "https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-orchestration/"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "LlamaIndex ephemeral workflows to DBOS or LG hybrid",
+      "from": "LI ephemeral",
+      "to": "LI+DBOS or LI+LG",
+      "dominant_rhs_ids": ["LI"],
+      "api_pain_points": [
+        "Docs: no built-in checkpointer; ephemeral by default",
+        "DIY StepStateChanged loop or DBOS plugin required for crash safety",
+        "At-least-once rewind demands idempotent side effects",
+        "Compliance mid-graph pause may still need LG interrupt()"
+      ],
+      "citations": [
+        "https://developers.llamaindex.ai/python/llamaagents/workflows/durable_workflows/",
+        "https://developers.llamaindex.ai/python/llamaagents/workflows/human_in_the_loop/",
+        "https://developers.llamaindex.ai/python/llamaagents/workflows/managing_state/",
+        "https://docs.langchain.com/oss/python/langgraph/persistence"
+      ]
+    }
+  ],
+  "meta": {
+    "verification": "RHS_unrounded recomputed from formula; published RHS matches matrix rounding",
+    "score_type": "EST",
+    "focus_set": ["LI", "LG", "LC", "HS", "VS", "PD", "CR", "MA"]
+  }
+}

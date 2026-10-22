@@ -1,0 +1,64 @@
+{
+  "id": "LC",
+  "framework": "LangChain",
+  "primary_lang": "Python/TS",
+  "category": "Orchestration + tools",
+  "study": "AFFIX-2026",
+  "evidence_date": "2026-10-22",
+  "one_liner": "High-gravity orchestration layer; v1 agents compile onto LangGraph.",
+  "best_for": "Ecosystem gravity, LangSmith, and LC\u2192LG funnel shops",
+  "when_not_to_use": "Do not assume 'LangChain only' avoids LangGraph lock-in once HITL/memory ship \u2014 create_agent funnels into LG persistence. High LIE for portable graphs.",
+  "versions": {
+    "pypi": "langchain==1.4.7",
+    "notes": "v1 create_agent compiles onto LangGraph"
+  },
+  "api_primitives": {
+    "hitl": "HumanInTheLoopMiddleware \u2192 LangGraph interrupt + checkpointer",
+    "checkpoint": "Short-term memory / threads via LangGraph persistence",
+    "stream": "Agent/graph streaming; frontend HITL stream helpers",
+    "structured": "with_structured_output / tool schemas",
+    "obs": "LangSmith observability first-class",
+    "multiAgent": "create_agent + handoffs/tools; Deep Agents layer",
+    "mcp": "MCP tool adapters in LangChain ecosystem"
+  },
+  "scores": {
+    "AF": 78.0,
+    "CS": 72.0,
+    "OB": 90.0,
+    "TC": 70.0,
+    "EG": 95.0,
+    "RE": 68.0,
+    "MF": 55.0,
+    "PH": 75.0,
+    "DX": 80.0,
+    "FP": 82.0
+  },
+  "affix_composite": 76.82,
+  "proprietary": {
+    "LIE": 72.0,
+    "CTI": 78.0,
+    "FMC": 74.0,
+    "GED": 55.0,
+    "RACS": 70.0,
+    "RHS": 32.8,
+    "PR": 86
+  },
+  "citations": [
+    "https://docs.langchain.com/oss/python/releases/langchain-v1",
+    "https://docs.langchain.com/oss/python/langchain/overview",
+    "https://docs.langchain.com/oss/python/langchain/human-in-the-loop",
+    "https://docs.langchain.com/oss/python/langchain/short-term-memory",
+    "https://docs.langchain.com/langsmith/observability",
+    "https://www.langchain.com/blog/deep-agents-vs-langchain-vs-langgraph",
+    "https://pypi.org/project/langchain/",
+    "https://docs.langchain.com/oss/javascript/langchain/agents"
+  ],
+  "pr_components_EST": {
+    "MCP_client": 92,
+    "MCP_server": 80,
+    "A2A_or_equiv": 75,
+    "OpenAPI_tool_bridge": 90,
+    "OTel_GenAI_portable": 95
+  },
+  "deep_notes_md": true
+}
