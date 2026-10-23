@@ -75,7 +75,7 @@ export function Hero() {
           label="Best RHS"
           value={safest.RHS.toFixed(1)}
           delta={`${safest.framework} · lower is safer`}
-          trend="down"
+          trend="up"
         />
       </div>
 
