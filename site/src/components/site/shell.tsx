@@ -35,7 +35,7 @@ export function Shell({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    <div className="min-h-dvh">
+    <div className="min-h-dvh bg-[#050505]">
       <div className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
         <div className="pointer-events-auto">
           <FloatingNav
@@ -43,6 +43,7 @@ export function Shell({ children }: { children: ReactNode }) {
             value={active}
             onChange={setActive}
             hideOnScroll
+            className="border-white/10 bg-[#0c0c0c]/80"
           />
         </div>
       </div>

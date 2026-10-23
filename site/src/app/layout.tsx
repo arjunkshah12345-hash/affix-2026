@@ -51,9 +51,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${sans.variable} ${mono.variable} ${display.variable} h-full`}
+      className={`dark ${sans.variable} ${mono.variable} ${display.variable} h-full`}
     >
-      <body className="flex min-h-full flex-col bg-canvas text-ink">
+      <body className="flex min-h-full flex-col bg-[#050505] text-ink">
         {children}
       </body>
     </html>

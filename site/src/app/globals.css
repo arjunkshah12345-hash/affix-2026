@@ -1,7 +1,32 @@
 @import "tailwindcss";
 @import "../../vibeui.tokens.css";
 
-@custom-variant dark (&:is(.dark *));
+/* Dark black canvas — Jasmine structure, near-black + warm orange for dither accents */
+.dark {
+  --canvas: #050505;
+  --surface: #0c0c0c;
+  --surface-muted: #121212;
+  --surface-sunken: #080808;
+  --ink: #f4f2ee;
+  --ink-soft: #c9c5bc;
+  --muted: #8a8680;
+  --faint: #5c5954;
+  --line: rgb(244 242 238 / 0.08);
+  --line-strong: rgb(244 242 238 / 0.16);
+  --overlay: rgb(0 0 0 / 0.72);
+  --accent: #e8943a;
+  --accent-ink: #050505;
+  --accent-soft: rgb(232 148 58 / 0.14);
+  --ring: rgb(232 148 58 / 0.35);
+  --pastel-rose: #3a2323;
+  --pastel-rose-ink: #f2b5b3;
+  --pastel-sky: #1c2e3b;
+  --pastel-sky-ink: #9ecbea;
+  --pastel-sage: #223127;
+  --pastel-sage-ink: #a9ceae;
+  --pastel-sand: #2e2618;
+  --pastel-sand-ink: #e8c978;
+}
 
 @layer base {
   * {
@@ -9,15 +34,17 @@
   }
   html {
     @apply scroll-smooth antialiased;
+    background: #050505;
   }
   body {
     @apply bg-canvas font-sans text-ink;
+    background-color: #050505;
   }
   section[id] {
     scroll-margin-top: 6rem;
   }
   ::selection {
-    background: color-mix(in oklab, var(--accent) 18%, transparent);
+    background: color-mix(in oklab, var(--accent) 35%, transparent);
     color: var(--ink);
   }
 }

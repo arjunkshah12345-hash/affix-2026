@@ -1,11 +1,24 @@
 "use client"
 
+import { DitherGradient } from "@/components/dither-kit"
 import { BlurReveal } from "@/components/ui/blur-reveal"
 
 export function LaunchVideo() {
   return (
-    <section id="film" className="px-5 py-20 md:px-8 md:py-28">
-      <div className="mx-auto max-w-3xl">
+    <section
+      id="film"
+      className="relative overflow-hidden border-t border-line px-5 py-20 md:px-8 md:py-28"
+    >
+      <DitherGradient
+        from="orange"
+        to="transparent"
+        direction="up"
+        cell={3}
+        opacity={0.12}
+        bloom="low"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-48"
+      />
+      <div className="relative mx-auto max-w-3xl">
         <BlurReveal>
           <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted">
             Study film
@@ -18,7 +31,7 @@ export function LaunchVideo() {
           </p>
         </BlurReveal>
         <BlurReveal delay={80} className="mt-10">
-          <div className="overflow-hidden rounded-lg border border-line bg-ink shadow-quiet">
+          <div className="overflow-hidden rounded-lg border border-line bg-black shadow-quiet">
             <video
               className="aspect-video w-full"
               controls

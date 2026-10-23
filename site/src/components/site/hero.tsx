@@ -1,15 +1,30 @@
 "use client"
 
 import { asOf, frameworks, leader, safest } from "@/data/content"
-import { Button } from "@/components/ui/button"
+import { DitherButton, DitherGradient } from "@/components/dither-kit"
 import { BlurReveal } from "@/components/ui/blur-reveal"
 import { Pill } from "@/components/ui/pill"
 import { Stat } from "@/components/ui/stat"
 
 export function Hero() {
   return (
-    <section id="top" className="px-5 pb-16 pt-28 md:px-8 md:pb-24 md:pt-36">
-      <div className="mx-auto max-w-3xl text-center">
+    <section
+      id="top"
+      className="relative overflow-hidden px-5 pb-16 pt-28 md:px-8 md:pb-24 md:pt-36"
+    >
+      {/* Quiet dither wash — craft accent, not a full specimen stage */}
+      <DitherGradient
+        from="orange"
+        to="transparent"
+        direction="up"
+        cell={3}
+        opacity={0.22}
+        bloom="low"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] max-h-[420px]"
+      />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] max-h-[420px] bg-gradient-to-t from-[#050505] via-[#050505]/70 to-transparent" />
+
+      <div className="relative mx-auto max-w-3xl text-center">
         <BlurReveal>
           <Pill tone="sand" className="mb-6">
             Fitness index · {asOf}
@@ -37,9 +52,12 @@ export function Hero() {
 
         <BlurReveal delay={240}>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button
-              variant="primary"
-              size="lg"
+            <DitherButton
+              type="button"
+              color="orange"
+              variant="gradient"
+              bloom="low"
+              className="h-12 rounded-md px-6 text-[15px] font-medium text-white"
               onClick={() =>
                 document
                   .querySelector("#rankings")
@@ -47,10 +65,10 @@ export function Hero() {
               }
             >
               View rankings
-            </Button>
+            </DitherButton>
             <a
               href="#split"
-              className="inline-flex h-12 items-center px-4 text-[15px] font-medium text-ink-soft transition hover:text-ink"
+              className="inline-flex h-12 items-center px-4 text-[15px] font-medium text-ink-soft transition hover:text-accent"
             >
               Key split
             </a>
@@ -58,7 +76,7 @@ export function Hero() {
         </BlurReveal>
       </div>
 
-      <div className="mx-auto mt-16 grid max-w-4xl gap-3 sm:grid-cols-3">
+      <div className="relative mx-auto mt-16 grid max-w-4xl gap-3 sm:grid-cols-3">
         <Stat
           label="Leader"
           value={leader.framework}
@@ -78,7 +96,6 @@ export function Hero() {
           trend="up"
         />
       </div>
-
     </section>
   )
 }

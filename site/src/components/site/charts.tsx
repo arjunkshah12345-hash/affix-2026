@@ -1,13 +1,27 @@
 "use client"
 
+import {
+  Bar,
+  BarChart,
+  Grid,
+  Legend,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "@/components/dither-kit"
 import { frameworks } from "@/data/content"
 import { BlurReveal } from "@/components/ui/blur-reveal"
-import { BarChart } from "@/components/ui/bar-chart"
 
 const barData = frameworks.slice(0, 8).map((f) => ({
-  label: f.id,
-  values: [Math.round(f.AFFIX * 10) / 10, Math.round(f.RHS * 10) / 10],
+  id: f.id,
+  affix: Math.round(f.AFFIX * 10) / 10,
+  rhs: Math.round(f.RHS * 10) / 10,
 }))
+
+const barConfig = {
+  affix: { label: "AFFIX", color: "orange" as const },
+  rhs: { label: "Rewrite risk", color: "grey" as const },
+}
 
 export function Charts() {
   return (
@@ -21,8 +35,8 @@ export function Charts() {
             Leading eight · fitness vs hazard
           </h2>
           <p className="mt-4 max-w-[44ch] text-[15px] leading-relaxed text-muted">
-            AFFIX and RHS for the top cohort. Ink bars are fitness; muted bars
-            are rewrite hazard.
+            AFFIX and RHS for the top cohort. Orange is fitness; grey hatch is
+            rewrite hazard.
           </p>
         </BlurReveal>
 
@@ -30,10 +44,21 @@ export function Charts() {
           <div className="rounded-lg border border-line bg-surface p-4 shadow-quiet md:p-6">
             <BarChart
               data={barData}
-              series={["AFFIX", "RHS"]}
-              height={280}
-              format={(n) => n.toFixed(1)}
-            />
+              config={barConfig}
+              className="h-[280px] w-full"
+              animate
+              animationDuration={1200}
+              bloom="low"
+              bloomOnHover
+            >
+              <Grid />
+              <XAxis dataKey="id" />
+              <YAxis />
+              <Bar dataKey="affix" variant="gradient" />
+              <Bar dataKey="rhs" variant="hatched" />
+              <Legend />
+              <Tooltip />
+            </BarChart>
           </div>
         </BlurReveal>
       </div>

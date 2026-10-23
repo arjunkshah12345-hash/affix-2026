@@ -33,14 +33,12 @@ export function ComparisonBar({
           {right}
         </span>
       </div>
-      <div className="flex h-2.5 gap-1">
+      <div className="flex h-2 gap-1">
         <div
-          className="h-full rounded-full bg-accent transition-[width] duration-700 ease-out"
+          className="h-full rounded-[2px] bg-accent transition-[width] duration-700 ease-out"
           style={{ width: `${leftPct}%` }}
         />
-        <div
-          className="h-full flex-1 rounded-full bg-surface-sunken ring-1 ring-inset ring-line-strong"
-        />
+        <div className="h-full flex-1 rounded-[2px] bg-surface-sunken ring-1 ring-inset ring-line" />
       </div>
     </div>
   );

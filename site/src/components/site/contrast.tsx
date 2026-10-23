@@ -1,6 +1,7 @@
 "use client"
 
 import { matrixFrameworkById } from "@/data/content"
+import { Sparkline } from "@/components/dither-kit"
 import { BlurReveal } from "@/components/ui/blur-reveal"
 import {
   Card,
@@ -18,7 +19,7 @@ export function Contrast() {
   return (
     <section
       id="split"
-      className="border-y border-line bg-surface-muted/40 px-5 py-20 md:px-8 md:py-28"
+      className="border-y border-line bg-surface-muted/30 px-5 py-20 md:px-8 md:py-28"
     >
       <div className="mx-auto max-w-4xl">
         <BlurReveal>
@@ -47,7 +48,7 @@ export function Contrast() {
                     <p className="text-[11px] uppercase tracking-[0.12em] text-muted">
                       AFFIX
                     </p>
-                    <p className="mt-1 font-mono text-3xl font-medium tabular-nums tracking-tight">
+                    <p className="mt-1 font-mono text-3xl font-medium tabular-nums tracking-tight text-accent">
                       {pd.AFFIX.toFixed(1)}
                     </p>
                   </div>
@@ -66,6 +67,15 @@ export function Contrast() {
                   leftValue={pd.AFFIX}
                   rightValue={pd.RHS}
                 />
+                <div className="h-9">
+                  <Sparkline
+                    data={[pd.AFFIX, 100 - pd.RHS, pd.PH, pd.DX]}
+                    color="orange"
+                    variant="gradient"
+                    bloom="low"
+                    className="h-full w-full"
+                  />
+                </div>
               </CardContent>
             </Card>
           </BlurReveal>
@@ -82,7 +92,7 @@ export function Contrast() {
                     <p className="text-[11px] uppercase tracking-[0.12em] text-muted">
                       AFFIX
                     </p>
-                    <p className="mt-1 font-mono text-3xl font-medium tabular-nums tracking-tight">
+                    <p className="mt-1 font-mono text-3xl font-medium tabular-nums tracking-tight text-accent">
                       {vs.AFFIX.toFixed(1)}
                     </p>
                   </div>
@@ -101,6 +111,15 @@ export function Contrast() {
                   leftValue={vs.AFFIX}
                   rightValue={vs.RHS}
                 />
+                <div className="h-9">
+                  <Sparkline
+                    data={[vs.AFFIX, 100 - vs.RHS, vs.PH, vs.DX]}
+                    color="orange"
+                    variant="gradient"
+                    bloom="low"
+                    className="h-full w-full"
+                  />
+                </div>
               </CardContent>
             </Card>
           </BlurReveal>
