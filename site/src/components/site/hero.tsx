@@ -12,17 +12,17 @@ export function Hero() {
       id="top"
       className="relative overflow-hidden px-5 pb-16 pt-28 md:px-8 md:pb-24 md:pt-36"
     >
-      {/* Quiet dither wash — craft accent, not a full specimen stage */}
+      {/* Thin floor wash — craft accent only */}
       <DitherGradient
         from="orange"
         to="transparent"
         direction="up"
         cell={3}
-        opacity={0.22}
+        opacity={0.1}
         bloom="low"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] max-h-[420px]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-40"
       />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] max-h-[420px] bg-gradient-to-t from-[#050505] via-[#050505]/70 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#050505] to-transparent" />
 
       <div className="relative mx-auto max-w-3xl text-center">
         <BlurReveal>
