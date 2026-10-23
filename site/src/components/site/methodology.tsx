@@ -13,17 +13,21 @@ export function Methodology() {
       id="method"
       className="border-t border-line px-5 py-20 md:px-8 md:py-28"
     >
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-5xl">
         <BlurReveal>
-          <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted">
-            Method
-          </p>
-          <h2 className="mt-3 max-w-[16ch] font-display text-3xl tracking-[-0.02em] text-ink md:text-4xl">
-            Weights and worked math
-          </h2>
-          <p className="mt-4 max-w-[46ch] text-[15px] leading-relaxed text-muted">
-            {methodology.overview}
-          </p>
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted">
+                Method
+              </p>
+              <h2 className="mt-3 max-w-[16ch] font-display text-3xl tracking-[-0.02em] text-ink md:text-4xl">
+                Weights and worked math
+              </h2>
+            </div>
+            <p className="max-w-[36ch] text-[14px] leading-relaxed text-muted md:text-right">
+              {methodology.overview}
+            </p>
+          </div>
         </BlurReveal>
 
         <BlurReveal delay={60} className="mt-10">

@@ -21,18 +21,22 @@ export function Contrast() {
       id="split"
       className="border-y border-line bg-surface-muted/30 px-5 py-20 md:px-8 md:py-28"
     >
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-5xl">
         <BlurReveal>
-          <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted">
-            Key split
-          </p>
-          <h2 className="mt-3 max-w-[22ch] font-display text-3xl tracking-[-0.02em] text-ink md:text-4xl">
-            High AFFIX does not mean low rewrite hazard
-          </h2>
-          <p className="mt-4 max-w-[46ch] text-[15px] leading-relaxed text-muted">
-            {pd.framework} leads fitness and succession safety. Sole-stack{" "}
-            {vs.framework} stays capable with elevated RHS after adjudication.
-          </p>
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted">
+                Key split
+              </p>
+              <h2 className="mt-3 max-w-[20ch] font-display text-3xl tracking-[-0.02em] text-ink md:text-4xl">
+                High AFFIX does not mean low rewrite hazard
+              </h2>
+            </div>
+            <p className="max-w-[34ch] text-[14px] leading-relaxed text-muted md:text-right">
+              {pd.framework} leads fitness and succession safety. Sole-stack{" "}
+              {vs.framework} stays capable with elevated RHS.
+            </p>
+          </div>
         </BlurReveal>
 
         <div className="mt-12 grid gap-4 md:grid-cols-2">

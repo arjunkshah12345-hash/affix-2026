@@ -7,8 +7,8 @@ const items = [
   { value: "top", label: "Index", href: "#top" },
   { value: "rankings", label: "Rankings", href: "#rankings" },
   { value: "split", label: "Split", href: "#split" },
+  { value: "signals", label: "Signals", href: "#signals" },
   { value: "findings", label: "Findings", href: "#findings" },
-  { value: "film", label: "Film", href: "#film" },
 ]
 
 export function Shell({ children }: { children: ReactNode }) {

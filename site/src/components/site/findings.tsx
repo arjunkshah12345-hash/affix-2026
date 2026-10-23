@@ -28,19 +28,22 @@ export function Findings() {
   }))
 
   return (
-    <section id="findings" className="px-5 py-20 md:px-8 md:py-28">
-      <div className="mx-auto max-w-3xl">
+    <section id="findings" className="border-t border-line px-5 py-20 md:px-8 md:py-28">
+      <div className="mx-auto max-w-5xl">
         <BlurReveal>
-          <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted">
-            Findings
-          </p>
-          <h2 className="mt-3 max-w-[18ch] font-display text-3xl tracking-[-0.02em] text-ink md:text-4xl">
-            Killable claims from the synthesis
-          </h2>
-          <p className="mt-4 max-w-[44ch] text-[15px] leading-relaxed text-muted">
-            {findings.length} claims. Expand for evidence and the falsifier that
-            retires each one.
-          </p>
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted">
+                Findings
+              </p>
+              <h2 className="mt-3 max-w-[18ch] font-display text-3xl tracking-[-0.02em] text-ink md:text-4xl">
+                Killable claims from the synthesis
+              </h2>
+            </div>
+            <p className="max-w-[30ch] text-[14px] leading-relaxed text-muted md:text-right">
+              {findings.length} claims. Expand for evidence and falsifier.
+            </p>
+          </div>
         </BlurReveal>
 
         <BlurReveal delay={80} className="mt-10">
