@@ -1,0 +1,381 @@
+/*
+ * VibeUI tokens — paste into your global CSS (Tailwind v4), after
+ * `@import "tailwindcss";`. Everything the components depend on lives here:
+ * colors, radii, shadows, easing, fonts, keyframes and the `dark` variant.
+ *
+ * Dark mode: add the `dark` class to <html>. Add `light` or `dark` to any
+ * element to force that palette for its subtree.
+ * Fonts: set --font-geist-sans / --font-geist-mono / --font-instrument
+ * (next/font does this) or let the system stack take over.
+ */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root,
+.light {
+  --canvas: #f8f7f4;
+  --surface: #ffffff;
+  --surface-muted: #f2f0ec;
+  --surface-sunken: #eceae4;
+  --ink: #1b1a17;
+  --ink-soft: #44423d;
+  --muted: #77746d;
+  --faint: #a6a39b;
+  --line: rgb(27 26 23 / 0.09);
+  --line-strong: rgb(27 26 23 / 0.17);
+  --overlay: rgb(27 26 23 / 0.42);
+
+  /* Light mode is monochrome: accent matches ink (dark mode uses white). */
+  --accent: #1b1a17;
+  --accent-ink: #ffffff;
+  --accent-soft: rgb(27 26 23 / 0.08);
+  --ring: rgb(27 26 23 / 0.22);
+
+  --pastel-rose: #fdecec;
+  --pastel-rose-ink: #a02e2c;
+  --pastel-sky: #e7f1fb;
+  --pastel-sky-ink: #1c5f93;
+  --pastel-sage: #e9f3ea;
+  --pastel-sage-ink: #2c6a33;
+  --pastel-sand: #f0eeea;
+  --pastel-sand-ink: #1b1a17;
+
+  --shadow-quiet: 0 1px 1px rgb(27 26 23 / 0.04), 0 1px 3px rgb(27 26 23 / 0.05);
+  --shadow-lift:
+    0 1px 2px rgb(27 26 23 / 0.04), 0 8px 20px -6px rgb(27 26 23 / 0.1),
+    0 20px 40px -16px rgb(27 26 23 / 0.1);
+  --shadow-pop:
+    0 1px 2px rgb(27 26 23 / 0.06), 0 12px 32px -8px rgb(27 26 23 / 0.18),
+    0 32px 64px -24px rgb(27 26 23 / 0.22);
+  --shadow-inset: inset 0 1px 0 rgb(255 255 255 / 0.14);
+}
+
+.dark {
+  --canvas: #0f0e0d;
+  --surface: #181715;
+  --surface-muted: #201e1c;
+  --surface-sunken: #121110;
+  --ink: #f4f2ee;
+  --ink-soft: #d6d3cc;
+  --muted: #9a968d;
+  --faint: #67645d;
+  --line: rgb(244 242 238 / 0.09);
+  --line-strong: rgb(244 242 238 / 0.18);
+  --overlay: rgb(0 0 0 / 0.6);
+
+  /* Dark mode is monochrome: the accent is the ink itself. */
+  --accent: #f4f2ee;
+  --accent-ink: #14130f;
+  --accent-soft: rgb(244 242 238 / 0.1);
+  --ring: rgb(244 242 238 / 0.26);
+
+  --pastel-rose: #3a2323;
+  --pastel-rose-ink: #f2b5b3;
+  --pastel-sky: #1c2e3b;
+  --pastel-sky-ink: #9ecbea;
+  --pastel-sage: #223127;
+  --pastel-sage-ink: #a9ceae;
+  --pastel-sand: #362f1d;
+  --pastel-sand-ink: #e8c978;
+
+  --shadow-quiet: 0 1px 1px rgb(0 0 0 / 0.3), 0 1px 3px rgb(0 0 0 / 0.3);
+  --shadow-lift:
+    0 1px 2px rgb(0 0 0 / 0.3), 0 10px 24px -6px rgb(0 0 0 / 0.45),
+    0 24px 48px -16px rgb(0 0 0 / 0.4);
+  --shadow-pop:
+    0 1px 2px rgb(0 0 0 / 0.4), 0 16px 40px -8px rgb(0 0 0 / 0.6),
+    0 40px 80px -24px rgb(0 0 0 / 0.55);
+  --shadow-inset: inset 0 1px 0 rgb(255 255 255 / 0.06);
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-overlay: var(--overlay);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-ring: var(--ring);
+  --color-pastel-rose: var(--pastel-rose);
+  --color-pastel-rose-ink: var(--pastel-rose-ink);
+  --color-pastel-sky: var(--pastel-sky);
+  --color-pastel-sky-ink: var(--pastel-sky-ink);
+  --color-pastel-sage: var(--pastel-sage);
+  --color-pastel-sage-ink: var(--pastel-sage-ink);
+  --color-pastel-sand: var(--pastel-sand);
+  --color-pastel-sand-ink: var(--pastel-sand-ink);
+
+  --shadow-quiet: var(--shadow-quiet);
+  --shadow-lift: var(--shadow-lift);
+  --shadow-pop: var(--shadow-pop);
+  --shadow-inset: var(--shadow-inset);
+
+  --font-sans:
+    var(--font-geist-sans, "Geist"), ui-sans-serif, system-ui, -apple-system,
+    sans-serif;
+  --font-mono:
+    var(--font-geist-mono, "Geist Mono"), ui-monospace, "SF Mono", Menlo,
+    monospace;
+  --font-display:
+    var(--font-instrument, "Instrument Serif"), "Times New Roman", serif;
+}
+
+@theme {
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-fade-up: vibe-fade-up 0.6s var(--ease-out) both;
+  --animate-fade-in: vibe-fade-in 0.25s ease-out both;
+  --animate-pop-in: vibe-pop-in 0.22s var(--ease-out) both;
+  --animate-marquee: vibe-marquee 40s linear infinite;
+  --animate-pulse-quiet: vibe-pulse 1.8s ease-in-out infinite;
+  --animate-spin-quiet: vibe-spin 0.8s linear infinite;
+  --animate-orbit: vibe-spin 28s linear infinite;
+  --animate-shimmer: vibe-shimmer 3s linear infinite;
+  --animate-jelly: vibe-jelly 0.9s ease-in-out infinite;
+  --animate-blink: vibe-blink 1s steps(2, start) infinite;
+  --animate-fade-out: vibe-fade-out 0.18s ease-in both;
+  --animate-pop-out: vibe-pop-out 0.16s ease-in both;
+  --animate-slide-in-right: vibe-slide-in-right 0.45s var(--ease-out) both;
+  --animate-slide-out-right: vibe-slide-out-right 0.28s ease-in both;
+  --animate-slide-in-left: vibe-slide-in-left 0.45s var(--ease-out) both;
+  --animate-slide-out-left: vibe-slide-out-left 0.28s ease-in both;
+  --animate-slide-in-bottom: vibe-slide-in-bottom 0.45s var(--ease-out) both;
+  --animate-slide-out-bottom: vibe-slide-out-bottom 0.28s ease-in both;
+  --animate-grow-x: vibe-grow-x 1s var(--ease-out) both;
+  --animate-grow-y: vibe-grow-y 1s var(--ease-out) both;
+  --animate-shrink-x: vibe-shrink-x 4s linear forwards;
+  --animate-ping-soft: vibe-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-float: vibe-float 4.5s ease-in-out infinite;
+  --animate-eq: vibe-eq 0.9s ease-in-out infinite;
+  --animate-tick: vibe-tick 0.35s var(--ease-out) both;
+  --animate-month-next: vibe-month-next 0.38s var(--ease-out) both;
+  --animate-month-prev: vibe-month-prev 0.38s var(--ease-out) both;
+  --animate-toast-in: vibe-toast-in 0.45s var(--ease-spring) both;
+  --animate-toast-out: vibe-toast-out 0.28s ease-in both;
+
+  @keyframes vibe-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes vibe-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes vibe-pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  @keyframes vibe-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes vibe-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+  @keyframes vibe-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes vibe-shimmer {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+  @keyframes vibe-jelly {
+    0%,
+    100% {
+      transform: scaleY(0.5);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scaleY(1.1);
+      opacity: 1;
+    }
+  }
+  @keyframes vibe-blink {
+    to {
+      visibility: hidden;
+    }
+  }
+  @keyframes vibe-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes vibe-pop-out {
+    to {
+      opacity: 0;
+      transform: translateY(4px) scale(0.97);
+    }
+  }
+  @keyframes vibe-slide-in-right {
+    from {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes vibe-slide-out-right {
+    to {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes vibe-slide-in-left {
+    from {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes vibe-slide-out-left {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes vibe-slide-in-bottom {
+    from {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes vibe-slide-out-bottom {
+    to {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes vibe-grow-x {
+    from {
+      transform: scaleX(0);
+    }
+  }
+  @keyframes vibe-grow-y {
+    from {
+      transform: scaleY(0);
+    }
+  }
+  @keyframes vibe-shrink-x {
+    to {
+      transform: scaleX(0);
+    }
+  }
+  @keyframes vibe-ping {
+    75%,
+    100% {
+      transform: scale(2.4);
+      opacity: 0;
+    }
+  }
+  @keyframes vibe-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+  @keyframes vibe-eq {
+    0%,
+    100% {
+      transform: scaleY(0.25);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+  @keyframes vibe-tick {
+    from {
+      opacity: 0;
+      transform: translateY(40%);
+    }
+  }
+  @keyframes vibe-month-next {
+    from {
+      opacity: 0;
+      transform: translateX(14px);
+    }
+  }
+  @keyframes vibe-month-prev {
+    from {
+      opacity: 0;
+      transform: translateX(-14px);
+    }
+  }
+  @keyframes vibe-toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.96);
+    }
+  }
+  @keyframes vibe-toast-out {
+    to {
+      opacity: 0;
+      transform: translateX(24px) scale(0.96);
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--accent-soft);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

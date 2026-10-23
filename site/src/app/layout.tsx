@@ -1,23 +1,22 @@
 import type { Metadata } from "next"
-import { DM_Sans, IBM_Plex_Mono, Syne } from "next/font/google"
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google"
 import "./globals.css"
 
-const display = Syne({
-  variable: "--font-display",
+const sans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
 })
 
-const sans = DM_Sans({
-  variable: "--font-sans",
+const mono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
 })
 
-const mono = IBM_Plex_Mono({
-  variable: "--font-mono",
+const display = Instrument_Serif({
+  variable: "--font-instrument",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: "400",
+  style: ["normal", "italic"],
 })
 
 export const metadata: Metadata = {
@@ -52,9 +51,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`dark ${display.variable} ${sans.variable} ${mono.variable} h-full`}
+      className={`${sans.variable} ${mono.variable} ${display.variable} h-full`}
     >
-      <body className="flex min-h-full flex-col bg-[#050505] text-foreground">
+      <body className="flex min-h-full flex-col bg-canvas text-ink">
         {children}
       </body>
     </html>
