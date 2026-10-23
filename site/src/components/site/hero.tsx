@@ -17,9 +17,9 @@ export function Hero() {
         to="transparent"
         direction="up"
         cell={3}
-        opacity={0.08}
+        opacity={0.12}
         bloom="low"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-32"
+        className="inset-x-0 bottom-0 h-28"
       />
 
       <div className="relative mx-auto grid max-w-5xl gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16">

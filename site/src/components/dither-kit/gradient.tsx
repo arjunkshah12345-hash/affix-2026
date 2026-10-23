@@ -148,7 +148,9 @@ export function DitherGradient({
       ref={wrapRef}
       aria-hidden
       className={cn(
-        "pointer-events-none absolute inset-0 overflow-hidden",
+        // Callers position the wash (inset-0, bottom-0 h-32, etc.).
+        // Do not force inset-0 — it expands every accent into a full-bleed field.
+        "pointer-events-none absolute overflow-hidden",
         className
       )}
     >

@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import { DitherGradient } from "@/components/dither-kit"
+import { useMemo, useState } from "react"
 import {
   failureFrameworks,
   failureLegend,
@@ -9,13 +8,18 @@ import {
   type FailureCoverage,
 } from "@/data/content"
 import { cn } from "@/lib/utils"
-import { Reveal, SectionLabel } from "./reveal"
+import { BlurReveal } from "@/components/ui/blur-reveal"
+import { Pill } from "@/components/ui/pill"
+import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table"
 
-const CELL: Record<FailureCoverage, { bg: string; label: string }> = {
-  first_class: { bg: "bg-emerald-500/90 text-[#050505]", label: "F" },
-  pattern: { bg: "bg-amber-400/85 text-[#050505]", label: "P" },
-  absent: { bg: "bg-rose-500/85 text-white", label: "A" },
-  unknown: { bg: "bg-white/15 text-white/70", label: "?" },
+const CELL: Record<
+  FailureCoverage,
+  { tone: "sage" | "sand" | "rose" | "neutral"; label: string }
+> = {
+  first_class: { tone: "sage", label: "F" },
+  pattern: { tone: "sand", label: "P" },
+  absent: { tone: "rose", label: "A" },
+  unknown: { tone: "neutral", label: "?" },
 }
 
 const LEGEND_ORDER: FailureCoverage[] = [
@@ -32,169 +36,147 @@ export function Failures() {
     note: string
     cell: FailureCoverage
     api?: string
-    url?: string
   } | null>(null)
 
+  const rows = useMemo(
+    () => [...failureFrameworks].sort((a, b) => b.FMC - a.FMC).slice(0, 8),
+    []
+  )
+
   return (
-    <section id="failures" className="relative overflow-hidden py-24 md:py-32">
-      <DitherGradient
-        from="orange"
-        to="transparent"
-        direction="up"
-        cell={3}
-        opacity={0.08}
-        bloom="low"
-        className="pointer-events-none absolute inset-x-0 top-0 h-40"
-      />
-      <div className="relative mx-auto max-w-[960px] px-5 md:px-10">
-        <Reveal>
-          <SectionLabel>Failure modes</SectionLabel>
-          <h2 className="mt-3 max-w-[16ch] font-display text-3xl font-semibold tracking-tight md:text-4xl">
-            Coverage at the fault line
-          </h2>
-          <p className="mt-4 max-w-[44ch] text-sm text-muted-foreground md:text-base">
-            First-class API, documented pattern, or absent. Hover a cell for the
-            named surface and evidence. FMC ranks rows.
-          </p>
-        </Reveal>
-
-        <Reveal delay={0.06} className="mt-8 flex flex-wrap gap-4">
-          {LEGEND_ORDER.map((k) => (
-            <div key={k} className="flex items-center gap-2">
-              <span className={cn("size-2.5 rounded-sm", CELL[k].bg)} />
-              <span className="font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                {k.replace("_", " ")} — {failureLegend[k]}
-              </span>
+    <section
+      id="failures"
+      className="border-t border-line px-5 py-20 md:px-8 md:py-28"
+    >
+      <div className="mx-auto max-w-5xl">
+        <BlurReveal>
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted">
+                Failures
+              </p>
+              <h2 className="mt-3 max-w-[16ch] font-display text-3xl tracking-[-0.02em] text-ink md:text-4xl">
+                Coverage at the fault line
+              </h2>
             </div>
+            <p className="max-w-[34ch] text-[14px] leading-relaxed text-muted md:text-right">
+              First-class API, documented pattern, or absent. Top eight by FMC —
+              hover a cell for the named surface.
+            </p>
+          </div>
+        </BlurReveal>
+
+        <BlurReveal delay={60} className="mt-6 flex flex-wrap gap-2">
+          {LEGEND_ORDER.map((k) => (
+            <Pill key={k} tone={CELL[k].tone} className="font-mono">
+              {CELL[k].label} · {failureLegend[k]}
+            </Pill>
           ))}
-        </Reveal>
+        </BlurReveal>
 
-        <Reveal delay={0.1} className="mt-10">
-          <div className="overflow-x-auto border border-white/8">
-            <table className="w-full min-w-[920px] border-collapse text-left">
-              <thead>
-                <tr className="border-b border-white/8">
-                  <th className="sticky left-0 z-10 bg-[#050505] px-3 py-3 font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                    Framework
-                  </th>
-                  {failureModes.map((m) => (
-                    <th
-                      key={m.code}
-                      title={m.name}
-                      className="px-1 py-3 text-center font-data text-[9px] uppercase tracking-[0.1em] text-muted-foreground"
-                    >
-                      {m.code}
-                    </th>
-                  ))}
-                  <th className="px-3 py-3 text-right font-data text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                    FMC
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...failureFrameworks]
-                  .sort((a, b) => b.FMC - a.FMC)
-                  .map((fw) => (
-                    <tr
-                      key={fw.id}
-                      className="border-b border-white/8 transition hover:bg-white/[0.02]"
-                    >
-                      <td className="sticky left-0 z-10 bg-[#050505] px-3 py-2.5">
-                        <span className="font-data text-[11px] text-foreground">
-                          {fw.id}
-                        </span>
-                        <span className="ml-2 hidden font-data text-[10px] text-muted-foreground sm:inline">
-                          {fw.name}
-                        </span>
-                      </td>
-                      {failureModes.map((m) => {
-                        const cell = fw.cells[m.code] ?? "unknown"
-                        const ev = fw.evidence?.[m.code]
-                        return (
-                          <td key={m.code} className="px-1 py-2 text-center">
-                            <button
-                              type="button"
-                              className={cn(
-                                "inline-flex size-6 items-center justify-center rounded-sm font-data text-[9px] transition",
-                                CELL[cell].bg,
-                                hover?.fw === fw.id && hover.mode === m.code
-                                  ? "ring-1 ring-accent ring-offset-1 ring-offset-[#050505]"
-                                  : ""
-                              )}
-                              onMouseEnter={() =>
-                                setHover({
-                                  fw: fw.id,
-                                  mode: m.code,
-                                  note: ev?.note || fw.notes,
-                                  cell,
-                                  api: ev?.api,
-                                  url: ev?.evidence_url,
-                                })
-                              }
-                              onMouseLeave={() => setHover(null)}
-                              onFocus={() =>
-                                setHover({
-                                  fw: fw.id,
-                                  mode: m.code,
-                                  note: ev?.note || fw.notes,
-                                  cell,
-                                  api: ev?.api,
-                                  url: ev?.evidence_url,
-                                })
-                              }
-                              onBlur={() => setHover(null)}
-                              aria-label={`${fw.id} ${m.code}: ${cell}`}
-                            >
-                              {CELL[cell].label}
-                            </button>
-                          </td>
-                        )
-                      })}
-                      <td className="px-3 py-2.5 text-right font-data text-[12px] tabular-nums text-accent">
-                        {fw.FMC}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
+        <BlurReveal delay={100} className="mt-8">
+          <Table className="min-w-[720px]">
+            <THead>
+              <TR>
+                <TH className="sticky left-0 z-10 bg-surface-muted/95 backdrop-blur-sm">
+                  Framework
+                </TH>
+                {failureModes.map((m) => (
+                  <TH
+                    key={m.code}
+                    title={m.name}
+                    className="px-2 text-center"
+                  >
+                    <span className="font-mono text-[10px]">{m.code}</span>
+                  </TH>
+                ))}
+                <TH className="text-right">FMC</TH>
+              </TR>
+            </THead>
+            <TBody>
+              {rows.map((fw) => (
+                <TR key={fw.id}>
+                  <TD className="sticky left-0 z-10 bg-[#0a0a0a]/95 backdrop-blur-sm">
+                    <span className="font-medium text-ink">{fw.name}</span>
+                    <span className="ml-2 font-mono text-xs text-faint">
+                      {fw.id}
+                    </span>
+                  </TD>
+                  {failureModes.map((m) => {
+                    const cell = fw.cells[m.code] ?? "unknown"
+                    const meta = CELL[cell]
+                    const evidence = fw.evidence?.[m.code]
+                    const note =
+                      evidence?.note ??
+                      evidence?.api ??
+                      failureLegend[cell]
+                    const active =
+                      hover?.fw === fw.name && hover.mode === m.name
+                    return (
+                      <TD key={m.code} className="px-2 text-center">
+                        <button
+                          type="button"
+                          className="inline-flex"
+                          title={`${m.name}${evidence?.api ? ` — ${evidence.api}` : ""}`}
+                          onMouseEnter={() =>
+                            setHover({
+                              fw: fw.name,
+                              mode: m.name,
+                              note,
+                              cell,
+                              api: evidence?.api,
+                            })
+                          }
+                          onMouseLeave={() => setHover(null)}
+                          onFocus={() =>
+                            setHover({
+                              fw: fw.name,
+                              mode: m.name,
+                              note,
+                              cell,
+                              api: evidence?.api,
+                            })
+                          }
+                          onBlur={() => setHover(null)}
+                        >
+                          <Pill
+                            tone={meta.tone}
+                            className={cn(
+                              "min-w-[1.75rem] justify-center font-mono",
+                              active && "ring-1 ring-accent/50"
+                            )}
+                          >
+                            {meta.label}
+                          </Pill>
+                        </button>
+                      </TD>
+                    )
+                  })}
+                  <TD className="text-right font-mono tabular-nums text-ink">
+                    {fw.FMC}
+                  </TD>
+                </TR>
+              ))}
+            </TBody>
+          </Table>
+        </BlurReveal>
 
-          <div className="mt-4 min-h-[4.5rem]">
-            {hover ? (
-              <p className="font-data text-[12px] leading-relaxed text-muted-foreground">
-                <span className="text-accent">
-                  {hover.fw} · {hover.mode} · {hover.cell.replace("_", " ")}
-                </span>
-                {" — "}
-                {failureModes.find((m) => m.code === hover.mode)?.name}.
-                {hover.api ? (
-                  <>
-                    {" "}
-                    <span className="text-foreground/80">{hover.api}.</span>
-                  </>
-                ) : null}{" "}
-                {hover.note}
-                {hover.url ? (
-                  <>
-                    {" "}
-                    <a
-                      href={hover.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-accent underline-offset-2 hover:underline"
-                    >
-                      Evidence
-                    </a>
-                  </>
-                ) : null}
-              </p>
-            ) : (
-              <p className="font-data text-[11px] text-muted-foreground/70">
-                Hover a cell for API surface and primary-source evidence.
-              </p>
-            )}
-          </div>
-        </Reveal>
+        <p className="mt-4 min-h-[2.5rem] font-mono text-[12px] leading-relaxed text-muted">
+          {hover ? (
+            <>
+              <span className="text-ink-soft">
+                {hover.fw} · {hover.mode}
+              </span>
+              {" — "}
+              {hover.note}
+              {hover.api ? (
+                <span className="text-faint"> · {hover.api}</span>
+              ) : null}
+            </>
+          ) : (
+            "Hover a cell for the named surface and evidence."
+          )}
+        </p>
       </div>
     </section>
   )

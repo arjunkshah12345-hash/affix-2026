@@ -19,11 +19,11 @@ export function Footer() {
         to="transparent"
         direction="up"
         cell={3}
-        opacity={0.18}
+        opacity={0.14}
         bloom="low"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-40"
+        className="inset-x-0 bottom-0 h-36"
       />
-      <div className="absolute inset-0 bg-[#050505]/65" />
+      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#050505] to-transparent" />
       <FooterSimple
         brand={
           <span className="font-display text-xl tracking-tight text-ink">

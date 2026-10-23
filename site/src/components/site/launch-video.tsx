@@ -14,9 +14,9 @@ export function LaunchVideo() {
         to="transparent"
         direction="up"
         cell={3}
-        opacity={0.12}
+        opacity={0.1}
         bloom="low"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-48"
+        className="inset-x-0 bottom-0 h-36"
       />
       <div className="relative mx-auto max-w-3xl">
         <BlurReveal>

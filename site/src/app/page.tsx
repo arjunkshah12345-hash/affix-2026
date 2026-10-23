@@ -1,5 +1,6 @@
 import { Charts } from "@/components/site/charts"
 import { Contrast } from "@/components/site/contrast"
+import { Failures } from "@/components/site/failures"
 import { Findings } from "@/components/site/findings"
 import { Footer } from "@/components/site/footer"
 import { FrameworkDetailProvider } from "@/components/site/framework-detail"
@@ -18,6 +19,7 @@ export default function Home() {
           <Leaderboard />
           <Contrast />
           <Charts />
+          <Failures />
           <Findings />
           <Methodology />
           <LaunchVideo />

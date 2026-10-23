@@ -8,6 +8,7 @@ const items = [
   { value: "rankings", label: "Rankings", href: "#rankings" },
   { value: "split", label: "Split", href: "#split" },
   { value: "signals", label: "Signals", href: "#signals" },
+  { value: "failures", label: "Failures", href: "#failures" },
   { value: "findings", label: "Findings", href: "#findings" },
 ]
 
